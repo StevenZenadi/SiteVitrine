@@ -8,7 +8,6 @@ import Footer from './components/Footer';
 // Import des pages
 import Home from './pages/Home';
 import Projects from './pages/Projects';
-import Skills from './pages/Skills';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Player from "./components/Player";
@@ -24,14 +23,13 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/projects" element={<Projects />} />
-            <Route path="/skills" element={<Skills />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
        
         <Footer />
-        <Player />
+        {/*<Player />*/}
       </Router>
       
     </div>

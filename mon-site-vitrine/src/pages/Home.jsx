@@ -3,30 +3,33 @@ import React, { useState } from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "./Home.css";
+import logo from '../images/home2.webp';
 
 function Home() {
-  // ----------------------------------
-  // 1) State pour le fil d’actualité
-  // (Optionnel, pas au cœur de la question, mais gardé pour le contexte)
-  // ----------------------------------
-  const [posts] = useState([
+  // Données pour les cartes de prestations
+  const [cards] = useState([
     {
       id: 1,
-      image: "/images/post1.jpg",
-      description: "Prototype en cours...",
-      date: "2025-03-01"
+      title: "Développement Web",
+      description: "Création de sites web responsives et performants.",
+      image: "/images/card-web.jpg"
     },
     {
       id: 2,
-      image: "/images/post2.jpg",
-      description: "Installation terminée avec succès !",
-      date: "2025-03-02"
+      title: "Applications Mobiles",
+      description: "Conception d'applications mobiles innovantes.",
+      image: "/images/card-mobile.jpg"
+    },
+    {
+      id: 3,
+      title: "IoT & Hardware",
+      description: "Solutions matérielles et connectées sur mesure.",
+      image: "/images/card-iot.jpg"
     }
   ]);
 
-  // ----------------------------------
-  // 2) State pour les avis
-  // ----------------------------------
+  // Données pour le carrousel d'avis (reste inchangé)
   const [reviews] = useState([
     {
       id: 1,
@@ -44,13 +47,7 @@ function Home() {
     },
   ]);
 
-  // ----------------------------------
-  // 3) Gérer le formulaire d’avis
-  // ----------------------------------
-
-  // ----------------------------------
-  // 4) Configuration du carrousel
-  // ----------------------------------
+  // Configuration du carrousel
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -76,41 +73,52 @@ function Home() {
     ]
   };
 
-
-  // ----------------------------------
-  // Rendu (JSX)
-  // ----------------------------------
   return (
-    <div className="home-container" style={{ padding: "1rem" }}>
-      {/* Fil d'actualité (optionnel) */}
-      <section className="feed-section">
-        <h2>Mon fil d'actualité</h2>
-        <div className="posts-container">
-          {posts.map((post) => (
-            <div key={post.id} className="post-item" style={{ marginBottom: "2rem" }}>
-              <img
-                src={post.image}
-                alt={post.description}
-                style={{ width: "100%", maxWidth: "400px", display: "block" }}
-              />
-              <p>{post.description}</p>
-              <small>Publié le {post.date}</small>
-            </div>
-          ))}
+    <>
+      {/* Section Hero : Image pleine largeur 
+      <section className="hero-section">
+        <img 
+          src={logo}
+          alt="Illustration de mon domaine d'activité" 
+          className="hero-image" 
+        />
+      </section>*/}
+      <div className="hero-container">
+        <img
+          src={logo}
+          alt="Illustration de mon domaine d'activité"
+          className="hero-image"
+        />
+        {/* Overlay pour atténuer les bords */}
+        <div className="hero-overlay"></div>
+        {/* Zone de texte (si nécessaire) */}
+        <div className="hero-text">
+          <h1>Bienvenue sur mon site</h1>
+          <p>Découvrez mes compétences et projets.</p>
         </div>
+      </div>
+
+      {/* Divider : espace blanc pour séparation */}
+      <div className="divider"></div>
+
+      {/* Section Cartes de Prestations */}
+      <section className="cards-section">
+        {cards.map(card => (
+          <div key={card.id} className="card">
+            <img src={card.image} alt={card.title} className="card-image" />
+            <h3>{card.title}</h3>
+            <p>{card.description}</p>
+          </div>
+        ))}
       </section>
 
-      <hr style={{ margin: "2rem 0" }} />
-
-      {/* Carrousel d'avis */}
+      {/* Section Carrousel d'Avis */}
       <section className="reviews-section">
         <h2>Avis des clients</h2>
-
-        <div className="reviews-carousel" style={{ maxWidth: "600px", margin: "0 auto" }}>
+        <div className="reviews-carousel">
           <Slider {...sliderSettings}>
-            {reviews.map((review) => (
-              <div key={review.id} style={{ padding: "1rem" }}>
-                <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}></div>
+            {reviews.map(review => (
+              <div key={review.id} className="review" style={{ padding: "1rem", display: "flex", alignItems: "center" }}>
                 <img
                   src={review.photo}
                   alt={review.author}
@@ -134,7 +142,7 @@ function Home() {
           </Slider>
         </div>
       </section>
-    </div>
+    </>
   );
 }
 

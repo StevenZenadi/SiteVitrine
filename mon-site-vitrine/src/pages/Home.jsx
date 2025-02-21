@@ -6,17 +6,16 @@ import "slick-carousel/slick/slick-theme.css";
 import "./Home.css";
 import mainImage from '../images/home2.webp';
 import imageCardSoftware from '../images/card_software.webp';
+import imageCardLearning from '../images/card_learning.webp';
+import imageCardHardware from '../images/card_hardware.webp';
 import image1 from '../images/1.0.webp';
-import image11 from '../images/1.1.webp';
 import image2 from '../images/2.webp';
-import image21 from '../images/2.1.webp';
 import image3 from '../images/3.webp';
-import image31 from '../images/3.1.webp';
 import image4 from '../images/4.webp';
 import image6 from '../images/6.webp';
 import image7 from '../images/7.webp';
-import imageCardLearning from '../images/card_learning.webp';
-import imageCardHardware from '../images/card_hardware.webp';
+import image8 from '../images/8.webp';
+import image9 from '../images/9.webp';
 
 function Home() {
   // Données pour les cartes de prestations
@@ -41,49 +40,63 @@ function Home() {
     }
   ]);
 
-  // Données pour le carrousel d'avis (reste inchangé)
+  // Données pour le carrousel d'avis
   const [reviews] = useState([
     {
       id: 1,
-      author: "Alice",
-      text: "Excellent travail, merci !",
-      service: "Plomberie",
+      author: "Margaux B.",
+      text: "Seconde fois que je fais appel à ses services pour m'aider à installer et configurer mon imprimante 3d. Toujours autant de patience et de soin au travail qu'il effectue. Je recommande !",
+      service: "Hardware & Software",
       photo: image1,
     },
     {
       id: 2,
-      author: "Bob",
-      text: "Très satisfait de l'installation électrique.",
-      service: "Électricité",
+      author: "Doudou",
+      text: "Très satisfait du montage du pc. J'ai appris pleins de choses par la même occasion.",
+      service: "Hardware & Software",
       photo: image2,
     },
     {
       id: 3,
-      author: "Bob",
-      text: "Très satisfait de l'installation électrique.",
-      service: "Électricité",
+      author: "Louis B.",
+      text: "Top tout fonctionne rien a redire.",
+      service: "Hardware",
       photo: image3,
     },
     {
       id: 4,
-      author: "Bob",
-      text: "Très satisfait de l'installation électrique.",
-      service: "Électricité",
+      author: "Clara",
+      text: "J'avais besoin de conseils pour penser une configuration de pc en fonction de mes besoins et pour le montage. Pour l'instant très satisfaite.",
+      service: "Hardware & Conseils",
       photo: image4,
     },
     {
       id: 5,
-      author: "Bob",
-      text: "Très satisfait de l'installation électrique.",
-      service: "Électricité",
+      author: "TikTak58",
+      text: "J'avais besoin de conseils pour l'aménagement de mon setup gaming. Il m'as aiguillé en fonction de mes besoins et biensur de mon budget. En plus de ca il m'as aidé à tout installer et monter. Top !",
+      service: "Hardware & Software & Conseils",
       photo: image6,
     },
     {
       id: 6,
-      author: "Bob",
-      text: "Très satisfait de l'installation électrique.",
-      service: "Électricité",
+      author: "BoB",
+      text: "J'avais besoin d'une petite config avec un petit budget en occasion, il as sue etre efficace.",
+      service: "Conseils",
       photo: image7,
+    },
+    {
+      id: 7,
+      author: "Sylvie M.",
+      text: "Très satisfaite de l'installation. Mon fils est tres content de son ordinateur et mon prote feuille aussi.",
+      service: "Hardware & Conseils",
+      photo: image8,
+    },
+    {
+      id: 8,
+      author: "Ahurit71",
+      text: "Top, le pc tourne du feu de dieu.",
+      service: "Hardware & Conseils",
+      photo: image9,
     },
   ]);
 
@@ -92,7 +105,7 @@ function Home() {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1,
+    slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3500,
@@ -100,29 +113,18 @@ function Home() {
     responsive: [
       {
         breakpoint: 768,
-        settings: {
-          slidesToShow: 1
-        }
+        settings: { slidesToShow: 1 }
       },
       {
         breakpoint: 1024,
-        settings: {
-          slidesToShow: 2
-        }
+        settings: { slidesToShow: 2 }
       }
     ]
   };
 
   return (
     <>
-      {/* Section Hero : Image pleine largeur 
-      <section className="hero-section">
-        <img 
-          src={logo}
-          alt="Illustration de mon domaine d'activité" 
-          className="hero-image" 
-        />
-      </section>*/}
+      {/* Section Hero */}
       <div className="hero-container">
         <img
           src={mainImage}
@@ -130,16 +132,14 @@ function Home() {
           className="hero-image"
           loading="lazy"
         />
-        {/* Overlay pour atténuer les bords */}
         <div className="hero-overlay"></div>
-        {/* Zone de texte (si nécessaire) */}
         <div className="hero-text">
           <h1>Bienvenue sur mon site la calotte de tes morts</h1>
           <p>Découvrez mes compétences et projets.</p>
         </div>
       </div>
 
-      {/* Divider : espace blanc pour séparation */}
+      {/* Divider */}
       <div className="divider"></div>
 
       {/* Section Cartes de Prestations */}

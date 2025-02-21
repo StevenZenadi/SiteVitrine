@@ -268,3 +268,12 @@ body {
   text-align: center;
   color: #333;
 }
+
+.review-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  max-width: 300px;  /* Limite la largeur à 300px */
+  max-height: 300px; /* Limite la hauteur à 300px */
+  border-radius: 8px;
+}

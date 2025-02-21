@@ -4,28 +4,40 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./Home.css";
-import logo from '../images/home2.webp';
+import mainImage from '../images/home2.webp';
+import imageCardSoftware from '../images/card_software.webp';
+import image1 from '../images/1.0.webp';
+import image11 from '../images/1.1.webp';
+import image2 from '../images/2.webp';
+import image21 from '../images/2.1.webp';
+import image3 from '../images/3.webp';
+import image31 from '../images/3.1.webp';
+import image4 from '../images/4.webp';
+import image6 from '../images/6.webp';
+import image7 from '../images/7.webp';
+import imageCardLearning from '../images/card_learning.webp';
+import imageCardHardware from '../images/card_hardware.webp';
 
 function Home() {
   // Données pour les cartes de prestations
   const [cards] = useState([
     {
       id: 1,
-      title: "Développement Web",
+      title: "Software",
       description: "Création de sites web responsives et performants.",
-      image: "/images/card-web.jpg"
+      image: imageCardSoftware
     },
     {
       id: 2,
-      title: "Applications Mobiles",
+      title: "Apprentissage et conseils",
       description: "Conception d'applications mobiles innovantes.",
-      image: "/images/card-mobile.jpg"
+      image: imageCardLearning
     },
     {
       id: 3,
       title: "IoT & Hardware",
       description: "Solutions matérielles et connectées sur mesure.",
-      image: "/images/card-iot.jpg"
+      image: imageCardHardware
     }
   ]);
 
@@ -36,14 +48,42 @@ function Home() {
       author: "Alice",
       text: "Excellent travail, merci !",
       service: "Plomberie",
-      photo: "/images/charlie.jpg",
+      photo: image1,
     },
     {
       id: 2,
       author: "Bob",
       text: "Très satisfait de l'installation électrique.",
       service: "Électricité",
-      photo: "/images/charlie.jpg",
+      photo: image2,
+    },
+    {
+      id: 3,
+      author: "Bob",
+      text: "Très satisfait de l'installation électrique.",
+      service: "Électricité",
+      photo: image3,
+    },
+    {
+      id: 4,
+      author: "Bob",
+      text: "Très satisfait de l'installation électrique.",
+      service: "Électricité",
+      photo: image4,
+    },
+    {
+      id: 5,
+      author: "Bob",
+      text: "Très satisfait de l'installation électrique.",
+      service: "Électricité",
+      photo: image6,
+    },
+    {
+      id: 6,
+      author: "Bob",
+      text: "Très satisfait de l'installation électrique.",
+      service: "Électricité",
+      photo: image7,
     },
   ]);
 
@@ -85,15 +125,16 @@ function Home() {
       </section>*/}
       <div className="hero-container">
         <img
-          src={logo}
+          src={mainImage}
           alt="Illustration de mon domaine d'activité"
           className="hero-image"
+          loading="lazy"
         />
         {/* Overlay pour atténuer les bords */}
         <div className="hero-overlay"></div>
         {/* Zone de texte (si nécessaire) */}
         <div className="hero-text">
-          <h1>Bienvenue sur mon site</h1>
+          <h1>Bienvenue sur mon site la calotte de tes morts</h1>
           <p>Découvrez mes compétences et projets.</p>
         </div>
       </div>
@@ -105,7 +146,7 @@ function Home() {
       <section className="cards-section">
         {cards.map(card => (
           <div key={card.id} className="card">
-            <img src={card.image} alt={card.title} className="card-image" />
+            <img src={card.image} alt={card.title} className="card-image" loading="lazy" />
             <h3>{card.title}</h3>
             <p>{card.description}</p>
           </div>
@@ -118,24 +159,22 @@ function Home() {
         <div className="reviews-carousel">
           <Slider {...sliderSettings}>
             {reviews.map(review => (
-              <div key={review.id} className="review" style={{ padding: "1rem", display: "flex", alignItems: "center" }}>
-                <img
-                  src={review.photo}
-                  alt={review.author}
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    marginRight: "1rem"
-                  }}
-                />
-                <div>
-                  <p style={{ fontStyle: "italic" }}>"{review.text}"</p>
-                  <p style={{ marginTop: "0.5rem", color: "#555" }}>
-                    <strong>- {review.author}</strong> <br />
-                    Service : <strong>{review.service}</strong>
-                  </p>
+              <div key={review.id} className="review-slide">
+                <div className="review-content">
+                  <div className="review-image">
+                    <img
+                      src={review.photo}
+                      alt={review.author}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="review-text">
+                    <p className="review-comment">"{review.text}"</p>
+                    <p className="review-author">
+                      - {review.author} <br />
+                      Service : {review.service}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}

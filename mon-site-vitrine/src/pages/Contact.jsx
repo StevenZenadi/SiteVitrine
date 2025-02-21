@@ -1,6 +1,7 @@
 // src/pages/Contact.jsx
 import React, { useState } from 'react';
 import "./Contact.css"; // Pour le style
+import imageProfil from "../images/profil.webp";
 
 function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -27,7 +28,7 @@ function Contact() {
       {/* Conteneur pour la photo */}
       <div className="profile-pic-container">
         <img
-          src="/images/moi.jpg" // <- remplace par le chemin de ta photo
+          src={imageProfil} // <- remplace par le chemin de ta photo
           alt="Mon portrait"
           className="profile-pic"
         />

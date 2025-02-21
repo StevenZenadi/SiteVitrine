@@ -1,6 +1,6 @@
 // src/App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -16,23 +16,16 @@ import './App.css';
 
 function App() {
   return (
-    <div className="app-container">
-      <Router>
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </main>
-       
-        <Footer />
-        {/*<Player />*/}
-      </Router>
-      
-    </div>
+    <BrowserRouter basename="/SiteVitrine">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/projets" element={<Projects />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+      <Footer />
+      {/*<Player />*/}
+    </BrowserRouter>
   );
 }
 

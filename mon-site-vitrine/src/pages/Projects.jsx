@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+// src/pages/Projects.jsx
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./Projects.css";
 
 function Projects() {
@@ -6,47 +8,35 @@ function Projects() {
   const projects = [
     {
       id: 1,
-      title: "Projet Hardware 1",
-      description: "Description du projet hardware 1.",
-      category: "hardware",
+      title: "Projet Software 1",
+      description: "Description du projet software 1.",
+      category: "software",
       image: "/images/project1.jpg",
     },
     {
       id: 2,
-      title: "Projet Software 1",
-      description: "Description du projet software 1.",
-      category: "software",
+      title: "Projet Hardware 1",
+      description: "Description du projet hardware 1.",
+      category: "hardware",
       image: "/images/project2.jpg",
     },
-    {
-      id: 3,
-      title: "Projet Hardware 2",
-      description: "Description du projet hardware 2.",
-      category: "hardware",
-      image: "/images/project3.jpg",
-    },
-    {
-      id: 4,
-      title: "Projet Software 2",
-      description: "Description du projet software 2.",
-      category: "software",
-      image: "/images/project4.jpg",
-    },
-    // Aucun projet pour "apprentissage" pour le moment
+    // ... autres projets
   ];
 
   // Liste des catégories disponibles
-  const categories = ["hardware", "software", "apprentissage"];
-  // Etat pour la catégorie active (par défaut "hardware")
-  const [activeCategory, setActiveCategory] = useState("hardware");
+  const categories = ["software", "hardware", "apprentissage"];
+  
+  const [searchParams] = useSearchParams();
+  const initialCat = searchParams.get('cat') || categories[0]; // Par défaut la première catégorie
+  const [activeCategory, setActiveCategory] = useState(initialCat);
 
   // Fonction pour convertir le nom de la catégorie en un titre lisible
   const getCategoryTitle = (cat) => {
     switch (cat) {
-      case "hardware":
-        return "Projets Hardware";
       case "software":
         return "Projets Software";
+      case "hardware":
+        return "Projets Hardware";
       case "apprentissage":
         return "Apprentissage et Conseils";
       default:
@@ -54,15 +44,19 @@ function Projects() {
     }
   };
 
-  // Filtrage des projets en fonction de la catégorie active
+  // Filtrer les projets en fonction de la catégorie active
   const filteredProjects = projects.filter(
     (proj) => proj.category === activeCategory
   );
 
+  // Optionnel : mettre à jour l'onglet actif si le paramètre change
+  useEffect(() => {
+    setActiveCategory(initialCat);
+  }, [initialCat]);
+
   return (
     <div className="projects-page">
       <h1>Mes Projets</h1>
-      {/* Onglets de catégories */}
       <div className="categories-tabs">
         {categories.map((cat) => (
           <button
@@ -74,17 +68,12 @@ function Projects() {
           </button>
         ))}
       </div>
-      {/* Affichage de la catégorie active */}
       <section className="project-category">
         {filteredProjects.length > 0 ? (
           <div className="project-grid">
             {filteredProjects.map((proj) => (
               <div key={proj.id} className="project-card">
-                <img
-                  src={proj.image}
-                  alt={proj.title}
-                  className="project-image"
-                />
+                <img src={proj.image} alt={proj.title} className="project-image" />
                 <h3>{proj.title}</h3>
                 <p>{proj.description}</p>
               </div>

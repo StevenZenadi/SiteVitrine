@@ -3,7 +3,12 @@ import React, { useState } from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ParticlesBg from 'react-tsparticles'; // ou utilisez votre composant ParticlesWrapper si vous préférez
+import Header from '../components/Header'; // Par exemple
+import TiltCard from '../components/TiltCard';
+import HeroBackground from '../components/Background';
 import "./Home.css";
+import profil from '../images/profil.webp';
 import mainImage from '../images/home2.webp';
 import imageCardSoftware from '../images/card_software.webp';
 import imageCardLearning from '../images/card_learning.webp';
@@ -16,6 +21,8 @@ import image6 from '../images/6.webp';
 import image7 from '../images/7.webp';
 import image8 from '../images/8.webp';
 import image9 from '../images/9.webp';
+import { Link } from 'react-router-dom';
+
 
 function Home() {
   // Données pour les cartes de prestations
@@ -111,30 +118,31 @@ function Home() {
     autoplaySpeed: 3500,
     adaptiveHeight: true,
     responsive: [
-      {
-        breakpoint: 768,
-        settings: { slidesToShow: 1 }
-      },
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2 }
-      }
+      { breakpoint: 768, settings: { slidesToShow: 1 } },
+      { breakpoint: 1024, settings: { slidesToShow: 2 } }
     ]
   };
 
   return (
     <>
-      {/* Section Hero */}
+      {/* Section Hero avec arrière-plan parallax et particules */}
       <div className="hero-container">
+        {/* Utilisation de votre composant HeroBackground pour un effet parallax */}
+        <HeroBackground />
+        {/* Vous pouvez aussi conserver l'image principale si nécessaire */}
         <img
-          src={mainImage}
+          src={profil}
           alt="Illustration de mon domaine d'activité"
           className="hero-image"
           loading="lazy"
         />
         <div className="hero-overlay"></div>
-        <div className="hero-text">
-          <h1>Bienvenue sur mon site la calotte de tes morts</h1>
+        {/* Texte en haut à gauche */}
+        <div className="hero-text top-left">
+          <h1>Bienvenue sur mon site</h1>
+        </div>
+        {/* Texte en bas à droite */}
+        <div className="hero-text bottom-right">
           <p>Découvrez mes compétences et projets.</p>
         </div>
       </div>
@@ -142,14 +150,20 @@ function Home() {
       {/* Divider */}
       <div className="divider"></div>
 
-      {/* Section Cartes de Prestations */}
+      {/* Section Cartes de Prestations avec effet tilt */}
       <section className="cards-section">
         {cards.map(card => (
-          <div key={card.id} className="card">
-            <img src={card.image} alt={card.title} className="card-image" loading="lazy" />
-            <h3>{card.title}</h3>
-            <p>{card.description}</p>
-          </div>
+          <Link 
+            key={card.id} 
+            to={`/projets?cat=${card.category}`} 
+            className="card-link"
+          >
+            <div className="card">
+              <img src={card.image} alt={card.title} className="card-image" loading="lazy" />
+              <h3>{card.title}</h3>
+              <p>{card.description}</p>
+            </div>
+          </Link>
         ))}
       </section>
 
@@ -162,11 +176,7 @@ function Home() {
               <div key={review.id} className="review-slide">
                 <div className="review-content">
                   <div className="review-image">
-                    <img
-                      src={review.photo}
-                      alt={review.author}
-                      loading="lazy"
-                    />
+                    <img src={review.photo} alt={review.author} loading="lazy" />
                   </div>
                   <div className="review-text">
                     <p className="review-comment">"{review.text}"</p>
@@ -186,3 +196,4 @@ function Home() {
 }
 
 export default Home;
+

@@ -1,20 +1,33 @@
 {
   "files": {
-    "main.css": "/SiteVitrine/static/css/main.298f1980.css",
-    "main.js": "/SiteVitrine/static/js/main.9245a3af.js",
+    "main.css": "/SiteVitrine/static/css/main.c66d23d3.css",
+    "main.js": "/SiteVitrine/static/js/main.f25c8e8f.js",
     "static/js/453.dd38250d.chunk.js": "/SiteVitrine/static/js/453.dd38250d.chunk.js",
+    "static/media/3.webp": "/SiteVitrine/static/media/3.cd68ce892a788469c4da.webp",
+    "static/media/2.1.webp": "/SiteVitrine/static/media/2.1.c6d2f695bc2a79044257.webp",
+    "static/media/1.0.webp": "/SiteVitrine/static/media/1.0.85504a701d9016105652.webp",
+    "static/media/1.1.webp": "/SiteVitrine/static/media/1.1.1fbfc639712119d772ae.webp",
+    "static/media/2.webp": "/SiteVitrine/static/media/2.dd97cb865dbdea78216b.webp",
+    "static/media/7.webp": "/SiteVitrine/static/media/7.b01791adf909aef9e0e2.webp",
+    "static/media/profil.webp": "/SiteVitrine/static/media/profil.3a093c8595058272fd21.webp",
+    "static/media/3.1.webp": "/SiteVitrine/static/media/3.1.1f5a34a8b80a49925090.webp",
+    "static/media/4.webp": "/SiteVitrine/static/media/4.257d88010af27c3e11d5.webp",
+    "static/media/6.webp": "/SiteVitrine/static/media/6.921d05b72cfeb7779544.webp",
+    "static/media/card_learning.webp": "/SiteVitrine/static/media/card_learning.558235e77f33924a338c.webp",
     "static/media/home2.webp": "/SiteVitrine/static/media/home2.2ad4b64641d2535d7731.webp",
+    "static/media/card_hardware.webp": "/SiteVitrine/static/media/card_hardware.2c84b7b4a2ea5070907e.webp",
+    "static/media/card_software.webp": "/SiteVitrine/static/media/card_software.f4033e9d77504141a42f.webp",
     "static/media/slick.svg": "/SiteVitrine/static/media/slick.2630a3e3eab21c607e21.svg",
     "static/media/slick.eot": "/SiteVitrine/static/media/slick.a4e97f5a2a64f0ab1323.eot",
     "static/media/slick.ttf": "/SiteVitrine/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/SiteVitrine/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/SiteVitrine/index.html",
-    "main.298f1980.css.map": "/SiteVitrine/static/css/main.298f1980.css.map",
-    "main.9245a3af.js.map": "/SiteVitrine/static/js/main.9245a3af.js.map",
+    "main.c66d23d3.css.map": "/SiteVitrine/static/css/main.c66d23d3.css.map",
+    "main.f25c8e8f.js.map": "/SiteVitrine/static/js/main.f25c8e8f.js.map",
     "453.dd38250d.chunk.js.map": "/SiteVitrine/static/js/453.dd38250d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.298f1980.css",
-    "static/js/main.9245a3af.js"
+    "static/css/main.c66d23d3.css",
+    "static/js/main.f25c8e8f.js"
   ]
 }

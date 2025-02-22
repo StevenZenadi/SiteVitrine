@@ -1,6 +1,13 @@
 // src/pages/Projects.jsx
-import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import softwareVideo1 from "../videos/software1.mp4";
+import softwareVideo2 from "../videos/software2.mp4";
+import learningVideo1 from "../videos/learn1.mp4";
+import learningVideo2 from "../videos/learn2.mp4";
+import hardwareVideo1 from "../videos/hardware1.mp4";
+import hardwareVideo2 from "../videos/hardware2.mp4";
+
+import React, { useState } from "react";
+import VideoCanvas from "../components/VideoCanvas";
 import "./Projects.css";
 
 function Projects() {
@@ -30,29 +37,12 @@ function Projects() {
   const initialCat = searchParams.get('cat') || categories[0]; // Par défaut la première catégorie
   const [activeCategory, setActiveCategory] = useState(initialCat);
 
-  // Fonction pour convertir le nom de la catégorie en un titre lisible
-  const getCategoryTitle = (cat) => {
-    switch (cat) {
-      case "software":
-        return "Projets Software";
-      case "hardware":
-        return "Projets Hardware";
-      case "apprentissage":
-        return "Apprentissage et Conseils";
-      default:
-        return cat;
-    }
+  // Mapping de chaque catégorie à une vidéo (uniquement une vidéo par catégorie)
+  const videoMapping = {
+    software: [softwareVideo1, softwareVideo2],
+    hardware: [hardwareVideo1, hardwareVideo2],
+    apprentissage: [learningVideo1, learningVideo2],
   };
-
-  // Filtrer les projets en fonction de la catégorie active
-  const filteredProjects = projects.filter(
-    (proj) => proj.category === activeCategory
-  );
-
-  // Optionnel : mettre à jour l'onglet actif si le paramètre change
-  useEffect(() => {
-    setActiveCategory(initialCat);
-  }, [initialCat]);
 
   return (
     <div className="projects-page">
@@ -61,13 +51,22 @@ function Projects() {
         {categories.map((cat) => (
           <button
             key={cat}
-            className={`tab ${activeCategory === cat ? "active" : ""}`}
-            onClick={() => setActiveCategory(cat)}
+            className="tab"
+            onMouseEnter={() => setHoverCategory(cat)}
+            onMouseLeave={() => setHoverCategory(null)}
           >
-            {getCategoryTitle(cat)}
+            {cat.charAt(0).toUpperCase() + cat.slice(1)}
           </button>
         ))}
       </div>
+
+      {/* Bande vidéo sous les onglets : affichée uniquement lors du survol */}
+      {hoverCategory && (
+        <div className="video-banner">
+          <VideoCanvas videoSources={videoMapping[hoverCategory]} duration={4000} width={800} height={450} />
+        </div>
+      )}
+
       <section className="project-category">
         {filteredProjects.length > 0 ? (
           <div className="project-grid">

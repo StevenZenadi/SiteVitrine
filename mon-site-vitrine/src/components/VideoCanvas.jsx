@@ -1,8 +1,8 @@
-// src/components/VideoBackground.jsx
+// src/components/VideoCanvas.jsx
 import React, { useRef, useState, useEffect } from "react";
 
-function VideoBackground({ videoSources = [], duration = 4000, width = 640, height = 360 }) {
-  // Crée une liste d'objets pour le playlist : { src, currentTime }
+function VideoCanvas({ videoSources = [], duration = 3000, width = "100%", height = "100%" }) {
+  // Création d'une playlist avec chaque source et son temps actuel
   const [playlist, setPlaylist] = useState(videoSources.map(src => ({ src, currentTime: 0 })));
   const [currentIndex, setCurrentIndex] = useState(0);
   
@@ -10,7 +10,7 @@ function VideoBackground({ videoSources = [], duration = 4000, width = 640, heig
   const videoRef = useRef(null);
   const animationRef = useRef(null);
 
-  // À l'initialisation, créer l'élément vidéo
+  // À l'initialisation, on crée l'élément vidéo
   useEffect(() => {
     const video = document.createElement("video");
     video.crossOrigin = "anonymous";
@@ -20,19 +20,18 @@ function VideoBackground({ videoSources = [], duration = 4000, width = 640, heig
     videoRef.current = video;
   }, []);
 
-  // Charger la vidéo courante quand l'index change
+  // Charger la vidéo courante lorsque l'index change
   useEffect(() => {
     if (videoRef.current) {
       const video = videoRef.current;
       const current = playlist[currentIndex];
       video.src = current.src;
-      // Réglez la position en fonction de ce qui a été enregistré
       video.currentTime = current.currentTime;
       video.play().catch((err) => console.error(err));
     }
   }, [currentIndex, playlist]);
 
-  // Intervalle pour passer à la vidéo suivante toutes les 4 secondes
+  // Intervalle pour passer à la vidéo suivante toutes les "duration" millisecondes
   useEffect(() => {
     if (playlist.length === 0) return;
     const interval = setInterval(() => {
@@ -42,7 +41,7 @@ function VideoBackground({ videoSources = [], duration = 4000, width = 640, heig
         setPlaylist(prev => {
           const newList = [...prev];
           newList[currentIndex].currentTime = video.currentTime;
-          // Si la vidéo est terminée, la remettre à 0
+          // Si la vidéo est terminée, remettre à 0
           if (video.ended) {
             newList[currentIndex].currentTime = 0;
           }
@@ -55,15 +54,31 @@ function VideoBackground({ videoSources = [], duration = 4000, width = 640, heig
     return () => clearInterval(interval);
   }, [duration, currentIndex, playlist.length]);
 
-  // Boucle de rendu sur le canvas
+  // Boucle de rendu sur le canvas avec effet "contain"
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
 
+    // On suppose que width et height sont des nombres (ex. 800 et 450)
+    const canvasWidth = width;
+    const canvasHeight = height;
+
     const render = () => {
       if (videoRef.current && videoRef.current.readyState >= videoRef.current.HAVE_CURRENT_DATA) {
-        ctx.drawImage(videoRef.current, 0, 0, width, height);
+        const video = videoRef.current;
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        // Obtenir les dimensions naturelles de la vidéo
+        const videoW = video.videoWidth;
+        const videoH = video.videoHeight;
+        // Calculer l'échelle pour que la vidéo soit entièrement visible (contain)
+        const scale = Math.min(canvasWidth / videoW, canvasHeight / videoH);
+        const newW = videoW * scale;
+        const newH = videoH * scale;
+        // Centrer la vidéo dans le canvas
+        const xOffset = (canvasWidth - newW) / 2;
+        const yOffset = (canvasHeight - newH) / 2;
+        ctx.drawImage(video, xOffset, yOffset, newW, newH);
       }
       animationRef.current = requestAnimationFrame(render);
     };
@@ -77,4 +92,4 @@ function VideoBackground({ videoSources = [], duration = 4000, width = 640, heig
   );
 }
 
-export default VideoBackground;
+export default VideoCanvas;

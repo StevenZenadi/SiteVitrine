@@ -1,187 +1,153 @@
-/* --- Section HERO --- */
-.hero-container {
+/* Container général de la page Projets */
+.projects-page {
   position: relative;
-  overflow: hidden;
-  width: 100vw;
-  height: 400px; /* Ajustez selon vos besoins */
-  margin: 0;
-  padding: 0;
-  /* Fond parallax (couche de fond) via CSS */
-  background-image: url('../images/mur.webp'); /* Remplacez par votre image de fond */
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: bottom;
+  padding-top: 70px;    /* Espace réservé pour le header */
+  padding-bottom: 70px; /* Espace réservé pour le footer */
+  min-height: 100vh;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
-.home-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transition: transform 0.3s ease;
-  z-index: 3;
+/* Titre centré */
+.projects-title {
+  text-align: center;
+  margin-bottom: 10px; /* Au lieu de 20px */
 }
 
-.hero-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(ellipse at center, rgba(255,255,255,0) 70%, rgba(255,255,255,0.4) 100%);
-  pointer-events: none;
+/* Conteneur principal (2 colonnes) 
+   align-items: center => centre verticalement la colonne de gauche et celle de droite */
+.projects-content {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;    /* Aligne verticalement les colonnes au centre */
+  justify-content: center;/* Centre horizontalement l'ensemble */
+  gap: 20px;
+  margin: 0 20px;
+}
+
+/* Colonne des onglets (gauche) */
+.tabs-column {
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: center; /* Centre verticalement les onglets dans leur colonne */
+  align-items: center;
   z-index: 2;
 }
 
-.hero-text {
-  position: absolute;
-  color: #333;
-  z-index: 4;
+/* Style des onglets */
+.tab {
+  background: #eee;
+  border: none;
+  padding: 15px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: background 0.3s ease, transform 0.3s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.tab:hover,
+.tab.active {
+  background: #0070c9;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Colonne de droite : vidéo + légende */
+.video-column {
+  display: flex;
+  flex-direction: column; /* La vidéo + la légende en dessous */
+  align-items: center;
+  justify-content: center;
+}
+
+/* Conteneur fixe pour la vidéo (ou ratio responsive selon vos besoins) */
+.video-wrapper {
+  position: relative;
+  width: 800px;
+  height: 450px;
+  background-color: #ddd;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  /* Animation fadeIn */
   opacity: 0;
-  animation: fadeIn 1s ease forwards;
-}
-
-.hero-text.top-left {
-  top: 20px;
-  left: 20px;
-}
-
-.hero-text.bottom-right {
-  bottom: 20px;
-  right: 20px;
-  animation-delay: 0.5s;
+  animation: fadeIn 2s forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+    transform: scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* --- Divider --- */
-.divider {
-  height: 50px;
-  background-color: #fff;
-}
-
-/* --- Section Cartes --- */
-.cards-section {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  padding: 20px 0;
-}
-
-.card-link {
-  text-decoration: none;
-  color: inherit;
-}
-
-.card {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  width: 30%;
-  min-width: 280px;
-  margin: 10px;
-  text-align: center;
-  padding: 20px;
-  transition: transform 0.2s;
-}
-
-.card:hover {
-  transform: scale(1.02);
-}
-
-.card-image {
+/* Placeholder si aucune vidéo n’est sélectionnée */
+.video-placeholder {
+  position: absolute;
+  top: 0; 
+  left: 0;
   width: 100%;
-  border-radius: 8px;
-  height: 150px;
-  object-fit: cover;
-  margin-bottom: 0.8rem;
-}
-
-.card h3 {
-  margin: 0.5rem 0;
-  font-size: 1.2rem;
-}
-
-.card p {
-  font-size: 0.9rem;
-  color: #555;
-}
-
-/* --- Section Carrousel d'Avis --- */
-.reviews-section {
-  padding: 40px 20px;
-  background-color: #f7f7f7;
-  text-align: center;
-}
-
-.reviews-section h2 {
-  margin-bottom: 20px;
-}
-
-.reviews-carousel {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.review-slide {
-  padding: 1rem;
-}
-
-.review-content {
+  height: 100%;
   display: flex;
-  flex-direction: column; /* Image au-dessus du texte */
   align-items: center;
   justify-content: center;
+  color: #555;
   text-align: center;
 }
 
-.review-image {
-  margin-bottom: 1rem;
+/* Légende sous la vidéo */
+.video-caption {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #333;
+  text-align: center;
 }
 
-.review-image img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  max-width: 300px;
-  max-height: 300px;
-  border-radius: 8px;
+/* Section Projets */
+.project-category {
+  padding: 20px;
+  text-align: center;
 }
 
-.review-text {
-  width: 100%;
-}
-
-.review-comment {
-  font-style: italic;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-}
-
-.review-author {
-  color: #555;
-  font-size: 0.9rem;
-}
-
-/* --- Responsive --- */
+/* Responsive (exemple) */
 @media (max-width: 768px) {
-  .cards-section {
-    flex-direction: column;
+  .projects-content {
+    flex-direction: column;       /* Passe en colonne */
     align-items: center;
+    margin: 0 10px;
   }
-  .card {
-    width: 80%;
+
+  .tabs-column {
+    width: 100%;
+    flex-direction: row;         /* Onglets en ligne */
+    justify-content: center;
+    gap: 10px;
   }
-  .review-content {
-    flex-direction: column;
+
+  .tab {
+    width: auto;
+    font-size: 1rem;
+    padding: 10px 15px;
   }
-  .review-image {
-    margin-right: 0;
-    margin-bottom: 1rem;
+
+  .video-wrapper {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    aspect-ratio: 16/9;
   }
 }
+

@@ -4,18 +4,86 @@ html, body {
   padding: 0;
 }
 
+/* --- Section HERO --- */
+.hero-container {
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  height: 400px; /* Ajustez la hauteur selon vos besoins */
+  margin: 0;
+  padding: 0;
+  /* Couche de fond parallax via CSS (si HeroBackground ne gère pas cela) */
+  background-image: url('../images/mur.webp'); /* Remplacez par le chemin de votre image de fond */
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+
+.home-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  z-index: 3;
+}
+
+/* Overlay dégradé */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0) 70%, rgba(255,255,255,0.4) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Texte positionné */
+.hero-text {
+  position: absolute;
+  color: #333;
+  z-index: 4;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+}
+
+.hero-text.top-left {
+  top: 20px;
+  left: 20px;
+}
+
+.hero-text.bottom-right {
+  bottom: 20px;
+  right: 20px;
+  animation-delay: 0.5s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* --- Divider --- */
 .divider {
   height: 50px;
   background-color: #fff;
 }
 
-/* --- Section Cartes de Prestations --- */
+/* --- Section Cartes --- */
 .cards-section {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   padding: 20px 0;
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .card {
@@ -74,7 +142,7 @@ html, body {
 
 .review-content {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Pour que l'image soit au-dessus du texte */
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -124,66 +192,4 @@ html, body {
     margin-right: 0;
     margin-bottom: 1rem;
   }
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.hero-container {
-  position: relative;
-  overflow: hidden;
-  width: 100vw;
-  height: 400px; /* Ajustez selon vos besoins */
-  margin: 0;
-  padding: 0;
-}
-
-
-
-.hero-container:hover .hero-image {
-  transform: scale(1.15);
-}
-
-.hero-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(ellipse at center, rgba(255,255,255,0) 70%, rgba(255,255,255,0.4) 100%);
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Texte commun pour la section hero */
-.hero-text {
-  position: absolute;
-  color: #333;
-  z-index: 4;
-  opacity: 0; /* On part de 0 pour l'animation */
-  animation: fadeIn 1s ease forwards;
-}
-
-/* Positionnement du titre en haut à gauche */
-.hero-text.top-left {
-  top: 20px;
-  left: 20px;
-}
-
-/* Positionnement de la phrase en bas à droite */
-.hero-text.bottom-right {
-  bottom: 20px;
-  right: 20px;
-  /* Optionnel: délai pour que ce texte apparaisse après le titre */
-  animation-delay: 0.5s;
-}
-
-.card-link {
-  text-decoration: none;
-  color: inherit;
 }

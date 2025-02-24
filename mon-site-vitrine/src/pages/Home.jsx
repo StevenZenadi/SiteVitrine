@@ -110,7 +110,7 @@ function Home() {
           alt="Profil"
           className="home-image"
           loading="lazy"
-          style={{ transform: `translate(${fgOffsetX}px, ${fgOffset}px) scale(1.7)` }}
+          style={{ transform: `translate(${fgOffsetX}px, ${fgOffset}px) scale(1.0)` }}
         />
         <div className="hero-overlay"></div>
         {/* Texte en haut à gauche */}

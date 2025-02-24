@@ -1,0 +1,83 @@
+/* About.css */
+
+/* Container global de la page À propos */
+.about-page {
+    position: relative;
+    min-height: 100vh;
+    background-color: #fff;
+  }
+  
+  /* Section HERO */
+  .hero-container {
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    height: 600px; /* Vous pouvez ajuster la hauteur */
+    background-image: url('../images/mur.webp'); /* Si vous souhaitez conserver un fond */
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .hero-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    z-index: 3;
+  }
+  
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0) 70%, rgba(255,255,255,0.4) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+  
+  /* Texte commun */
+  .hero-text {
+    position: absolute;
+    color: #333;
+    z-index: 4;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+  }
+  
+  /* Position du texte en haut à gauche */
+  .hero-text.top-left {
+    top: 20px;
+    left: 20px;
+  }
+  
+  /* Position du texte en bas à droite */
+  .hero-text.bottom-right {
+    bottom: 20px;
+    right: 20px;
+    animation-delay: 0.5s;
+  }
+  
+  /* Animation fadeIn */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Contenu de la page À propos */
+  .about-content {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  

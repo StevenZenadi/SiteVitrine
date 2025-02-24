@@ -4,14 +4,12 @@ import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Header from '../components/Header';
 import TiltCard from '../components/TiltCard';
 import "./Home.css";
-import profil from '../images/profilTransparent.webp';
-import mainImage from '../images/home2.webp';
-import imageCardSoftware from '../images/card_software.webp';
-import imageCardLearning from '../images/card_learning.webp';
-import imageCardHardware from '../images/card_hardware.webp';
+import home from '../images/fondHome.webp';
+import imageCardSoftware from '../images/cardSoftware.jpg';
+import imageCardLearning from '../images/cardLearn.jpg';
+import imageCardHardware from '../images/cardHardware.jpg';
 import image1 from '../images/1.0.webp';
 import image2 from '../images/2.webp';
 import image3 from '../images/3.webp';
@@ -101,27 +99,23 @@ function Home() {
 
   return (
     <>
-      {/* Section Hero avec double parallax (vertical via scroll et horizontal via souris) */}
+      {/* Section Hero avec double parallax (vertical via scroll et horizontal via souris)
       <div className="hero-container" onMouseMove={handleMouseMove}>
-        {/* La couche de fond est gérée par le background CSS ou un composant séparé */}
-        {/* Couche de premier plan : image profil avec décalage vertical et horizontal */}
         <img
-          src={profil}
+          src={home}
           alt="Profil"
           className="home-image"
           loading="lazy"
           style={{ transform: `translate(${fgOffsetX}px, ${fgOffset}px) scale(1.0)` }}
         />
         <div className="hero-overlay"></div>
-        {/* Texte en haut à gauche */}
         <div className="hero-text top-left">
           <h1>Bienvenue sur mon site</h1>
         </div>
-        {/* Texte en bas à droite */}
         <div className="hero-text bottom-right">
           <p>Découvrez mes compétences et projets.</p>
         </div>
-      </div>
+      </div> */}
 
       {/* Divider */}
       <div className="divider"></div>

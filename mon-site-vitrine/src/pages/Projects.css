@@ -114,6 +114,11 @@
   font-size: 1.2rem;
   color: #333;
   text-align: center;
+  /* On part d'une opacité nulle et d'un décalage vers le bas */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideFadeIn 1s forwards;
+  animation-delay: 0.3s;
 }
 
 /* Section Projets */
@@ -151,3 +156,13 @@
   }
 }
 
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

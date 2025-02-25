@@ -1,8 +1,9 @@
 {
   "files": {
-    "main.css": "/SiteVitrine/static/css/main.e29df580.css",
-    "main.js": "/SiteVitrine/static/js/main.f87c0500.js",
+    "main.css": "/SiteVitrine/static/css/main.bd93ea66.css",
+    "main.js": "/SiteVitrine/static/js/main.6b2baed7.js",
     "static/js/453.031b35b3.chunk.js": "/SiteVitrine/static/js/453.031b35b3.chunk.js",
+    "static/media/fondHome.webp": "/SiteVitrine/static/media/fondHome.f1f1381fafb702696d7e.webp",
     "static/media/hardware2.mp4": "/SiteVitrine/static/media/hardware2.fd3bf619fab2ab1a55d2.mp4",
     "static/media/software1.mp4": "/SiteVitrine/static/media/software1.b7bd46bf38b6d53bab91.mp4",
     "static/media/learn2.mp4": "/SiteVitrine/static/media/learn2.e58c1bf9b1162fafb9b0.mp4",
@@ -17,25 +18,25 @@
     "static/media/9.webp": "/SiteVitrine/static/media/9.b19c5ced3dfcc7606aa7.webp",
     "static/media/4.webp": "/SiteVitrine/static/media/4.257d88010af27c3e11d5.webp",
     "static/media/8.webp": "/SiteVitrine/static/media/8.fb6426006321df2bfec9.webp",
+    "static/media/Logo3.mp4": "/SiteVitrine/static/media/Logo3.070bc24ec6a1aac634fb.mp4",
     "static/media/6.webp": "/SiteVitrine/static/media/6.921d05b72cfeb7779544.webp",
     "static/media/profilTransparent.webp": "/SiteVitrine/static/media/profilTransparent.760f17c9577de6ba75f8.webp",
-    "static/media/card_learning.webp": "/SiteVitrine/static/media/card_learning.558235e77f33924a338c.webp",
-    "static/media/home2.webp": "/SiteVitrine/static/media/home2.2ad4b64641d2535d7731.webp",
-    "static/media/card_hardware.webp": "/SiteVitrine/static/media/card_hardware.2c84b7b4a2ea5070907e.webp",
-    "static/media/card_software.webp": "/SiteVitrine/static/media/card_software.f4033e9d77504141a42f.webp",
-    "static/media/Logo.webp": "/SiteVitrine/static/media/Logo.d3ff6dc1fbc313c077a9.webp",
+    "static/media/cardHardware.jpg": "/SiteVitrine/static/media/cardHardware.514d37f35c28e877bb4a.jpg",
+    "static/media/cardSoftware.jpg": "/SiteVitrine/static/media/cardSoftware.297c0f11aecf7f417d64.jpg",
+    "static/media/cardLearn.jpg": "/SiteVitrine/static/media/cardLearn.039623285adc5fadccc6.jpg",
     "static/media/mur.webp": "/SiteVitrine/static/media/mur.8706ae65fe91d11cc1c0.webp",
+    "static/media/Logo.png": "/SiteVitrine/static/media/Logo.8afab60d6072655828bc.png",
     "static/media/slick.svg": "/SiteVitrine/static/media/slick.2630a3e3eab21c607e21.svg",
     "static/media/slick.eot": "/SiteVitrine/static/media/slick.a4e97f5a2a64f0ab1323.eot",
     "static/media/slick.ttf": "/SiteVitrine/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/SiteVitrine/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/SiteVitrine/index.html",
-    "main.e29df580.css.map": "/SiteVitrine/static/css/main.e29df580.css.map",
-    "main.f87c0500.js.map": "/SiteVitrine/static/js/main.f87c0500.js.map",
+    "main.bd93ea66.css.map": "/SiteVitrine/static/css/main.bd93ea66.css.map",
+    "main.6b2baed7.js.map": "/SiteVitrine/static/js/main.6b2baed7.js.map",
     "453.031b35b3.chunk.js.map": "/SiteVitrine/static/js/453.031b35b3.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e29df580.css",
-    "static/js/main.f87c0500.js"
+    "static/css/main.bd93ea66.css",
+    "static/js/main.6b2baed7.js"
   ]
 }

@@ -1,6 +1,8 @@
 // src/pages/Games.jsx
 import React, { useState } from 'react';
 import './Games.css';
+import SnakeGame from '../components/SnakeGame';
+
 
 function Games() {
   const [showGame, setShowGame] = useState(false);
@@ -31,7 +33,7 @@ function Games() {
           <button onClick={() => setShowGame(false)} className="btn back-btn">
             Retour
           </button>
-
+          <SnakeGame />
         </div>
       )}
     </div>

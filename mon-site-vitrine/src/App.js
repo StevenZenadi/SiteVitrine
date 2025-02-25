@@ -11,9 +11,9 @@ import Home from './pages/Home';
 import Projects from './pages/Projects';
 import About from './pages/About';
 import Contact from './pages/Contact';
-import Player from "./components/Player";
 import Jeux from './pages/Games';
 import PageTransition from './components/PageTransition';
+import { ProjectCategoryProvider } from './contexts/ProjectCategoryContext';
 import Preloader from './components/Preloader';
 import './App.css';
 
@@ -38,17 +38,19 @@ function App() {
 
   return (
     <>
-      {loading && <Preloader onFinish={() => setLoading(false)} />}
-      <div className="app-container">
-        <Router>
-          <Header />
-          <div className="header-placeholder"></div>
-          <main>
-            <AnimatedRoutes />
-          </main>
-          <Footer />
-        </Router>
-      </div>
+      <ProjectCategoryProvider>
+        {loading && <Preloader onFinish={() => setLoading(false)} />}
+        <div className="app-container">
+          <Router>
+            <Header />
+            <div className="header-placeholder"></div>
+            <main>
+              <AnimatedRoutes />
+            </main>
+            <Footer />
+          </Router>
+        </div>
+      </ProjectCategoryProvider>
     </>
   );
 }

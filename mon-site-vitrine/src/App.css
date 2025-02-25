@@ -137,15 +137,23 @@ body.accessibility-mode a {
   color: #0af;
 }
 
-body.accessibility-mode .header {
-  background-color: #222;
-}
-
 body.accessibility-mode .nav .menu li a {
   color: #fff;
 }
 
-/* src/App.css */
-.app-content.hidden {
-  display: none;
+body.accessibility-mode .header {
+  background-color: #fff; /* ou une autre couleur qui convient à votre design */
+  /* Vous pouvez conserver d'autres propriétés (ex. box-shadow, etc.) si nécessaire */
+}
+
+body.accessibility-mode .projects-page.software {
+  background: linear-gradient(to top, #cceeff, #000);
+}
+
+body.accessibility-mode .projects-page.hardware {
+  background: linear-gradient(to top, #fff8cc, #000);
+}
+
+body.accessibility-mode .projects-page.apprentissage {
+  background: linear-gradient(to top, #ccffcc, #000);
 }

@@ -1,5 +1,5 @@
 // src/App.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
@@ -14,7 +14,7 @@ import Contact from './pages/Contact';
 import Player from "./components/Player";
 import Jeux from './pages/Games';
 import PageTransition from './components/PageTransition';
-
+import Preloader from './components/Preloader';
 import './App.css';
 
 function AnimatedRoutes() {
@@ -34,17 +34,22 @@ function AnimatedRoutes() {
 }
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
   return (
-    <div className="app-container">
-      <Router>
-        <Header />
-        <div className="header-placeholder"></div>
-        <main>
-          <AnimatedRoutes />
-        </main>
-        <Footer />
-      </Router>
-    </div>
+    <>
+      {loading && <Preloader onFinish={() => setLoading(false)} />}
+      <div className="app-container">
+        <Router>
+          <Header />
+          <div className="header-placeholder"></div>
+          <main>
+            <AnimatedRoutes />
+          </main>
+          <Footer />
+        </Router>
+      </div>
+    </>
   );
 }
 

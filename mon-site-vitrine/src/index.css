@@ -10,3 +10,30 @@ html, body, #root {
   padding: 0;
   height: 100%;
 }
+
+/* Styles par défaut du site */
+body {
+  font-size: 16px;
+  background-color: #fff;
+  color: #333;
+}
+
+/* Mode Accessibilité : police plus grande, contraste renforcé */
+body.accessibility-mode {
+  font-size: 18px;
+  background-color: #000;
+  color: #fff;
+}
+
+/* Exemple : modification des liens et boutons pour un meilleur contraste */
+body.accessibility-mode a {
+  color: #0af;
+}
+
+body.accessibility-mode .header {
+  background-color: #222;
+}
+
+body.accessibility-mode .nav .menu li a {
+  color: #fff;
+}

@@ -21,6 +21,7 @@ import image9 from '../images/9.webp';
 
 function Home() {
   // Données pour les cartes de prestations
+  
   const [cards] = useState([
     {
       id: 1,
@@ -96,6 +97,8 @@ function Home() {
     // Appliquer un coefficient pour l'effet horizontal (ajustez selon vos préférences)
     setFgOffsetX(deltaX * 0.03);
   };
+
+  
 
   return (
     <>

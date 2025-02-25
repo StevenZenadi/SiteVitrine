@@ -123,3 +123,29 @@ footer {
 .shadow {
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
+
+
+/* Mode Accessibilité : police plus grande, contraste renforcé */
+body.accessibility-mode {
+  font-size: 18px;
+  background-color: #000;
+  color: #fff;
+}
+
+/* Exemple : modification des liens et boutons pour un meilleur contraste */
+body.accessibility-mode a {
+  color: #0af;
+}
+
+body.accessibility-mode .header {
+  background-color: #222;
+}
+
+body.accessibility-mode .nav .menu li a {
+  color: #fff;
+}
+
+/* src/App.css */
+.app-content.hidden {
+  display: none;
+}

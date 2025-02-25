@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import VideoCanvas from "../components/VideoCanvas";
 import "./Projects.css";
 
+// Importez vos vidéos
 import softwareVideo1 from "../videos/software1.mp4";
 import softwareVideo2 from "../videos/software2.mp4";
 import learningVideo1 from "../videos/learn1.mp4";
@@ -12,15 +13,14 @@ import hardwareVideo2 from "../videos/hardware2.mp4";
 
 function Projects() {
   const categories = ["software", "hardware", "apprentissage"];
-
-  // On part par exemple sur "software"
+  // Par défaut, on part sur "software"
   const [hoverCategory, setHoverCategory] = useState("software");
   const [animationKey, setAnimationKey] = useState(0);
 
   const videoMapping = {
-    software: [softwareVideo1],
-    hardware: [hardwareVideo1],
-    apprentissage: [learningVideo1],
+    software: [softwareVideo1, softwareVideo2],
+    hardware: [hardwareVideo1, hardwareVideo2],
+    apprentissage: [learningVideo1, learningVideo2],
   };
 
   const captions = {
@@ -29,23 +29,35 @@ function Projects() {
     apprentissage: "Apprenez et recevez des conseils",
   };
 
-  // Fonction qui change la catégorie et incrémente la clé pour rejouer l'animation
+  const subTitles = {
+    software: "Logiciels et Développement",
+    hardware: "Matériel et Innovations",
+    apprentissage: "Formation et Conseils",
+  };
+
   const handleCategoryChange = (cat) => {
     setHoverCategory(cat);
     setAnimationKey((prev) => prev + 1);
   };
 
+  // La classe de fond correspond à la catégorie active, ou "software" par défaut
+  const backgroundClass = hoverCategory || "software";
+
   return (
-    <div className="projects-page">
+    // On ajoute la classe dynamique au conteneur principal
+    <div className={`projects-page ${backgroundClass}`}>
+      {/* Fil d'ariane ou titre principal, etc. */}
       <h1 className="projects-title">Mes Projets</h1>
 
       <div className="projects-content">
-        {/* Colonne de gauche : onglets */}
-        <div className="tabs-column">
+        <div 
+          className="tabs-column"
+          onMouseLeave={() => {}}
+        >
           {categories.map((cat) => (
             <button
               key={cat}
-              className={`tab ${hoverCategory === cat ? "active" : ""}`}
+              className={`tab ${hoverCategory === cat ? "active" : ""} ${cat}`}
               onMouseEnter={() => handleCategoryChange(cat)}
             >
               {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -53,12 +65,14 @@ function Projects() {
           ))}
         </div>
 
-        {/* Colonne de droite : vidéo + légende */}
         <div className="video-column">
-          <div 
-            className="video-wrapper" 
-            key={`${hoverCategory}-${animationKey}`}
-          >
+          {hoverCategory && (
+            <h2 className="video-subtitle" key={`subtitle-${hoverCategory}-${animationKey}`}>
+              {subTitles[hoverCategory]}
+            </h2>
+          )}
+
+          <div className="video-wrapper" key={`${hoverCategory}-${animationKey}`}>
             <VideoCanvas
               videoSources={videoMapping[hoverCategory]}
               duration={3000}
@@ -66,12 +80,12 @@ function Projects() {
               height={450}
             />
           </div>
-          <div 
-            className="video-caption" 
-            key={`caption-${hoverCategory}-${animationKey}`}
-          >
-            {captions[hoverCategory]}
-          </div>
+
+          {hoverCategory && (
+            <div className="video-caption" key={`caption-${hoverCategory}-${animationKey}`}>
+              {captions[hoverCategory]}
+            </div>
+          )}
         </div>
       </div>
 

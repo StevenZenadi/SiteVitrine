@@ -1,48 +1,44 @@
-/* Styles de base pour les boutons du header */
-.header .menu li a {
-    display: inline-block;
-    padding: 0.7rem 1.2rem;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-  }
-  
-  /* Effet de survol : fond coloré et texte blanc */
-  .header .menu li a:hover {
-    background: linear-gradient(45deg, #0070c9, #005fa3);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Optionnel : effet "pulse" léger au survol */
-  .header .menu li a::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
-  }
-  
-  .header .menu li a:hover::after {
-    width: 150%;
-    height: 150%;
-    opacity: 0;
-  }
-  
-  /* Si vous souhaitez ajouter un effet de surbrillance lors du clic */
-  .header .menu li a:active {
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
-  
+.logo img {
+  height: 40px;
+}
+
+.nav .menu {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+}
+
+.nav .menu li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.accessibility-btn {
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  border: 1px solid #0070c9;
+  background-color: #0070c9;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.accessibility-btn:hover {
+  background-color: #005fa3;
+}

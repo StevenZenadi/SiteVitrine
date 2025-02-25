@@ -10,7 +10,7 @@ const Preloader = ({ onFinish }) => {
     // Forcer la fin du préloader après 2 secondes, quelle que soit la durée de la vidéo
     const timeout = setTimeout(() => {
       setVideoEnded(true);
-    }, 2000);
+    }, 4000);
 
     return () => clearTimeout(timeout);
   }, []);

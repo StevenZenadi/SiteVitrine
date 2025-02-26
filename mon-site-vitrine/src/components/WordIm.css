@@ -46,7 +46,7 @@
   .m-container {
     display: flex;
     gap: 2px;
-    align-items: flex-end;
+    align-items: flex-start;
   }
   
   /* Les trois barres du M s'animent simultanément */
@@ -66,7 +66,6 @@
   /* Barre centrale du M */
   .bar.m2 {
     height: 30px;
-    margin-top: 10px;
     border-radius: 5px;
   }
   

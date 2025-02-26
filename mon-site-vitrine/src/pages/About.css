@@ -26,12 +26,11 @@
 /* Style de chaque boule */
 .parallax-ball {
   position: absolute;
-  background-size: cover;
   background-position: center;
   border-radius: 50%;
   pointer-events: none;
   transition: transform 0.2s ease-out;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 6px rgb(0, 0, 0);
 }
 
 /* Animation pour le texte (complète) */

@@ -28,6 +28,7 @@ function AnimatedRoutes() {
         <Route path="/projets" element={<PageTransition><Projects /></PageTransition>} />
         <Route path="/jeux" element={<PageTransition><Jeux /></PageTransition>} />
         <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+        <Route path="*" element={<PageTransition><Home /></PageTransition>} />
       </Routes>
     </AnimatePresence>
   );

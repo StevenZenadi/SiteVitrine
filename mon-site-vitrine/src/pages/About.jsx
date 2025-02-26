@@ -1,45 +1,132 @@
 // src/pages/About.jsx
-import React, { useState, useEffect } from 'react';
-import "./About.css";
-import profil from '../images/profilTransparent.webp'; // Utilisez la même image ou une autre si vous préférez
+import React, { useState, useEffect, useRef  } from 'react';
+import './About.css';
+
+// Importez vos 6 images (remplacez les chemins par les vôtres)
+import img1 from '../images/orange.png';
+import img2 from '../images/rouge.png';
+import img3 from '../images/gris.png';
+import img4 from '../images/bleu.png';
+import img5 from '../images/vert.png';
+import img6 from '../images/violet.png';
+
+
+
+const images = [img1, img2, img3, img4, img5, img6];
+// Texte associé à chaque boule, par exemple les lettres de "STEVEN"
+const texts = ["S", "T", "E", "V", "E", "N"];
+
+function ParallaxBackground() {
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+  const [bouncingIndex, setBouncingIndex] = useState(null);
+  const [idle, setIdle] = useState(false);
+  const lastMouseMoveRef = useRef(Date.now());
+
+  // Paramètres de mise en page
+  const ballSize = 80; // diamètre en pixels
+  const spacing = 70;  // espacement horizontal
+  const nbBalls = images.length;
+  const totalWidth = (nbBalls - 1) * spacing + ballSize;
+
+  // Mise à jour du parallax via le mouvement de la souris
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const offsetX = (e.clientX - window.innerWidth / 2) / 40;
+      const offsetY = (e.clientY - window.innerHeight / 2) / 40;
+      setMouseOffset({ x: offsetX, y: offsetY });
+      lastMouseMoveRef.current = Date.now();
+      setIdle(false);
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Détecter l'inactivité de la souris (2 secondes)
+  useEffect(() => {
+    const checkIdle = setInterval(() => {
+      if (Date.now() - lastMouseMoveRef.current > 2000) {
+        setIdle(true);
+      } else {
+        setIdle(false);
+      }
+    }, 500);
+    return () => clearInterval(checkIdle);
+  }, []);
+
+  // Déclencher aléatoirement l'animation sur une seule boule quand idle est vrai
+  useEffect(() => {
+    if (!idle) {
+      setBouncingIndex(null);
+      return;
+    }
+    const bounceInterval = setInterval(() => {
+      if (bouncingIndex === null) {
+        const randomIndex = Math.floor(Math.random() * nbBalls);
+        setBouncingIndex(randomIndex);
+        // Laisser l'animation se dérouler sur 2s, puis réinitialiser
+        setTimeout(() => {
+          setBouncingIndex(null);
+        }, 2000);
+      }
+    }, 4000);
+    return () => clearInterval(bounceInterval);
+  }, [idle, bouncingIndex, nbBalls]);
+
+  return (
+    <div className="parallax-container">
+      <div 
+        className="parallax-row"
+        style={{
+          width: `${totalWidth}px`,
+          top: '100px',       // Ajustez la distance du haut
+          left: '50%',
+          transform: 'translateX(-50%)'
+        }}
+      >
+        {images.map((img, index) => {
+          const left = index * spacing;
+          // Différence de hauteur : indices pairs à top:0, impairs à 40px
+          const top = (index % 2 === 0) ? 0 : 40;
+          // Si idle et que cette boule est sélectionnée pour l'animation, on ajoute la classe animate-eye
+          const animate = idle && bouncingIndex === index;
+          // Si animate, on ne combine pas l'effet parallax (l'animation CSS prend le relais)
+          const styleTransform = animate ? {} : { transform: `translate(${mouseOffset.x}px, ${mouseOffset.y}px)` };
+
+          return (
+            <div 
+              key={index}
+              className={`parallax-ball ${animate ? "animate-eye" : ""}`}
+              style={{ 
+                width: `${ballSize}px`,
+                height: `${ballSize}px`,
+                left: `${left}px`,
+                top: `${top}px`,
+                backgroundImage: `url(${img})`,
+                zIndex: (index % 2 === 0) ? 1 : 2,
+                ...styleTransform
+              }}
+            >
+              <div 
+                className={`ball-text ${animate ? "animate-eye" : ""}`}
+                style={animate ? {} : { transform: `translate(${mouseOffset.x}px, ${mouseOffset.y}px)` }}
+              >
+                {texts[index]}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 function About() {
-  // On utilise un offset pour l'effet parallax vertical
-  const [offset, setOffset] = useState(0);
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      setOffset(window.pageYOffset * 0.3); // Ajustez le coefficient selon vos préférences
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-  
   return (
     <div className="about-page">
-      <div className="hero-container">
-        {/* Image de profil en premier plan */}
-        <img 
-          src={profil} 
-          alt="Profil" 
-          className="hero-image" 
-          loading="lazy"
-          style={{ transform: `translateY(${offset}px) scale(1.1)` }}
-        />
-        <div className="hero-overlay"></div>
-        {/* Texte placé en haut à gauche */}
-        <div className="hero-text top-left">
-          <h1>À Propos de Moi</h1>
-        </div>
-        {/* Texte placé en bas à droite */}
-        <div className="hero-text bottom-right">
-          <p>Découvrez mon parcours, mes compétences et mes passions.</p>
-        </div>
-      </div>
-      
+      <ParallaxBackground />
       <div className="about-content">
-        {/* Votre contenu pour la page À propos */}
-        <p>Ici, vous pouvez ajouter une description plus détaillée de votre parcours, vos valeurs, etc.</p>
+        <h1>À Propos de Moi</h1>
+        <p>Votre contenu ici…</p>
       </div>
     </div>
   );

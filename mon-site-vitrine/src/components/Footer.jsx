@@ -12,11 +12,11 @@ function Footer() {
   // Si on est sur la page Projets, on utilise la couleur définie pour la catégorie active
   if (location.pathname === '/projets') {
     if (projectCategory === "hardware") {
-      bgColor = "#fff8cc"; // jaune clair pour hardware
+      bgColor = "#4e4e4e"; // jaune clair pour hardware
     } else if (projectCategory === "apprentissage") {
-      bgColor = "#ccffcc"; // vert clair pour apprentissage
+      bgColor = "#ffb300"; // vert clair pour apprentissage
     } else {
-      bgColor = "#cceeff"; // bleu clair pour software
+      bgColor = "#00a6f9"; // bleu clair pour software
     }
   } else {
     // En dehors de la page Projets, on utilise la couleur par défaut :

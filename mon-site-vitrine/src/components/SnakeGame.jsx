@@ -2,16 +2,17 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./SnakeGame.css";
 
-// Couleurs pour la vraie nourriture
 const foodColors = ["#ff0000", "#0000ff", "#008000", "#808080", "#ffa500", "#800080"];
-// Couleurs pour les fake objects (palette pastel, différente des foodColors et trapColors)
-const fakeColors = ["#f08080", "#fafad2", "#87cefa", "#98fb98", "#d8bfd8"];
+const fakeColors = ["#f08080", "#fafad2", "#87cefa", "#98fb98", "#d8bfd8"]; // si besoin ultérieurement
 
 const SnakeGame = () => {
   const canvasRef = useRef(null);
   const tickDuration = 100; // durée d'un tick pour le compte à rebours (en ms)
 
-  // Taille de la grille (taille d'un bloc)
+  // Etat pour savoir si le jeu est lancé (appui sur espace)
+  const [started, setStarted] = useState(false);
+
+  // Taille de la grille (blockSize)
   const [gridSize, setGridSize] = useState(20);
   const minGridSize = 10;
   const maxGridSize = 40;
@@ -19,13 +20,13 @@ const SnakeGame = () => {
   // Contrôle d'affichage du panneau d'options
   const [showOptions, setShowOptions] = useState(false);
 
-  // Zone de jeu fixe (dimensions du canvas)
+  // Zone de jeu fixe
   const canvasWidth = 800;
   const canvasHeight = 600;
   const columns = Math.floor(canvasWidth / gridSize);
   const rows = Math.floor(canvasHeight / gridSize);
 
-  // Temps de référence pour le compte à rebours : temps maximum que le serpent mettrait à parcourir la distance maximale
+  // Temps de référence pour le compte à rebours
   const referenceTime = (columns + rows - 2) * tickDuration;
   const [countdown, setCountdown] = useState(referenceTime);
 
@@ -44,7 +45,12 @@ const SnakeGame = () => {
     return snakeArr;
   };
 
-  // Fonction pour générer la vraie nourriture
+  const [snake, setSnake] = useState(initialSnake());
+  const [direction, setDirection] = useState("RIGHT");
+  const [food, setFood] = useState(generateFood(initialSnake()));
+  const [gameOver, setGameOver] = useState(false);
+
+  // Générer la nourriture dans un emplacement aléatoire non occupé par le serpent
   function generateFood(snakeArray) {
     let newFood;
     while (true) {
@@ -60,38 +66,10 @@ const SnakeGame = () => {
     return newFood;
   }
 
-  // Fonction pour générer un fake object (à des fins de distraction)
-  function generateFake(snakeArray, foodObj) {
-    let newFake;
-    while (true) {
-      const x = Math.floor(Math.random() * columns);
-      const y = Math.floor(Math.random() * rows);
-      // Éviter la collision avec le serpent ET la vraie nourriture
-      const collision = snakeArray.some(segment => segment.x === x && segment.y === y)
-                     || (foodObj && foodObj.x === x && foodObj.y === y);
-      if (!collision) {
-        const randomColor = fakeColors[Math.floor(Math.random() * fakeColors.length)];
-        newFake = { x, y, color: randomColor };
-        break;
-      }
-    }
-    return newFake;
-  }
-
-  // États du jeu
-  const [snake, setSnake] = useState(initialSnake());
-  const [direction, setDirection] = useState("RIGHT");
-  const [food, setFood] = useState(generateFood(initialSnake()));
-  const [fake, setFake] = useState(generateFake(initialSnake(), food));
-  const [gameOver, setGameOver] = useState(false);
-
-  // Réinitialiser le jeu (lors du changement de grille ou pour rejouer)
+  // Réinitialiser le jeu
   const initializeGame = () => {
-    const initSnake = initialSnake();
-    setSnake(initSnake);
-    const newFood = generateFood(initSnake);
-    setFood(newFood);
-    setFake(generateFake(initSnake, newFood));
+    setSnake(initialSnake());
+    setFood(generateFood(initialSnake()));
     setDirection("RIGHT");
     setGameOver(false);
     setTimer(0);
@@ -102,21 +80,44 @@ const SnakeGame = () => {
     initializeGame();
   }, [gridSize, referenceTime]);
 
-  // Chronomètre (timer) s'incrémente chaque seconde tant que le jeu n'est pas terminé
+  // Écouteur de touches pour démarrer le jeu et pour contrôler le serpent
   useEffect(() => {
-    if (gameOver) return;
+    const handleKeyDown = (e) => {
+      // Si le jeu n'est pas démarré, appuyer sur espace démarre le jeu
+      if (!started) {
+        if (e.key === " " || e.key === "Spacebar") {
+          setStarted(true);
+        }
+        return; // ne traite pas d'autres touches avant le démarrage
+      }
+      // Si le jeu a démarré, gérer le mouvement
+      const key = e.key.toLowerCase();
+      if (key === "z" && direction !== "DOWN") setDirection("UP");
+      else if (key === "q" && direction !== "RIGHT") setDirection("LEFT");
+      else if (key === "s" && direction !== "UP") setDirection("DOWN");
+      else if (key === "d" && direction !== "LEFT") setDirection("RIGHT");
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [started, direction]);
+
+  // Chronomètre (timer) : s'incrémente chaque seconde tant que le jeu est lancé et non terminé
+  useEffect(() => {
+    if (!started || gameOver) return;
     const timerInterval = setInterval(() => {
       setTimer(prev => prev + 1);
     }, 1000);
     return () => clearInterval(timerInterval);
-  }, [gameOver]);
+  }, [started, gameOver]);
 
-  // Compte à rebours : se décrémente toutes les 100ms. S'il atteint zéro, le serpent perd un segment.
+  // Compte à rebours : se décrémente toutes les 100ms
   useEffect(() => {
-    if (gameOver) return;
+    if (!started || gameOver) return;
     const countdownInterval = setInterval(() => {
       setCountdown(prev => {
         if (prev - tickDuration <= 0) {
+          // Si le compte atteint zéro, le serpent perd un segment
           setSnake(snake => {
             if (snake.length > 1) {
               return snake.slice(1);
@@ -131,30 +132,16 @@ const SnakeGame = () => {
       });
     }, tickDuration);
     return () => clearInterval(countdownInterval);
-  }, [gameOver, tickDuration, referenceTime]);
+  }, [started, gameOver, tickDuration, referenceTime]);
 
-  // Contrôle du serpent avec Z, Q, S, D
+  // Boucle de jeu : mise à jour du serpent (seulement si le jeu est démarré)
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      const key = e.key.toLowerCase();
-      if (key === "z" && direction !== "DOWN") setDirection("UP");
-      else if (key === "q" && direction !== "RIGHT") setDirection("LEFT");
-      else if (key === "s" && direction !== "UP") setDirection("DOWN");
-      else if (key === "d" && direction !== "LEFT") setDirection("RIGHT");
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [direction]);
-
-  // Boucle de jeu : mise à jour du serpent
-  useEffect(() => {
-    if (gameOver) return;
+    if (!started || gameOver) return;
     const interval = setInterval(() => {
       setSnake(prevSnake => {
         const newSnake = [...prevSnake];
         const head = { ...newSnake[newSnake.length - 1] };
 
-        // Mise à jour de la tête selon la direction
         if (direction === "UP") head.y -= 1;
         if (direction === "DOWN") head.y += 1;
         if (direction === "LEFT") head.x -= 1;
@@ -173,27 +160,12 @@ const SnakeGame = () => {
         }
 
         const ateFood = head.x === food.x && head.y === food.y;
-        const ateFake = head.x === fake.x && head.y === fake.y;
-
         if (ateFood) {
-          // Grandir : ajouter la tête sans retirer la queue
-          head.color = "#000"; // Le serpent reste toujours noir
+          // Le serpent grandit d'un segment (tout en restant noir)
+          head.color = "#000";
           newSnake.push(head);
           setFood(generateFood(newSnake));
-          setFake(generateFake(newSnake, food)); // Régénérer le fake objet
-          setCountdown(referenceTime);
-        } else if (ateFake) {
-          // Pénalité : perdre un segment (si possible)
-          if (newSnake.length > 1) {
-            newSnake.push(head);
-            // Retirer deux segments : le comportement de perte de taille
-            newSnake.shift();
-            newSnake.shift();
-          } else {
-            setGameOver(true);
-            return prevSnake;
-          }
-          setFake(generateFake(newSnake, food));
+          setCountdown(referenceTime); // Réinitialiser le compte à rebours
         } else {
           newSnake.push(head);
           newSnake.shift();
@@ -202,23 +174,7 @@ const SnakeGame = () => {
       });
     }, 150);
     return () => clearInterval(interval);
-  }, [direction, food, fake, gameOver, columns, rows, referenceTime]);
-
-  // Fonction pour dessiner un rectangle arrondi
-  const drawRoundedRect = (ctx, x, y, width, height, radius) => {
-    ctx.beginPath();
-    ctx.moveTo(x + radius, y);
-    ctx.lineTo(x + width - radius, y);
-    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-    ctx.lineTo(x + width, y + height - radius);
-    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-    ctx.lineTo(x + radius, y + height);
-    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-    ctx.lineTo(x, y + radius);
-    ctx.quadraticCurveTo(x, y, x + radius, y);
-    ctx.closePath();
-    ctx.fill();
-  };
+  }, [started, direction, food, gameOver, columns, rows, referenceTime]);
 
   // Rendu du canvas
   useEffect(() => {
@@ -231,7 +187,17 @@ const SnakeGame = () => {
       ctx.fillStyle = "#f0f0f0";
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-      // Dessiner la vraie nourriture en cercle
+      // Si le jeu n'est pas démarré, afficher un message
+      if (!started && !gameOver) {
+        ctx.fillStyle = "#333";
+        ctx.font = "48px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Appuyez sur Espace pour commencer", canvasWidth / 2, canvasHeight / 2);
+        requestAnimationFrame(render);
+        return;
+      }
+
+      // Dessiner la nourriture sous forme de cercle
       ctx.beginPath();
       ctx.fillStyle = food.color;
       const centerX = food.x * gridSize + gridSize / 2;
@@ -239,13 +205,9 @@ const SnakeGame = () => {
       ctx.arc(centerX, centerY, gridSize / 2, 0, 2 * Math.PI);
       ctx.fill();
 
-      // Dessiner le fake objet sous forme de carré arrondi
-      ctx.fillStyle = fake.color;
-      drawRoundedRect(ctx, fake.x * gridSize, fake.y * gridSize, gridSize, gridSize, 4);
-
-      // Dessiner le serpent (chaque segment en carré arrondi)
+      // Dessiner le serpent (chaque segment avec coins arrondis)
       snake.forEach(segment => {
-        ctx.fillStyle = "#000";
+        ctx.fillStyle = "#000"; // Le serpent reste toujours noir
         drawRoundedRect(ctx, segment.x * gridSize, segment.y * gridSize, gridSize, gridSize, 4);
       });
 
@@ -267,13 +229,30 @@ const SnakeGame = () => {
     };
 
     render();
-  }, [snake, food, fake, gameOver, gridSize, countdown]);
+  }, [snake, food, gameOver, gridSize, countdown, started]);
+
+  // Fonction de dessin d'un rectangle arrondi
+  const drawRoundedRect = (ctx, x, y, width, height, radius) => {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+    ctx.fill();
+  };
 
   const score = snake.length - 5;
 
-  // Pop-up de fin de jeu
+  // Pop-up modal de Game Over
   const handleReplay = () => {
     initializeGame();
+    setStarted(false); // Revenir à l'état non démarré pour nécessiter l'appui sur espace
   };
 
   const handleQuit = () => {

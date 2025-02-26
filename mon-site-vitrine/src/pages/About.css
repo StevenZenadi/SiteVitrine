@@ -1,83 +1,77 @@
-/* About.css */
-
-/* Container global de la page À propos */
+/* Conteneur global de la page À propos */
 .about-page {
-    position: relative;
-    min-height: 100vh;
-    background-color: #fff;
-  }
-  
-  /* Section HERO */
-  .hero-container {
-    position: relative;
-    overflow: hidden;
-    width: 100vw;
-    height: 600px; /* Vous pouvez ajuster la hauteur */
-    background-image: url('../images/mur.webp'); /* Si vous souhaitez conserver un fond */
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center;
-  }
-  
-  .hero-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-    z-index: 3;
-  }
-  
-  .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at center, rgba(255,255,255,0) 70%, rgba(255,255,255,0.4) 100%);
-    pointer-events: none;
-    z-index: 2;
-  }
-  
-  /* Texte commun */
-  .hero-text {
-    position: absolute;
-    color: #333;
-    z-index: 4;
-    opacity: 0;
-    animation: fadeIn 1s ease forwards;
-  }
-  
-  /* Position du texte en haut à gauche */
-  .hero-text.top-left {
-    top: 20px;
-    left: 20px;
-  }
-  
-  /* Position du texte en bas à droite */
-  .hero-text.bottom-right {
-    bottom: 20px;
-    right: 20px;
-    animation-delay: 0.5s;
-  }
-  
-  /* Animation fadeIn */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  /* Contenu de la page À propos */
-  .about-content {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  
+  position: relative;
+  min-height: 100vh;
+  background: #fff;
+  overflow: hidden;
+}
+
+/* Conteneur pour le parallax */
+.parallax-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Conteneur de la rangée de balles, centré horizontalement */
+.parallax-row {
+  position: absolute;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Style de chaque boule */
+.parallax-ball {
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.2s ease-out;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* Animation automatique "eye movement" pour la boule animée */
+@keyframes eyeMovement {
+  0% { transform: translate(0, 0); }
+  15% { transform: translate(-30px, 0); }
+  30% { transform: translate(-30px, 0); }
+  45% { transform: translate(30px, 0); }
+  60% { transform: translate(30px, 0); }
+  80% { transform: translate(-15px, 20px); }
+  100% { transform: translate(0, 0); }
+}
+
+
+.animate-eye {
+  animation: eyeMovement 2s ease-out infinite;
+}
+
+/* Texte centré dans la boule */
+.ball-text {
+  position: absolute;
+  top: 30%;   /* Ajustez pour centrer dans la boule */
+  left: 40%;  /* Ajustez pour centrer dans la boule */
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  pointer-events: none;
+  transition: transform 0.2s ease-out;
+}
+
+/* Contenu principal de la page */
+.about-content {
+  position: relative;
+  z-index: 10;
+  padding: 20px;
+  text-align: center;
+  color: #333;
+  background: rgba(255,255,255,0.8);
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 350px; /* Espace pour les balles en haut */
+}

@@ -24,9 +24,9 @@ function Projects() {
   }, [setProjectCategory]);
 
   const videoMapping = {
-    software: [softwareVideo1, softwareVideo2],
-    hardware: [hardwareVideo1, hardwareVideo2],
-    apprentissage: [learningVideo1, learningVideo2],
+    software: [ softwareVideo2],
+    hardware: [ hardwareVideo2],
+    apprentissage: [learningVideo2],
   };
 
   const captions = {
@@ -53,7 +53,6 @@ function Projects() {
   return (
     // On ajoute la classe dynamique au conteneur principal
       <div className={`projects-page ${backgroundClass}`}>
-        <h1 className="projects-title">Mes Projets</h1>
         <div className="projects-content">
           <div
             className="tabs-column"

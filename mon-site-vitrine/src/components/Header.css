@@ -3,43 +3,69 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #fff;
+  background: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.logo img {
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo {
   height: 40px;
+  width: auto;
+}
+
+.logo-text {
+  margin-left: 8px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
 }
 
 .nav .menu {
   list-style: none;
   display: flex;
-  gap: 15px;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
 }
 
-.nav .menu li a {
+.menu-link {
   text-decoration: none;
   color: #333;
-  font-weight: 500;
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.3s ease;
 }
 
-.header-right {
-  display: flex;
-  align-items: center;
+.menu-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: #0070c9;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
 }
 
-.accessibility-btn {
-  padding: 6px 10px;
-  font-size: 0.9rem;
-  border: 1px solid #0070c9;
-  background-color: #0070c9;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.menu-link:hover {
+  color: #0070c9;
 }
 
-.accessibility-btn:hover {
-  background-color: #005fa3;
+.menu-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
+/* Vous pouvez ajouter d'autres styles pour header-right ou pour le bouton accessibilité */

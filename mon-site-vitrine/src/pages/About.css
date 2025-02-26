@@ -34,27 +34,36 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
-/* Animation automatique "eye movement" pour la boule animée */
+/* Animation pour le texte (complète) */
 @keyframes eyeMovement {
-  0% { transform: translate(0, 0); }
-  15% { transform: translate(-30px, 0); }
-  30% { transform: translate(-30px, 0); }
-  45% { transform: translate(30px, 0); }
-  60% { transform: translate(30px, 0); }
-  80% { transform: translate(-15px, 20px); }
-  100% { transform: translate(0, 0); }
+  0% { transform: translate(var(--initial-x), var(--initial-y)); }
+  15% { transform: translate(calc(var(--initial-x) - 30px), var(--initial-y)); }
+  30% { transform: translate(calc(var(--initial-x) - 30px), var(--initial-y)); }
+  45% { transform: translate(calc(var(--initial-x) + 30px), var(--initial-y)); }
+  60% { transform: translate(calc(var(--initial-x) + 30px), var(--initial-y)); }
+  80% { transform: translate(calc(var(--initial-x) - 15px), calc(var(--initial-y) + 20px)); }
+  100% { transform: translate(var(--initial-x), var(--initial-y)); }
 }
 
-
-.animate-eye {
-  animation: eyeMovement 2s ease-out infinite;
+/* Animation atténuée pour la boule */
+@keyframes ballEyeMovement {
+  0% { transform: translate(var(--initial-x), var(--initial-y)); }
+  15% { transform: translate(calc(var(--initial-x) - 15px), var(--initial-y)); }
+  30% { transform: translate(calc(var(--initial-x) - 15px), var(--initial-y)); }
+  45% { transform: translate(calc(var(--initial-x) + 15px), var(--initial-y)); }
+  60% { transform: translate(calc(var(--initial-x) + 15px), var(--initial-y)); }
+  80% { transform: translate(calc(var(--initial-x) - 7.5px), calc(var(--initial-y) + 10px)); }
+  100% { transform: translate(var(--initial-x), var(--initial-y)); }
 }
+
+/* Appliquer l'animation ballEyeMovement au texte lorsqu'on le souhaite */
+/* Dans notre cas, nous appliquons directement via inline style sur le conteneur de la boule si en animation */
 
 /* Texte centré dans la boule */
 .ball-text {
   position: absolute;
-  top: 30%;   /* Ajustez pour centrer dans la boule */
-  left: 40%;  /* Ajustez pour centrer dans la boule */
+  top: 30%;
+  left: 40%;
   color: white;
   font-size: 2rem;
   font-weight: bold;
@@ -73,5 +82,5 @@
   background: rgba(255,255,255,0.8);
   max-width: 800px;
   margin: 0 auto;
-  margin-top: 350px; /* Espace pour les balles en haut */
+  margin-top: 350px; /* Laisser de l'espace pour les balles */
 }

@@ -1,0 +1,72 @@
+.word-im {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  /* On force le display inline-block pour que width/height soient respectés */
+  .word-im .bar,
+  .word-im .apostrophe {
+    display: inline-block;
+    background-color: black;
+    transform: scale(0);
+    transform-origin: center;
+    animation-fill-mode: forwards !important;
+  }
+  
+  /* Animation simple pour apparaître */
+  @keyframes appear {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+  }
+  
+  /* Lettre I */
+  .bar.i {
+    width: 10px;
+    height: 50px;
+    border-radius: 5px;
+    animation: appear 0.5s ease-out forwards;
+    animation-delay: 0s;
+  }
+  
+  /* Apostrophe */
+  .apostrophe {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    align-self: flex-start;
+    margin-top: 10px;
+    animation: appear 0.5s ease-out forwards;
+    animation-delay: 0.5s;
+  }
+  
+  /* Conteneur pour le M */
+  .m-container {
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+  }
+  
+  /* Les trois barres du M s'animent simultanément */
+  .m-container .bar {
+    width: 10px;
+    animation: appear 0.5s ease-out forwards;
+    animation-delay: 1s;
+  }
+  
+  /* Barres latérales du M */
+  .bar.m1,
+  .bar.m3 {
+    height: 50px;
+    border-radius: 5px;
+  }
+  
+  /* Barre centrale du M */
+  .bar.m2 {
+    height: 30px;
+    margin-top: 10px;
+    border-radius: 5px;
+  }
+  

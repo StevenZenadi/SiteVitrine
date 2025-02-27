@@ -4,10 +4,11 @@
   padding-top: 70px;
   padding-bottom: 70px;
   min-height: 100vh;
-  background-color: #cceeff; /* Couleur par défaut pour software */
-  transition: background 2s ease;
-  display: flex;
-  flex-direction: column;
+  /* Supprimez le background-gradient précédent */
+  background: none;
+  /* ou laissez simplement un fond neutre */
+  background-color: #fff;
+  z-index: 0;
 }
 
 /* Fond pour chaque catégorie */
@@ -86,19 +87,19 @@
 /* On va définir les couleurs spécifiques pour chaque onglet */
 .tab.software:hover,
 .tab.software.active {
-  background: #8235B8;
+  background: #00a6f9;
   color: #fff;
 }
 
 .tab.hardware:hover,
 .tab.hardware.active {
-  background: #90EE90;
+  background: #00b700;
   color: #fff;
 }
 
 .tab.apprentissage:hover,
 .tab.apprentissage.active {
-  background: #ff0000;
+  background: #ffb300;
   color: #fff;
 }
 
@@ -128,7 +129,7 @@
 .video-caption {
   margin-top: 10px;
   font-size: 1.2rem;
-  color: #ffffff;
+  color: #333;
   text-align: left;
   opacity: 0;
   transform: translateY(20px);

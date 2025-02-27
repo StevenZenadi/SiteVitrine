@@ -1,7 +1,8 @@
 /* Container général de la page Jeux */
 .games-page {
   position: relative;
-  padding-top: 70px; /* Espace réservé pour le header fixe */
+  min-height: 100vh;
+  background-color: #fff;
 }
 
 /* Style de la liste des jeux */

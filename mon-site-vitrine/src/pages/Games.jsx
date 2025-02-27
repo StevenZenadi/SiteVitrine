@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './Games.css';
 import SnakeGame from '../components/SnakeGame';
+import SeparatorLine from '../components/SeparatorLine';
 
 
 function Games() {
@@ -9,15 +10,16 @@ function Games() {
 
   return (
     <div className="games-page">
+      <SeparatorLine />
       {!showGame ? (
         <div className="games-list">
           <h1>Mes Jeux Web</h1>
           {/* Carte pour le jeu Neon Snake */}
           <div className="game-card">
-            <img 
-              src="/images/snake-thumbnail.webp" 
-              alt="Neon Snake" 
-              className="game-thumbnail" 
+            <img
+              src="/images/snake-thumbnail.webp"
+              alt="Neon Snake"
+              className="game-thumbnail"
               loading="lazy"
             />
             <h3>Neon Snake</h3>

@@ -1,4 +1,3 @@
-// src/components/Footer.jsx
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useProjectCategory } from '../contexts/ProjectCategoryContext';
@@ -8,28 +7,38 @@ function Footer() {
   const { projectCategory } = useProjectCategory();
   const location = useLocation();
 
-  let bgColor;
-  // Si on est sur la page Projets, on utilise la couleur définie pour la catégorie active
+  let bgColor, borderColor;
+  // Sur la page Projets, la couleur dépend de la catégorie
   if (location.pathname === '/projets') {
     if (projectCategory === "hardware") {
-      bgColor = "#4e4e4e"; // jaune clair pour hardware
+      bgColor = "#fff8cc";
+      borderColor = "#fff8cc";
     } else if (projectCategory === "apprentissage") {
-      bgColor = "#ffb300"; // vert clair pour apprentissage
+      bgColor = "#ccffcc";
+      borderColor = "#ccffcc";
     } else {
-      bgColor = "#00a6f9"; // bleu clair pour software
+      bgColor = "#cceeff";
+      borderColor = "#cceeff";
     }
   } else {
-    // En dehors de la page Projets, on utilise la couleur par défaut :
-    // blanc en mode normal, noir en mode accessibilité.
+    // Hors de Projets : par défaut blanc ou noir en mode accessibilité
     if (document.body.classList.contains('accessibility-mode')) {
       bgColor = "#000";
+      borderColor = "#000";
     } else {
       bgColor = "#fff";
+      borderColor = "#fff";
     }
   }
 
   return (
-    <footer className="footer" style={{ backgroundColor: bgColor }}>
+    <footer
+      className="footer"
+      style={{
+        backgroundColor: 'transparent',
+        '--footer-border-color': borderColor
+      }}
+    >
       <p>© 2023 Mon Site - Tous droits réservés</p>
     </footer>
   );

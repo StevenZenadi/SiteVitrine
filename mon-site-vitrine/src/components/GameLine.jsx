@@ -10,6 +10,7 @@ function randomBetween(min, max) {
   return Math.random() * (max - min) + min;
 }
 
+
 function GameLine() {
   const pathRef = useRef(null);
   const svgRef = useRef(null);

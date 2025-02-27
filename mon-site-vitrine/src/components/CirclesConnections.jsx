@@ -1,11 +1,12 @@
+// src/components/CirclesConnections.jsx
 import React, { useState, useEffect } from 'react';
 
-const CirclesConnections = ({ circles, ballSize }) => {
+const CirclesConnections = ({ circles, ballSize, transitioning }) => {
   const [lines, setLines] = useState([]);
 
   useEffect(() => {
-    // Définir le nombre de connexions (par exemple, la moitié du nombre de cercles)
-    const numConnections = Math.floor(circles.length / 2);
+    // Générer un nombre réduit de connexions, par exemple la moitié du nombre de cercles divisée par 3
+    const numConnections = Math.floor(circles.length / 5);
     const connections = [];
     const usedPairs = new Set();
 
@@ -21,7 +22,6 @@ const CirclesConnections = ({ circles, ballSize }) => {
       }
     }
 
-    // Calculer les positions en pixels pour chaque connexion.
     const width = window.innerWidth;
     const height = window.innerHeight;
     const computedLines = connections.map((conn, index) => {
@@ -34,7 +34,7 @@ const CirclesConnections = ({ circles, ballSize }) => {
       const dx = cx2 - cx1;
       const dy = cy2 - cy1;
       const angle = Math.atan2(dy, dx);
-      const offset = ballSize / 2 + 5; // marge de 5px
+      const offset = ballSize / 2 + 5;
       const startX = cx1 + Math.cos(angle) * offset;
       const startY = cy1 + Math.sin(angle) * offset;
       const endX = cx2 - Math.cos(angle) * offset;
@@ -43,7 +43,7 @@ const CirclesConnections = ({ circles, ballSize }) => {
     });
 
     setLines(computedLines);
-  }, [circles, ballSize]); // Se recalculera uniquement quand circles ou ballSize changent
+  }, [circles, ballSize]);
 
   return (
     <svg
@@ -62,15 +62,10 @@ const CirclesConnections = ({ circles, ballSize }) => {
           stroke="black"
           strokeWidth="3"
           strokeLinecap="round"
-          opacity="1"
-          filter="url(#blurFilter)"
+          opacity={transitioning ? 0 : 1}
+          style={{ transition: 'opacity 0.6s ease' }}
         />
       ))}
-      <defs>
-        <filter id="blurFilter">
-          <feGaussianBlur stdDeviation="2" />
-        </filter>
-      </defs>
     </svg>
   );
 };

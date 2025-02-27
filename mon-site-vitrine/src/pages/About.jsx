@@ -75,7 +75,7 @@ function ParallaxBackground() {
         className="parallax-row"
         style={{
           width: `${totalWidth}px`,
-          top: '100px',       // Ajustez la distance du haut
+          top: '120px',       // Ajustez la distance du haut
           left: '50%',
           transform: 'translateX(-50%)'
         }}

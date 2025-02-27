@@ -3,7 +3,7 @@
     align-items: flex-end;
     gap: 8px;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 40px;
   }
   
   /* On force le display inline-block pour que width/height soient respectés */

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './Games.css';
 import SnakeGame from '../components/SnakeGame';
-import SeparatorLine from '../components/SeparatorLine';
+import SeparatorLine from '../components/GameLine';
 
 
 function Games() {

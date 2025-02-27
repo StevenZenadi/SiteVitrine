@@ -1,0 +1,42 @@
+.game-line-container {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  /* On pourrait mettre un background si besoin */
+}
+
+.game-line-svg {
+  position: relative;
+  display: block;
+}
+
+/* La ligne serpentine */
+.line-serp {
+  fill: none;
+  stroke: black;
+  stroke-width: 4;
+}
+
+/* Animation "draw" via keyframes 
+   stroke-dasharray = pathLength (600 nominal),
+   stroke-dashoffset part de 600 à 0 */
+   .draw-line {
+    animation: drawStroke 1.5s linear forwards;
+  }
+
+@keyframes drawStroke {
+  0% {
+    stroke-dashoffset: var(--somePlaceholder, 600); /* On part de la valeur inline fixée par JS */
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+/* Boules */
+.rolling-ball {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  /* Pas d'animation spéciale, elles bougent via JS */
+}

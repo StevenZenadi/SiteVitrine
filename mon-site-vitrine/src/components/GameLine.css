@@ -9,6 +9,7 @@
 .game-line-svg {
   position: relative;
   display: block;
+  transform: scaleY(-1);
 }
 
 /* La ligne serpentine */
@@ -38,5 +39,6 @@
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
+  box-shadow: rgb(0, 0, 0);
   /* Pas d'animation spéciale, elles bougent via JS */
 }

@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 20px 40px;
   background: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -30,42 +30,51 @@
   color: #333;
 }
 
-.nav .menu {
+/* Conteneur du menu avec position relative pour l'indicateur */
+.nav {
+  position: relative;
+}
+
+/* Menu en ligne */
+.menu {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 30px;
   margin: 0;
   padding: 0;
 }
 
+/* Lien du menu */
 .menu-link {
   text-decoration: none;
   color: #333;
   position: relative;
-  padding-bottom: 4px;
+  font-size: 1.2rem;     /* Taille de police plus grande */
+  padding: 8px 0;    
+  font-weight: bold;
   transition: color 0.3s ease;
 }
 
-.menu-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 2px;
-  background: #0070c9;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.3s ease;
+.menu-link.active {
+  color: #0070c9;
 }
 
+/* Couleur au survol */
 .menu-link:hover {
   color: #0070c9;
 }
 
-.menu-link:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
+/* Barre d'indication noire épaisse avec extrémités arrondies */
+.menu-indicator {
+  position: absolute;
+  bottom: 0;
+  height: 4px; /* Épaisseur de la barre */
+  background: #000;
+  border-radius: 3px; /* Extrémités arrondies */
+  transition: left 0.3s ease, width 0.3s ease;
 }
 
-/* Vous pouvez ajouter d'autres styles pour header-right ou pour le bouton accessibilité */
+/* Optionnel : style pour l'onglet actif */
+.menu-link.active {
+  color: #0070c9;
+}

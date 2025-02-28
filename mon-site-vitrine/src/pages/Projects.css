@@ -4,9 +4,7 @@
   padding-top: 70px;
   padding-bottom: 70px;
   min-height: 100vh;
-  /* Supprimez le background-gradient précédent */
   background: none;
-  /* ou laissez simplement un fond neutre */
   background-color: #fff;
   z-index: 0;
 }
@@ -15,11 +13,9 @@
 .projects-page.software {
   background: linear-gradient(to top, #00a6f9, #ffffff);
 }
-
 .projects-page.hardware {
   background: linear-gradient(to top, #4e4e4e, #ffffff);
 }
-
 .projects-page.apprentissage {
   background: linear-gradient(to top, #ffb300, #ffffff);
 }
@@ -30,33 +26,18 @@
   margin-bottom: 10px;
 }
 
-/* Conteneur principal */
+/* Conteneur principal centré en Flexbox */
 .projects-content {
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px; /* Espace entre le menu et la vidéo */
   width: 100%;
   min-height: 500px;
 }
 
-/* Colonne vidéo : fixée à droite */
-.video-column {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-/* Conteneur des onglets : occupe l'espace restant */
+/* Menu onglet */
 .tabs-column {
-  position: absolute;
-  left: 0;
-  right: 800px; /* Laisse 800px pour la vidéo */
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -64,49 +45,18 @@
   gap: 15px;
 }
 
-/* Style des onglets */
-.tab {
-  background: #eee;
-  border: none;
-  padding: 15px 20px;
-  cursor: pointer;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 1.1rem;
-  transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
-  width: 180px; /* Largeur fixe pour tous les onglets */
-  text-align: center;
-  color: #333;
-}
-
-.tab:hover,
-.tab.active {
-  transform: scale(1.05);
-}
-
-/* On va définir les couleurs spécifiques pour chaque onglet */
-.tab.software:hover,
-.tab.software.active {
-  background: #00a6f9;
-  color: #fff;
-}
-
-.tab.hardware:hover,
-.tab.hardware.active {
-  background: #00b700;
-  color: #fff;
-}
-
-.tab.apprentissage:hover,
-.tab.apprentissage.active {
-  background: #ffb300;
-  color: #fff;
-}
-
 /* Vidéo et légende */
+.video-column {
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 .video-wrapper {
   position: relative;
-  width: 800px;
+  width: 100%;
   height: 450px;
   background-color: #ddd;
   border-radius: 8px;
@@ -159,30 +109,61 @@
   animation: slideFadeIn 0.8s forwards;
 }
 
+/* Style des onglets */
+.tab {
+  background: #eee;
+  border: none;
+  padding: 15px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
+  width: 180px;
+  text-align: center;
+  color: #333;
+}
+
+.tab:hover,
+.tab.active {
+  transform: scale(1.05);
+}
+
+.tab.software:hover,
+.tab.software.active {
+  background: #00a6f9;
+  color: #fff;
+}
+
+.tab.hardware:hover,
+.tab.hardware.active {
+  background: #00b700;
+  color: #fff;
+}
+
+.tab.apprentissage:hover,
+.tab.apprentissage.active {
+  background: #ffb300;
+  color: #fff;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
+  .projects-page {
+    padding-top: 50px;
+  }
+  
   .projects-content {
-    position: static;
-    display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0 10px;
   }
   
-  .tabs-column {
-    position: static;
-    width: 100%;
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-    transform: none;
-  }
-  
+  .tabs-column,
   .video-column {
-    position: static;
     width: 100%;
-    margin-top: 40px;
-    transform: none;
+    display: flex;
+    align-items: center;
   }
   
   .video-wrapper {

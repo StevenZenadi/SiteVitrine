@@ -22,15 +22,15 @@
   
   /* Image circulaire */
   .profile-pic {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
+    width: 180px;
+    height: 180px;
+    border-radius: 20px;
     object-fit: cover; /* Ajuste l’image dans le cadre */
-    border: 3px solid #fff;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border: 3px solid #292929;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.666);
     /* Pour la placer en légère superposition ou “au-dessus” : */
     position: relative;
-    top: -30px; /* Ajuste selon le rendu souhaité */
+    top: -10px; /* Ajuste selon le rendu souhaité */
   }
   
   /* Titre, paragraphes */

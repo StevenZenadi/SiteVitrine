@@ -1,7 +1,7 @@
 // src/pages/Contact.jsx
 import React, { useState } from 'react';
 import "./Contact.css"; // Pour le style
-import imageProfil from "../images/profil.webp";
+import imageProfil from "../images/Profil.jpg";
 
 function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });

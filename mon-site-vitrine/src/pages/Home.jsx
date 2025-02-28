@@ -21,7 +21,7 @@ import image9 from '../images/9.webp';
 
 function Home() {
   // Données pour les cartes de prestations
-  
+
   const [cards] = useState([
     {
       id: 1,
@@ -98,7 +98,7 @@ function Home() {
     setFgOffsetX(deltaX * 0.03);
   };
 
-  
+
 
   return (
     <>
@@ -126,13 +126,13 @@ function Home() {
       {/* Section Cartes de Prestations */}
       <section className="cards-section">
         {cards.map(card => (
-          <Link 
-            key={card.id} 
-            to={`/projets?cat=${card.category}`} 
+          <Link
+            key={card.id}
+            to={`/projets?cat=${card.category}`}
             className="card-link"
           >
             <TiltCard>
-              <div className="card">
+              <div className={`card card-${card.category}`}>
                 <img src={card.image} alt={card.title} className="card-image" loading="lazy" />
                 <h3>{card.title}</h3>
                 <p>{card.description}</p>
@@ -141,6 +141,7 @@ function Home() {
           </Link>
         ))}
       </section>
+
 
       {/* Section Carrousel d'Avis */}
       <section className="reviews-section">

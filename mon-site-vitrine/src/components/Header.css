@@ -68,9 +68,9 @@
 .menu-indicator {
   position: absolute;
   bottom: 0;
-  height: 4px; /* Épaisseur de la barre */
+  height: 3px; /* Épaisseur de la barre */
   background: #000;
-  border-radius: 3px; /* Extrémités arrondies */
+  border-radius: 20px; /* Extrémités arrondies */
   transition: left 0.3s ease, width 0.3s ease;
 }
 

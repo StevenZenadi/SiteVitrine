@@ -136,6 +136,7 @@ function Home() {
                 <img src={card.image} alt={card.title} className="card-image" loading="lazy" />
                 <h3>{card.title}</h3>
                 <p>{card.description}</p>
+                <button className="card-cta">En savoir plus</button>
               </div>
             </TiltCard>
           </Link>
@@ -160,6 +161,11 @@ function Home() {
                   </div>
                   <div className="review-text">
                     <p className="review-comment">"{review.text}"</p>
+                    <div className="review-stars">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <span key={i} className={`star ${i < review.rating ? 'filled' : ''}`}>★</span>
+                      ))}
+                    </div>
                     <p className="review-author">
                       - {review.author} <br />
                       Service : {review.service}

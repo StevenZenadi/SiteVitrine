@@ -66,13 +66,15 @@ html, body {
 
 /* --- Section Cartes --- */
 .cards-section {
-  max-width: 280px;       /* Largeur max du conteneur, à ajuster selon vos besoins */
-  margin: 0 auto;          /* Centre horizontalement la section */
-  display: flex;
-  justify-content: center; /* Centre les cartes */
-  flex-wrap: nowrap;         /* Permet de passer à la ligne si l'écran est trop étroit */
-  gap: 20px;               /* Espace entre les cartes */
-  padding: 70px;
+  margin-top: 40px; /* Ajustez cette valeur selon l'espacement désiré */
+  margin-bottom: 40px; /* Ajustez cette valeur selon l'espacement désiré */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1200px; /* Limite la largeur globale si besoin */
+  padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .card-link {
@@ -82,50 +84,56 @@ html, body {
 
 .card {
   background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.781); /* Ombre légère par défaut */
-  width: 20%;
-  min-width: 240px;
-  margin: 10px;
-  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombre discrète */
   padding: 20px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .card.card-software {
-  background-color: #75d1ff;
-  color: #000000ac;
+  border-left: 4px solid #00a6f9;
+
 }
 
 /* Vert pour IoT et Hardware (catégorie "hardware") */
 .card.card-hardware {
-  background-color: #7cff7c;
-  color: #000000ac;
+  border-left: 4px solid #00b700;
 }
 
 /* Orange pour Apprentissage et Conseils (catégorie "apprentissage") */
 .card.card-apprentissage {
-  background-color: #ffdc8a;
-  color: #000000ac;
+  border-left: 4px solid #ffb300;
 }
 
 .card:hover {
-  transform: scale(1.01);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Ombre accentuée au survol */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
 }
 
 .card-image {
   width: 100%;
-  border-radius: 8px;
-  height: 150px;
+  height: 150px; /* Hauteur fixe pour toutes les images de cards */
   object-fit: cover;
-  margin-bottom: 0.8rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
 }
 
 .card h3 {
   margin: 0.5rem 0;
   font-size: 1.2rem;
+}
+
+.card-cta {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  background-color: #0070c9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 /* --- Section Carrousel d'Avis --- */
@@ -163,10 +171,8 @@ html, body {
 
 .review-image img {
   width: 100%;
-  height: auto;
+  height: 200px; /* Par exemple, pour un ratio similaire ou adapté à votre design */
   object-fit: cover;
-  max-width: 300px;
-  max-height: 300px;
   border-radius: 8px;
 }
 
@@ -184,6 +190,20 @@ html, body {
   color: #555;
   font-size: 0.9rem;
   font-weight: bold;
+}
+
+.review-stars {
+  margin: 0.5rem 0;
+}
+
+.star {
+  color: #ccc;
+  font-size: 1rem;
+  margin-right: 2px;
+}
+
+.star.filled {
+  color: #ffb300;
 }
 
 /* --- Responsive --- */

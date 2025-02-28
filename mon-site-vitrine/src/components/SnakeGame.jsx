@@ -1,300 +1,356 @@
-// src/components/SnakeGame.jsx
-import React, { useRef, useState, useEffect } from "react";
-import "./SnakeGame.css";
+import React, { useRef, useEffect, useState } from 'react';
+import './SnakeGame.css';
 
-const foodColors = ["#ff0000", "#0000ff", "#008000", "#808080", "#ffa500", "#800080"];
-const fakeColors = ["#f08080", "#fafad2", "#87cefa", "#98fb98", "#d8bfd8"]; // si besoin ultérieurement
+const tickDuration = 100; // Durée d'un tick en ms
+const gridSize = 20;      // Taille d'une cellule (agrandie)
+const countdownLimit = 5000; // Temps imparti (ms) pour manger l'objet mangeable
 
-const SnakeGame = () => {
+// Fonction d'interpolation linéaire
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
+const appleColors = ["#ff0000", "#0000ff", "#008000", "#808080", "#ffa500", "#800080"];
+
+const initialSnake = [
+  { x: 40, y: 40 },
+  { x: 20, y: 40 },
+  { x: 0, y: 40 },
+];
+const initialDirection = { x: gridSize, y: 0 };
+
+const SnakeGame = ({ onQuit }) => {
+  // Références et états internes
   const canvasRef = useRef(null);
-  const tickDuration = 100; // durée d'un tick pour le compte à rebours (en ms)
+  const accumulatorRef = useRef(0);
+  const lastTimestampRef = useRef(0);
+  const startTimeRef = useRef(0);
+  const appleSpawnTimeRef = useRef(0);
+  const diagonalCounterRef = useRef(0);
+  const pressedKeysRef = useRef(new Set());
+  const animationFrameIdRef = useRef(null);
 
-  // Etat pour savoir si le jeu est lancé (appui sur espace)
-  const [started, setStarted] = useState(false);
-
-  // Taille de la grille (blockSize)
-  const [gridSize, setGridSize] = useState(20);
-  const minGridSize = 10;
-  const maxGridSize = 40;
-
-  // Contrôle d'affichage du panneau d'options
+  const [chrono, setChrono] = useState(0);
+  const [countdown, setCountdown] = useState((countdownLimit / 1000).toFixed(1));
+  const [points, setPoints] = useState(0);
   const [showOptions, setShowOptions] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
 
-  // Zone de jeu fixe
-  const canvasWidth = 800;
-  const canvasHeight = 600;
-  const columns = Math.floor(canvasWidth / gridSize);
-  const rows = Math.floor(canvasHeight / gridSize);
-
-  // Temps de référence pour le compte à rebours
-  const referenceTime = (columns + rows - 2) * tickDuration;
-  const [countdown, setCountdown] = useState(referenceTime);
-
-  // Chronomètre (en secondes)
-  const [timer, setTimer] = useState(0);
-
-  // Initialiser le serpent : 5 segments noirs, centrés horizontalement, près du bas
-  const initialSnake = () => {
-    const snakeLength = 5;
-    const startX = Math.floor((columns - snakeLength) / 2);
-    const startY = rows - 3;
-    const snakeArr = [];
-    for (let i = 0; i < snakeLength; i++) {
-      snakeArr.push({ x: startX + i, y: startY, color: "#000" });
-    }
-    return snakeArr;
+  // Pour les contrôles tactiles, on peut gérer un state "mobileDirection"
+  // qui sera mis à jour lors des pressions sur les boutons.
+  // On injecte ces directions dans pressedKeysRef de manière temporaire.
+  const handleMobileDirection = (dir) => {
+    // Dir peut être "up", "down", "left", "right"
+    // On simule les touches Z, S, Q, D respectivement.
+    pressedKeysRef.current = new Set(); // On réinitialise pour un contrôle "instantané"
+    if (dir === "up") pressedKeysRef.current.add("z");
+    if (dir === "down") pressedKeysRef.current.add("s");
+    if (dir === "left") pressedKeysRef.current.add("q");
+    if (dir === "right") pressedKeysRef.current.add("d");
   };
 
-  const [snake, setSnake] = useState(initialSnake());
-  const [direction, setDirection] = useState("RIGHT");
-  const [food, setFood] = useState(generateFood(initialSnake()));
-  const [gameOver, setGameOver] = useState(false);
-
-  // Générer la nourriture dans un emplacement aléatoire non occupé par le serpent
-  function generateFood(snakeArray) {
-    let newFood;
-    while (true) {
-      const x = Math.floor(Math.random() * columns);
-      const y = Math.floor(Math.random() * rows);
-      const collision = snakeArray.some(segment => segment.x === x && segment.y === y);
-      if (!collision) {
-        const randomColor = foodColors[Math.floor(Math.random() * foodColors.length)];
-        newFood = { x, y, color: randomColor };
-        break;
-      }
-    }
-    return newFood;
-  }
-
-  // Réinitialiser le jeu
-  const initializeGame = () => {
-    setSnake(initialSnake());
-    setFood(generateFood(initialSnake()));
-    setDirection("RIGHT");
-    setGameOver(false);
-    setTimer(0);
-    setCountdown(referenceTime);
+  const clearMobileDirection = () => {
+    pressedKeysRef.current.clear();
   };
 
-  useEffect(() => {
-    initializeGame();
-  }, [gridSize, referenceTime]);
+  const gameStateRef = useRef({
+    snake: initialSnake.map(segment => ({ ...segment })),
+    direction: initialDirection,
+    apple: {
+      x: 100,
+      y: 100,
+      color: appleColors[Math.floor(Math.random() * appleColors.length)]
+    },
+    canvasWidth: 800,
+    canvasHeight: 600,
+    gameOver: false,
+  });
 
-  // Écouteur de touches pour démarrer le jeu et pour contrôler le serpent
+  const previousStateRef = useRef({
+    snake: initialSnake.map(segment => ({ ...segment })),
+  });
+
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Si le jeu n'est pas démarré, appuyer sur espace démarre le jeu
-      if (!started) {
-        if (e.key === " " || e.key === "Spacebar") {
-          setStarted(true);
-        }
-        return; // ne traite pas d'autres touches avant le démarrage
-      }
-      // Si le jeu a démarré, gérer le mouvement
       const key = e.key.toLowerCase();
-      if (key === "z" && direction !== "DOWN") setDirection("UP");
-      else if (key === "q" && direction !== "RIGHT") setDirection("LEFT");
-      else if (key === "s" && direction !== "UP") setDirection("DOWN");
-      else if (key === "d" && direction !== "LEFT") setDirection("RIGHT");
+      if (["z", "q", "s", "d"].includes(key)) {
+        pressedKeysRef.current.add(key);
+        e.preventDefault();
+      }
+    };
+    const handleKeyUp = (e) => {
+      const key = e.key.toLowerCase();
+      if (["z", "q", "s", "d"].includes(key)) {
+        pressedKeysRef.current.delete(key);
+        e.preventDefault();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
+  const updateGameState = (timestamp) => {
+    previousStateRef.current = {
+      snake: gameStateRef.current.snake.map(segment => ({ ...segment })),
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [started, direction]);
+    if (gameStateRef.current.gameOver) return;
 
-  // Chronomètre (timer) : s'incrémente chaque seconde tant que le jeu est lancé et non terminé
-  useEffect(() => {
-    if (!started || gameOver) return;
-    const timerInterval = setInterval(() => {
-      setTimer(prev => prev + 1);
-    }, 1000);
-    return () => clearInterval(timerInterval);
-  }, [started, gameOver]);
+    const keys = pressedKeysRef.current;
+    let vertical = 0, horizontal = 0;
+    if (keys.has('z')) vertical = -1;
+    if (keys.has('s')) vertical = 1;
+    if (keys.has('q')) horizontal = -1;
+    if (keys.has('d')) horizontal = 1;
 
-  // Compte à rebours : se décrémente toutes les 100ms
-  useEffect(() => {
-    if (!started || gameOver) return;
-    const countdownInterval = setInterval(() => {
-      setCountdown(prev => {
-        if (prev - tickDuration <= 0) {
-          // Si le compte atteint zéro, le serpent perd un segment
-          setSnake(snake => {
-            if (snake.length > 1) {
-              return snake.slice(1);
-            } else {
-              setGameOver(true);
-              return snake;
-            }
-          });
-          return referenceTime;
-        }
-        return prev - tickDuration;
-      });
-    }, tickDuration);
-    return () => clearInterval(countdownInterval);
-  }, [started, gameOver, tickDuration, referenceTime]);
+    const oldDirection = gameStateRef.current.direction;
+    let newDirection = oldDirection;
+    if (vertical !== 0 && horizontal !== 0) {
+      if (diagonalCounterRef.current % 2 === 0) {
+        newDirection = { x: 0, y: vertical * gridSize };
+      } else {
+        newDirection = { x: horizontal * gridSize, y: 0 };
+      }
+      diagonalCounterRef.current++;
+    } else if (vertical !== 0) {
+      newDirection = { x: 0, y: vertical * gridSize };
+    } else if (horizontal !== 0) {
+      newDirection = { x: horizontal * gridSize, y: 0 };
+    }
+    if (newDirection.x === -oldDirection.x && newDirection.y === -oldDirection.y) {
+      newDirection = oldDirection;
+    }
+    gameStateRef.current.direction = newDirection;
 
-  // Boucle de jeu : mise à jour du serpent (seulement si le jeu est démarré)
-  useEffect(() => {
-    if (!started || gameOver) return;
-    const interval = setInterval(() => {
-      setSnake(prevSnake => {
-        const newSnake = [...prevSnake];
-        const head = { ...newSnake[newSnake.length - 1] };
+    const head = gameStateRef.current.snake[0];
+    const newHead = {
+      x: head.x + newDirection.x,
+      y: head.y + newDirection.y,
+    };
 
-        if (direction === "UP") head.y -= 1;
-        if (direction === "DOWN") head.y += 1;
-        if (direction === "LEFT") head.x -= 1;
-        if (direction === "RIGHT") head.x += 1;
+    if (
+      newHead.x < 0 ||
+      newHead.x >= gameStateRef.current.canvasWidth ||
+      newHead.y < 0 ||
+      newHead.y >= gameStateRef.current.canvasHeight
+    ) {
+      gameStateRef.current.gameOver = true;
+      return;
+    }
 
-        // Collision avec les bords
-        if (head.x < 0 || head.x >= columns || head.y < 0 || head.y >= rows) {
-          setGameOver(true);
-          return prevSnake;
-        }
-
-        // Collision avec le corps
-        if (newSnake.some(segment => segment.x === head.x && segment.y === head.y)) {
-          setGameOver(true);
-          return prevSnake;
-        }
-
-        const ateFood = head.x === food.x && head.y === food.y;
-        if (ateFood) {
-          // Le serpent grandit d'un segment (tout en restant noir)
-          head.color = "#000";
-          newSnake.push(head);
-          setFood(generateFood(newSnake));
-          setCountdown(referenceTime); // Réinitialiser le compte à rebours
-        } else {
-          newSnake.push(head);
-          newSnake.shift();
-        }
-        return newSnake;
-      });
-    }, 150);
-    return () => clearInterval(interval);
-  }, [started, direction, food, gameOver, columns, rows, referenceTime]);
-
-  // Rendu du canvas
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
-    const ctx = canvas.getContext("2d");
-
-    const render = () => {
-      ctx.fillStyle = "#f0f0f0";
-      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-      // Si le jeu n'est pas démarré, afficher un message
-      if (!started && !gameOver) {
-        ctx.fillStyle = "#333";
-        ctx.font = "48px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("Appuyez sur Espace pour commencer", canvasWidth / 2, canvasHeight / 2);
-        requestAnimationFrame(render);
+    for (let i = 1; i < gameStateRef.current.snake.length; i++) {
+      const segment = gameStateRef.current.snake[i];
+      if (newHead.x === segment.x && newHead.y === segment.y) {
+        gameStateRef.current.gameOver = true;
         return;
       }
+    }
 
-      // Dessiner la nourriture sous forme de cercle
-      ctx.beginPath();
-      ctx.fillStyle = food.color;
-      const centerX = food.x * gridSize + gridSize / 2;
-      const centerY = food.y * gridSize + gridSize / 2;
-      ctx.arc(centerX, centerY, gridSize / 2, 0, 2 * Math.PI);
-      ctx.fill();
+    gameStateRef.current.snake.unshift(newHead);
 
-      // Dessiner le serpent (chaque segment avec coins arrondis)
-      snake.forEach(segment => {
-        ctx.fillStyle = "#000"; // Le serpent reste toujours noir
-        drawRoundedRect(ctx, segment.x * gridSize, segment.y * gridSize, gridSize, gridSize, 4);
+    const apple = gameStateRef.current.apple;
+    if (newHead.x === apple.x && newHead.y === apple.y) {
+      setPoints(prev => prev + 10);
+      const cols = gameStateRef.current.canvasWidth / gridSize;
+      const rows = gameStateRef.current.canvasHeight / gridSize;
+      gameStateRef.current.apple = {
+        x: Math.floor(Math.random() * cols) * gridSize,
+        y: Math.floor(Math.random() * rows) * gridSize,
+        color: appleColors[Math.floor(Math.random() * appleColors.length)]
+      };
+      appleSpawnTimeRef.current = timestamp;
+    } else {
+      gameStateRef.current.snake.pop();
+    }
+  };
+
+  const renderGame = (alpha, timestamp) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Effet de bounce léger pour le serpent
+    const snakeBounce = 2 * Math.sin(timestamp / 500);
+
+    const currentSnake = gameStateRef.current.snake;
+    const prevSnake = previousStateRef.current.snake;
+    const interpolatedPoints = [];
+    const commonLength = Math.min(prevSnake.length, currentSnake.length);
+    for (let i = 0; i < commonLength; i++) {
+      const interpX = lerp(prevSnake[i].x, currentSnake[i].x, alpha) + gridSize / 2;
+      const interpY = lerp(prevSnake[i].y, currentSnake[i].y, alpha) + gridSize / 2 + snakeBounce;
+      interpolatedPoints.push({ x: interpX, y: interpY });
+    }
+    for (let i = commonLength; i < currentSnake.length; i++) {
+      interpolatedPoints.push({
+        x: currentSnake[i].x + gridSize / 2,
+        y: currentSnake[i].y + gridSize / 2 + snakeBounce,
       });
+    }
 
-      // Afficher le compte à rebours
-      ctx.fillStyle = "#000";
-      ctx.font = "16px sans-serif";
-      ctx.fillText(`Countdown: ${Math.floor(countdown/1000)}s`, 10, 20);
+    if (interpolatedPoints.length === 1) {
+      ctx.beginPath();
+      ctx.fillStyle = 'green';
+      ctx.arc(interpolatedPoints[0].x, interpolatedPoints[0].y, gridSize / 2, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (interpolatedPoints.length > 1) {
+      ctx.beginPath();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = 'green';
+      ctx.lineWidth = gridSize;
+      ctx.moveTo(interpolatedPoints[0].x, interpolatedPoints[0].y);
+      for (let i = 1; i < interpolatedPoints.length; i++) {
+        ctx.lineTo(interpolatedPoints[i].x, interpolatedPoints[i].y);
+      }
+      ctx.stroke();
+    }
 
-      if (!gameOver) {
-        requestAnimationFrame(render);
+    const apple = gameStateRef.current.apple;
+    const breathScale = 1 + 0.15 * Math.sin(timestamp / 250);
+    ctx.save();
+    ctx.translate(apple.x + gridSize / 2, apple.y + gridSize / 2);
+    ctx.scale(breathScale, breathScale);
+    ctx.beginPath();
+    ctx.arc(0, 0, gridSize / 2, 0, Math.PI * 2);
+    ctx.fillStyle = apple.color;
+    ctx.fill();
+    ctx.restore();
+
+    if (gameStateRef.current.gameOver) {
+      ctx.fillStyle = 'black';
+      ctx.font = '48px sans-serif';
+      ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2);
+    }
+  };
+
+  const gameLoop = (timestamp) => {
+    if (!startTimeRef.current) {
+      startTimeRef.current = timestamp;
+      appleSpawnTimeRef.current = timestamp;
+    }
+    setChrono(((timestamp - startTimeRef.current) / 1000).toFixed(1));
+    const timeSinceApple = timestamp - appleSpawnTimeRef.current;
+    const timeLeft = Math.max(0, (countdownLimit - timeSinceApple) / 1000);
+    setCountdown(timeLeft.toFixed(1));
+    if (timeSinceApple >= countdownLimit) {
+      if (gameStateRef.current.snake.length > 1) {
+        gameStateRef.current.snake.pop();
       } else {
-        ctx.fillStyle = "rgba(0,0,0,0.5)";
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-        ctx.fillStyle = "#fff";
-        ctx.font = "48px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("Game Over", canvasWidth / 2, canvasHeight / 2);
+        gameStateRef.current.gameOver = true;
+      }
+      appleSpawnTimeRef.current = timestamp;
+    }
+    const delta = timestamp - lastTimestampRef.current;
+    lastTimestampRef.current = timestamp;
+    accumulatorRef.current += delta;
+    while (accumulatorRef.current >= tickDuration) {
+      updateGameState(timestamp);
+      accumulatorRef.current -= tickDuration;
+    }
+    const alpha = accumulatorRef.current / tickDuration;
+    renderGame(alpha, timestamp);
+    if (gameStateRef.current.gameOver) {
+      setIsGameOver(true);
+      return;
+    }
+    animationFrameIdRef.current = requestAnimationFrame(gameLoop);
+  };
+
+  useEffect(() => {
+    animationFrameIdRef.current = requestAnimationFrame(gameLoop);
+    return () => {
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current);
       }
     };
+  }, []);
 
-    render();
-  }, [snake, food, gameOver, gridSize, countdown, started]);
-
-  // Fonction de dessin d'un rectangle arrondi
-  const drawRoundedRect = (ctx, x, y, width, height, radius) => {
-    ctx.beginPath();
-    ctx.moveTo(x + radius, y);
-    ctx.lineTo(x + width - radius, y);
-    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-    ctx.lineTo(x + width, y + height - radius);
-    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-    ctx.lineTo(x + radius, y + height);
-    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-    ctx.lineTo(x, y + radius);
-    ctx.quadraticCurveTo(x, y, x + radius, y);
-    ctx.closePath();
-    ctx.fill();
+  const restartGame = () => {
+    setIsGameOver(false);
+    if (animationFrameIdRef.current) {
+      cancelAnimationFrame(animationFrameIdRef.current);
+    }
+    const now = performance.now();
+    gameStateRef.current = {
+      snake: initialSnake.map(segment => ({ ...segment })),
+      direction: initialDirection,
+      apple: {
+        x: 100,
+        y: 100,
+        color: appleColors[Math.floor(Math.random() * appleColors.length)]
+      },
+      canvasWidth: 800,
+      canvasHeight: 600,
+      gameOver: false,
+    };
+    previousStateRef.current = {
+      snake: initialSnake.map(segment => ({ ...segment })),
+    };
+    accumulatorRef.current = 0;
+    lastTimestampRef.current = now;
+    startTimeRef.current = now;
+    appleSpawnTimeRef.current = now;
+    diagonalCounterRef.current = 0;
+    pressedKeysRef.current = new Set();
+    setPoints(0);
+    animationFrameIdRef.current = requestAnimationFrame(gameLoop);
   };
 
-  const score = snake.length - 5;
-
-  // Pop-up modal de Game Over
-  const handleReplay = () => {
-    initializeGame();
-    setStarted(false); // Revenir à l'état non démarré pour nécessiter l'appui sur espace
-  };
-
-  const handleQuit = () => {
-    window.location.reload();
+  const quitGame = () => {
+    if (typeof onQuit === 'function') {
+      onQuit();
+    }
   };
 
   return (
-    <div className="snake-game-container">
-      <div className="snake-menu">
-        <div className="menu-item">Points: {score}</div>
-        <div className="menu-item">Chrono: {timer}s</div>
-        <div className="menu-item options" onClick={() => setShowOptions(prev => !prev)}>
-          Options
+    <div className="game-container">
+      <div className="interface-bar">
+        <div>Time: {chrono}s</div>
+        <div>Countdown: {countdown}s</div>
+        <div>Points: {points}</div>
+        <div className="interface-buttons">
+          <button onClick={() => setShowOptions(!showOptions)} className="btn">Options</button>
+          <button onClick={quitGame} className="btn">Quitter</button>
         </div>
       </div>
       {showOptions && (
-        <div className="snake-options">
-          <label htmlFor="gridSize">Taille de la grille: {gridSize}px</label>
-          <input
-            id="gridSize"
-            type="range"
-            min={minGridSize}
-            max={maxGridSize}
-            value={gridSize}
-            onChange={(e) => { setGridSize(Number(e.target.value)); setShowOptions(false); }}
-          />
+        <div className="options-bar">
+          <h3>Options</h3>
+          <p>Aucune option disponible pour le moment.</p>
         </div>
       )}
-      <div className="snake-canvas-container">
-        <canvas ref={canvasRef} style={{ display: "block" }} />
-      </div>
-      {gameOver && (
-        <div className="gameover-modal">
-          <div className="gameover-popup">
-            <h2>Game Over</h2>
-            <div className="gameover-buttons">
-              <button onClick={handleQuit}>Quitter</button>
-              <button onClick={handleReplay}>Rejouer</button>
+      <div className="canvas-wrapper">
+        <canvas
+          ref={canvasRef}
+          className="game-canvas"
+          width={gameStateRef.current.canvasWidth}
+          height={gameStateRef.current.canvasHeight}
+        />
+        {isGameOver && (
+          <div className="game-over-overlay">
+            <div className="game-over-popup">
+              <h2>Game Over</h2>
+              <button onClick={restartGame} className="btn">Rejouer</button>
+              <button onClick={quitGame} className="btn">Quitter</button>
             </div>
           </div>
+        )}
+      </div>
+      {/* Mobile controls */}
+      <div className="mobile-controls">
+        <button className="mobile-btn" onTouchStart={() => handleMobileDirection("up")} onTouchEnd={clearMobileDirection}>↑</button>
+        <div className="mobile-row">
+          <button className="mobile-btn" onTouchStart={() => handleMobileDirection("left")} onTouchEnd={clearMobileDirection}>←</button>
+          <button className="mobile-btn" onTouchStart={() => handleMobileDirection("down")} onTouchEnd={clearMobileDirection}>↓</button>
+          <button className="mobile-btn" onTouchStart={() => handleMobileDirection("right")} onTouchEnd={clearMobileDirection}>→</button>
         </div>
-      )}
+      </div>
     </div>
   );
 };

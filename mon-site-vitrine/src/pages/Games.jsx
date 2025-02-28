@@ -1,9 +1,7 @@
-// src/pages/Games.jsx
 import React, { useState } from 'react';
 import './Games.css';
 import SnakeGame from '../components/SnakeGame';
 import SeparatorLine from '../components/GameLine';
-
 
 function Games() {
   const [showGame, setShowGame] = useState(false);
@@ -14,7 +12,6 @@ function Games() {
       {!showGame ? (
         <div className="games-list">
           <h1>Mes Jeux Web</h1>
-          {/* Carte pour le jeu Neon Snake */}
           <div className="game-card">
             <img
               src="/images/snake-thumbnail.webp"
@@ -28,14 +25,10 @@ function Games() {
               Jouer
             </button>
           </div>
-          {/* Vous pouvez ajouter d'autres cartes de jeux ici */}
         </div>
       ) : (
         <div className="game-container">
-          <button onClick={() => setShowGame(false)} className="btn back-btn">
-            Retour
-          </button>
-          <SnakeGame />
+          <SnakeGame onQuit={() => setShowGame(false)} />
         </div>
       )}
     </div>

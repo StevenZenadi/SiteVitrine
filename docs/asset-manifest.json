@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/SiteVitrine/static/css/main.a49abf1f.css",
-    "main.js": "/SiteVitrine/static/js/main.301af00a.js",
+    "main.css": "/SiteVitrine/static/css/main.501932c6.css",
+    "main.js": "/SiteVitrine/static/js/main.8c74ba79.js",
     "static/js/453.031b35b3.chunk.js": "/SiteVitrine/static/js/453.031b35b3.chunk.js",
     "static/media/fondHome.webp": "/SiteVitrine/static/media/fondHome.f1f1381fafb702696d7e.webp",
     "static/media/hardware2.mp4": "/SiteVitrine/static/media/hardware2.fd3bf619fab2ab1a55d2.mp4",
@@ -13,9 +13,9 @@
     "static/media/1.0.webp": "/SiteVitrine/static/media/1.0.85504a701d9016105652.webp",
     "static/media/2.webp": "/SiteVitrine/static/media/2.dd97cb865dbdea78216b.webp",
     "static/media/7.webp": "/SiteVitrine/static/media/7.b01791adf909aef9e0e2.webp",
-    "static/media/profil.webp": "/SiteVitrine/static/media/profil.3a093c8595058272fd21.webp",
     "static/media/software2.mp4": "/SiteVitrine/static/media/software2.a3500f4d8917aa1d1456.mp4",
     "static/media/9.webp": "/SiteVitrine/static/media/9.b19c5ced3dfcc7606aa7.webp",
+    "static/media/Profil.jpg": "/SiteVitrine/static/media/Profil.9a14618e2ba45e837fe4.jpg",
     "static/media/4.webp": "/SiteVitrine/static/media/4.257d88010af27c3e11d5.webp",
     "static/media/8.webp": "/SiteVitrine/static/media/8.fb6426006321df2bfec9.webp",
     "static/media/Logo3.mp4": "/SiteVitrine/static/media/Logo3.070bc24ec6a1aac634fb.mp4",
@@ -35,12 +35,12 @@
     "static/media/slick.ttf": "/SiteVitrine/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/SiteVitrine/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/SiteVitrine/index.html",
-    "main.a49abf1f.css.map": "/SiteVitrine/static/css/main.a49abf1f.css.map",
-    "main.301af00a.js.map": "/SiteVitrine/static/js/main.301af00a.js.map",
+    "main.501932c6.css.map": "/SiteVitrine/static/css/main.501932c6.css.map",
+    "main.8c74ba79.js.map": "/SiteVitrine/static/js/main.8c74ba79.js.map",
     "453.031b35b3.chunk.js.map": "/SiteVitrine/static/js/453.031b35b3.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a49abf1f.css",
-    "static/js/main.301af00a.js"
+    "static/css/main.501932c6.css",
+    "static/js/main.8c74ba79.js"
   ]
 }

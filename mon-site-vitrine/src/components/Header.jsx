@@ -10,7 +10,7 @@ function Header() {
 
   // Met à jour la position de l'indicateur sur l'onglet actif
   const updateIndicator = () => {
-    const activeLink = menuRef.current.querySelector('.menu-link.active');
+    const activeLink = menuRef.current?.querySelector('.menu-link.active');
     if (activeLink) {
       setIndicatorStyle({
         left: activeLink.offsetLeft,
@@ -33,6 +33,7 @@ function Header() {
   // Au montage et lors d'un changement de route, positionne l'indicateur sur l'onglet actif
   useEffect(() => {
     updateIndicator();
+    // eslint-disable-next-line
   }, [location]);
 
   return (
@@ -42,12 +43,13 @@ function Header() {
           <img src={logo} alt="Logo" className="logo" />
         </Link>
       </div>
+
       <nav className="nav" ref={menuRef}>
         <ul className="menu" onMouseLeave={handleMouseLeave}>
           <li>
             <Link
               to="/"
-              className={`menu-link ${location.pathname === "/" ? "active" : ""}`}
+              className={`menu-link ${location.pathname === '/' ? 'active' : ''}`}
               onMouseEnter={handleMouseEnter}
             >
               Accueil
@@ -56,7 +58,7 @@ function Header() {
           <li>
             <Link
               to="/projets"
-              className={`menu-link ${location.pathname === "/projets" ? "active" : ""}`}
+              className={`menu-link ${location.pathname.startsWith('/projets') ? 'active' : ''}`}
               onMouseEnter={handleMouseEnter}
             >
               Projets
@@ -65,7 +67,7 @@ function Header() {
           <li>
             <Link
               to="/jeux"
-              className={`menu-link ${location.pathname === "/jeux" ? "active" : ""}`}
+              className={`menu-link ${location.pathname.startsWith('/jeux') ? 'active' : ''}`}
               onMouseEnter={handleMouseEnter}
             >
               Jeux
@@ -74,7 +76,7 @@ function Header() {
           <li>
             <Link
               to="/about"
-              className={`menu-link ${location.pathname === "/about" ? "active" : ""}`}
+              className={`menu-link ${location.pathname === '/about' ? 'active' : ''}`}
               onMouseEnter={handleMouseEnter}
             >
               À propos
@@ -83,17 +85,22 @@ function Header() {
           <li>
             <Link
               to="/contact"
-              className={`menu-link ${location.pathname === "/contact" ? "active" : ""}`}
+              className={`menu-link ${location.pathname === '/contact' ? 'active' : ''}`}
               onMouseEnter={handleMouseEnter}
             >
               Contact
             </Link>
           </li>
         </ul>
-        <div className="menu-indicator" style={{ left: indicatorStyle.left, width: indicatorStyle.width }} />
+        {/* Barre d'indication de l'onglet actif */}
+        <div
+          className="menu-indicator"
+          style={{ left: indicatorStyle.left, width: indicatorStyle.width }}
+        />
       </nav>
+
       <div className="header-right">
-        {/* Autres éléments du header, comme le bouton accessibilité */}
+        {/* Autres éléments éventuels (bouton accessibilité, etc.) */}
       </div>
     </header>
   );

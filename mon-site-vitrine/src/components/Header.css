@@ -2,7 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 40px;
+  /* Plus de padding pour éviter l'effet "collé" */
+  padding: 15px 40px;
   background: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -19,18 +20,11 @@
 }
 
 .logo {
-  height: 40px;
+  height: 50px; /* Agrandir légèrement le logo pour le mettre en valeur */
   width: auto;
 }
 
-.logo-text {
-  margin-left: 8px;
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: #333;
-}
-
-/* Conteneur du menu avec position relative pour l'indicateur */
+/* Conteneur du menu avec position: relative pour l'indicateur */
 .nav {
   position: relative;
 }
@@ -39,6 +33,7 @@
 .menu {
   list-style: none;
   display: flex;
+  /* Espacement plus important entre les onglets */
   gap: 30px;
   margin: 0;
   padding: 0;
@@ -49,34 +44,37 @@
   text-decoration: none;
   color: #333;
   position: relative;
-  font-size: 1.2rem;     /* Taille de police plus grande */
-  padding: 8px 0;    
-  font-weight: bold;
+  /* Plus de padding vertical pour agrandir la zone cliquable */
+  padding-bottom: 8px;
   transition: color 0.3s ease;
-}
-
-.menu-link.active {
-  color: #0070c9;
+  font-size: 1.1rem; /* Taille de police augmentée pour la lisibilité */
+  font-weight: 600;  /* Texte légèrement plus gras */
 }
 
 /* Couleur au survol */
 .menu-link:hover {
-  color: #0070c9;
+  color: #0070c9; /* Reprend par exemple la couleur du logo ou une couleur marquante */
 }
 
-/* Barre d'indication noire épaisse avec extrémités arrondies */
+/* Onglet actif */
+.menu-link.active {
+  color: #0070c9; /* Fait écho à la couleur de survol ou du logo */
+}
+
+/* Barre d'indication noire ou colorée, plus épaisse */
 .menu-indicator {
   position: absolute;
   bottom: 0;
-  height: 3px; /* Épaisseur de la barre */
-  background: #000;
-  border-radius: 20px; /* Extrémités arrondies */
+  height: 4px; /* Barre plus épaisse pour une meilleure visibilité */
+  background: #0070c9; /* Couleur identique à l'onglet actif */
+  border-radius: 2px;  /* Extrémités arrondies */
   transition: left 0.3s ease, width 0.3s ease;
 }
 
-/* Optionnel : style pour l'onglet actif */
-.menu-link.active {
-  color: #0070c9;
+/* Espace pour d'autres éléments du header */
+.header-right {
+  display: flex;
+  align-items: center;
 }
 
 @media (max-width: 768px) {

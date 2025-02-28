@@ -1,125 +1,73 @@
-/* Style général du conteneur de la page */
+/* Corps et typographie globale */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.4;
+  color: #333;
+}
+
+/* Conteneur principal de la page */
 .projects-page {
   position: relative;
-  padding-top: 70px;
-  padding-bottom: 70px;
   min-height: 100vh;
-  background: none;
+  padding-top: 90px; /* Ajout d'espace sous le header */
+  padding-bottom: 70px;
   background-color: #fff;
   z-index: 0;
 }
 
-/* Fond pour chaque catégorie */
+/* --- Dégradés de fond allégés --- */
 .projects-page.software {
-  background: linear-gradient(to top, #00a6f9, #ffffff);
+  background: linear-gradient(to top, #90d5fa, #ffffff);
 }
 .projects-page.hardware {
-  background: linear-gradient(to top, #4e4e4e, #ffffff);
+  background: linear-gradient(to top, #cccccc, #ffffff);
 }
 .projects-page.apprentissage {
-  background: linear-gradient(to top, #ffb300, #ffffff);
+  background: linear-gradient(to top, #ffe082, #ffffff);
 }
 
-/* Titre centré */
-.projects-title {
+/* Titre principal */
+.page-main-title {
   text-align: center;
-  margin-bottom: 10px;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #333;
 }
 
-/* Conteneur principal centré en Flexbox */
+/* Conteneur principal : flex centré */
 .projects-content {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 30px; /* Espace entre le menu et la vidéo */
+  align-items: flex-start; /* Aligné en haut */
+  gap: 30px;
   width: 100%;
-  min-height: 500px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 400px;
 }
 
-/* Menu onglet */
+/* Colonne d'onglets */
 .tabs-column {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 15px;
 }
 
-/* Vidéo et légende */
-.video-column {
-  width: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.video-wrapper {
-  position: relative;
-  width: 100%;
-  height: 450px;
-  background-color: #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  opacity: 0;
-  animation: fadeIn 2s forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.video-caption {
-  margin-top: 10px;
-  font-size: 1.2rem;
-  color: #333;
-  text-align: left;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideFadeIn 1s forwards;
-  animation-delay: 0.3s;
-}
-
-@keyframes slideFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Sous-titre au-dessus de la vidéo */
-.video-subtitle {
-  margin-bottom: 10px;
-  font-size: 1.3rem;
-  color: #333;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: slideFadeIn 0.8s forwards;
-}
-
-/* Style des onglets */
+/* Onglets */
 .tab {
   background: #eee;
   border: none;
-  padding: 15px 20px;
+  padding: 12px 16px;
   cursor: pointer;
   border-radius: 8px;
-  font-weight: bold;
-  font-size: 1.1rem;
+  font-weight: 600;
+  font-size: 1rem;
   transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
-  width: 180px;
+  width: 150px;
   text-align: center;
   color: #333;
 }
@@ -129,6 +77,7 @@
   transform: scale(1.05);
 }
 
+/* Couleurs d'onglet spécifiques au hover ou actif */
 .tab.software:hover,
 .tab.software.active {
   background: #00a6f9;
@@ -147,33 +96,139 @@
   color: #fff;
 }
 
-/* Responsive */
+/* Colonne vidéo */
+.video-column {
+  width: 600px; /* Correspond à la largeur de VideoCanvas */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Bloc vidéo */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+  background-color: #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sous-titre au-dessus de la vidéo */
+.video-subtitle {
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+  color: #333;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: slideFadeIn 0.8s forwards;
+}
+
+/* Légende sous la vidéo */
+.video-caption {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #333;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideFadeIn 1s forwards;
+  animation-delay: 0.3s;
+}
+
+/* Animation de la légende */
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Bouton CTA sous la légende */
+.video-cta-container {
+  margin-top: 10px;
+}
+
+.video-cta {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #0070c9;
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.video-cta:hover {
+  background-color: #005ea6;
+}
+
+/* Section "en cours" */
+.project-category {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 1rem;
+}
+
+/* --- Responsive --- */
 @media (max-width: 768px) {
   .projects-page {
-    padding-top: 50px;
+    padding-top: 70px;
   }
-  
+
   .projects-content {
     flex-direction: column;
     align-items: center;
     margin: 0 10px;
   }
-  
+
   .tabs-column,
   .video-column {
     width: 100%;
     display: flex;
     align-items: center;
   }
-  
+
+  .video-column {
+    max-width: 100%;
+  }
+
   .video-wrapper {
     width: 100%;
-    height: auto;
     max-width: 100%;
     aspect-ratio: 16/9;
+    border-radius: 8px;
   }
-  
+
+  .video-subtitle {
+    font-size: 1.2rem;
+  }
+
   .video-caption {
     text-align: center;
+  }
+
+  .video-cta {
+    font-size: 1rem;
   }
 }

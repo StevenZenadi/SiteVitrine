@@ -56,20 +56,31 @@
   color: #0070c9; /* Reprend par exemple la couleur du logo ou une couleur marquante */
 }
 
-/* Onglet actif */
-.menu-link.active {
-  color: #0070c9; /* Fait écho à la couleur de survol ou du logo */
-}
-
-/* Barre d'indication noire ou colorée, plus épaisse */
+/* Barre d'indication : noire et plus épaisse */
 .menu-indicator {
   position: absolute;
   bottom: 0;
-  height: 4px; /* Barre plus épaisse pour une meilleure visibilité */
-  background: #0070c9; /* Couleur identique à l'onglet actif */
-  border-radius: 2px;  /* Extrémités arrondies */
+  height: 4px;
+  background: #000; /* Noir */
+  border-radius: 2px;
   transition: left 0.3s ease, width 0.3s ease;
 }
+
+/* Onglet actif : texte multicolore */
+.menu-link.active {
+  /* Rendre le texte transparent, puis appliquer un dégradé en fond */
+  background: linear-gradient(
+    to right,
+    #ff0000, /* Rouge */
+    #ff9900, /* Orange */
+    #009600, /* Vert */
+    #0099ff, /* Bleu */
+    #9900ff  /* Violet, etc. */
+  );
+  -webkit-background-clip: text; /* Pour afficher le dégradé dans le texte */
+  color: transparent;            /* Masque la couleur initiale du texte */
+}
+
 
 /* Espace pour d'autres éléments du header */
 .header-right {

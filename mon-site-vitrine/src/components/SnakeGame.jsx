@@ -10,14 +10,36 @@ function lerp(a, b, t) {
   return a + (b - a) * t;
 }
 
-const appleColors = ["#ff0000", "#0000ff", "#008000", "#808080", "#ffa500", "#800080"];
+// Liste des couleurs d'objets mangeables et leurs bonus associés
+const appleColors = ["#828282", "#FF0000", "#FFAD00", "#00A1FF", "#894FFF", "#1AAD0E"];
 
+// État initial du serpent (3 segments) et direction initiale (vers la droite)
 const initialSnake = [
   { x: 40, y: 40 },
   { x: 20, y: 40 },
   { x: 0, y: 40 },
 ];
 const initialDirection = { x: gridSize, y: 0 };
+
+// Génère des obstacles selon le niveau (obstacles sous forme de rectangles)
+const generateObstacles = (level, canvasWidth, canvasHeight) => {
+  const obstacles = [];
+  // Par exemple, ajouter jusqu'à 3 obstacles pour le niveau 1, +1 par niveau max 8
+  const count = Math.min(3 + level - 1, 8);
+  for (let i = 0; i < count; i++) {
+    const obstacleWidth = gridSize * (2 + Math.floor(Math.random() * 2)); // 2-3 cellules
+    const obstacleHeight = gridSize * (2 + Math.floor(Math.random() * 2));
+    const maxX = Math.floor((canvasWidth - obstacleWidth) / gridSize);
+    const maxY = Math.floor((canvasHeight - obstacleHeight) / gridSize);
+    obstacles.push({
+      x: Math.floor(Math.random() * maxX) * gridSize,
+      y: Math.floor(Math.random() * maxY) * gridSize,
+      width: obstacleWidth,
+      height: obstacleHeight
+    });
+  }
+  return obstacles;
+};
 
 const SnakeGame = ({ onQuit }) => {
   // Références et états internes
@@ -30,29 +52,21 @@ const SnakeGame = ({ onQuit }) => {
   const pressedKeysRef = useRef(new Set());
   const animationFrameIdRef = useRef(null);
 
+  // États de l'interface et du jeu
   const [chrono, setChrono] = useState(0);
   const [countdown, setCountdown] = useState((countdownLimit / 1000).toFixed(1));
   const [points, setPoints] = useState(0);
+  const [level, setLevel] = useState(1);
+  const [comboCount, setComboCount] = useState(0);
   const [showOptions, setShowOptions] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
+  // Bonus actif : par exemple { type:"invincible", expires: timestamp }
+  const [activeBonus, setActiveBonus] = useState(null);
 
-  // Pour les contrôles tactiles, on peut gérer un state "mobileDirection"
-  // qui sera mis à jour lors des pressions sur les boutons.
-  // On injecte ces directions dans pressedKeysRef de manière temporaire.
-  const handleMobileDirection = (dir) => {
-    // Dir peut être "up", "down", "left", "right"
-    // On simule les touches Z, S, Q, D respectivement.
-    pressedKeysRef.current = new Set(); // On réinitialise pour un contrôle "instantané"
-    if (dir === "up") pressedKeysRef.current.add("z");
-    if (dir === "down") pressedKeysRef.current.add("s");
-    if (dir === "left") pressedKeysRef.current.add("q");
-    if (dir === "right") pressedKeysRef.current.add("d");
-  };
+  const canvasWidth = 800;
+  const canvasHeight = 600;
 
-  const clearMobileDirection = () => {
-    pressedKeysRef.current.clear();
-  };
-
+  // Game state stocké dans une ref
   const gameStateRef = useRef({
     snake: initialSnake.map(segment => ({ ...segment })),
     direction: initialDirection,
@@ -61,8 +75,9 @@ const SnakeGame = ({ onQuit }) => {
       y: 100,
       color: appleColors[Math.floor(Math.random() * appleColors.length)]
     },
-    canvasWidth: 800,
-    canvasHeight: 600,
+    obstacles: generateObstacles(level, canvasWidth, canvasHeight),
+    canvasWidth,
+    canvasHeight,
     gameOver: false,
   });
 
@@ -70,6 +85,35 @@ const SnakeGame = ({ onQuit }) => {
     snake: initialSnake.map(segment => ({ ...segment })),
   });
 
+  // Bonus : applique un bonus en fonction de la couleur de l'objet mangeable
+  const applyBonus = (color, timestamp) => {
+    let bonus = null;
+    switch(color) {
+      case "#0000ff": // Bleu : ralentissement temporaire
+        bonus = { type: "slow", expires: timestamp + 3000 };
+        break;
+      case "#008000": // Vert : croissance supplémentaire (+2 segments)
+        {
+          const tail = gameStateRef.current.snake[gameStateRef.current.snake.length - 1];
+          gameStateRef.current.snake.push({ ...tail }, { ...tail });
+        }
+        break;
+      case "#808080": // Gris : bouclier (ignore une collision une fois)
+        bonus = { type: "shield", expires: timestamp + 5000 };
+        break;
+      case "#ffa500": // Orange : double score sur la pomme suivante
+        bonus = { type: "double", expires: timestamp + 5000 };
+        break;
+      case "#800080": // Violet : invincibilité 3 sec
+        bonus = { type: "invincible", expires: timestamp + 3000 };
+        break;
+      default:
+        break;
+    }
+    setActiveBonus(bonus);
+  };
+
+  // Gestion des événements clavier
   useEffect(() => {
     const handleKeyDown = (e) => {
       const key = e.key.toLowerCase();
@@ -99,6 +143,11 @@ const SnakeGame = ({ onQuit }) => {
     };
 
     if (gameStateRef.current.gameOver) return;
+
+    // Bonus expire ?
+    if (activeBonus && timestamp > activeBonus.expires) {
+      setActiveBonus(null);
+    }
 
     const keys = pressedKeysRef.current;
     let vertical = 0, horizontal = 0;
@@ -132,6 +181,25 @@ const SnakeGame = ({ onQuit }) => {
       y: head.y + newDirection.y,
     };
 
+    // Collision avec obstacles
+    for (let obstacle of gameStateRef.current.obstacles) {
+      if (
+        newHead.x < obstacle.x + obstacle.width &&
+        newHead.x + gridSize > obstacle.x &&
+        newHead.y < obstacle.y + obstacle.height &&
+        newHead.y + gridSize > obstacle.y
+      ) {
+        // Si bonus bouclier ou invincible est actif, on l'annule et on ignore la collision
+        if (activeBonus && (activeBonus.type === "shield" || activeBonus.type === "invincible")) {
+          setActiveBonus(null);
+        } else {
+          gameStateRef.current.gameOver = true;
+          return;
+        }
+      }
+    }
+
+    // Collision avec les murs
     if (
       newHead.x < 0 ||
       newHead.x >= gameStateRef.current.canvasWidth ||
@@ -142,11 +210,16 @@ const SnakeGame = ({ onQuit }) => {
       return;
     }
 
+    // Collision avec le corps
     for (let i = 1; i < gameStateRef.current.snake.length; i++) {
       const segment = gameStateRef.current.snake[i];
       if (newHead.x === segment.x && newHead.y === segment.y) {
-        gameStateRef.current.gameOver = true;
-        return;
+        if (activeBonus && activeBonus.type === "invincible") {
+          setActiveBonus(null);
+        } else {
+          gameStateRef.current.gameOver = true;
+          return;
+        }
       }
     }
 
@@ -154,9 +227,32 @@ const SnakeGame = ({ onQuit }) => {
 
     const apple = gameStateRef.current.apple;
     if (newHead.x === apple.x && newHead.y === apple.y) {
-      setPoints(prev => prev + 10);
-      const cols = gameStateRef.current.canvasWidth / gridSize;
-      const rows = gameStateRef.current.canvasHeight / gridSize;
+      // Combo : si plus de 30% du temps reste, incrémenter comboCount
+      if (parseFloat(countdown) > (countdownLimit / 1000) * 0.3) {
+        setComboCount(prev => prev + 1);
+      } else {
+        setComboCount(0);
+      }
+      // Appliquer bonus combo si combo atteint certains seuils
+      let bonusMultiplier = 1;
+      const thresholds = [5, 10, 15, 20, 25];
+      if (thresholds.includes(comboCount + 1)) {
+        bonusMultiplier = 1.3;
+      }
+      setPoints(prev => prev + Math.floor(10 * bonusMultiplier));
+
+      // Appliquer bonus lié à la couleur de l'apple
+      applyBonus(apple.color, timestamp);
+
+      // Augmenter le niveau tous les 100 points par exemple
+      if ((points + 10) % 100 === 0) {
+        setLevel(prev => prev + 1);
+        // Regénérer obstacles pour le nouveau niveau
+        gameStateRef.current.obstacles = generateObstacles(level + 1, canvasWidth, canvasHeight);
+      }
+
+      const cols = canvasWidth / gridSize;
+      const rows = canvasHeight / gridSize;
       gameStateRef.current.apple = {
         x: Math.floor(Math.random() * cols) * gridSize,
         y: Math.floor(Math.random() * rows) * gridSize,
@@ -173,6 +269,12 @@ const SnakeGame = ({ onQuit }) => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Dessiner les obstacles
+    for (let obstacle of gameStateRef.current.obstacles) {
+      ctx.fillStyle = '#555';
+      ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+    }
 
     // Effet de bounce léger pour le serpent
     const snakeBounce = 2 * Math.sin(timestamp / 500);
@@ -193,16 +295,19 @@ const SnakeGame = ({ onQuit }) => {
       });
     }
 
+    // Si un bonus actif (par exemple "slow"), on peut changer légèrement la couleur
+    let snakeColor = activeBonus && activeBonus.type === "slow" ? "#00aa00" : "green";
+
     if (interpolatedPoints.length === 1) {
       ctx.beginPath();
-      ctx.fillStyle = 'green';
+      ctx.fillStyle = snakeColor;
       ctx.arc(interpolatedPoints[0].x, interpolatedPoints[0].y, gridSize / 2, 0, Math.PI * 2);
       ctx.fill();
     } else if (interpolatedPoints.length > 1) {
       ctx.beginPath();
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = 'green';
+      ctx.strokeStyle = snakeColor;
       ctx.lineWidth = gridSize;
       ctx.moveTo(interpolatedPoints[0].x, interpolatedPoints[0].y);
       for (let i = 1; i < interpolatedPoints.length; i++) {
@@ -233,6 +338,7 @@ const SnakeGame = ({ onQuit }) => {
     if (!startTimeRef.current) {
       startTimeRef.current = timestamp;
       appleSpawnTimeRef.current = timestamp;
+      gameStateRef.current.obstacles = generateObstacles(level, canvasWidth, canvasHeight);
     }
     setChrono(((timestamp - startTimeRef.current) / 1000).toFixed(1));
     const timeSinceApple = timestamp - appleSpawnTimeRef.current;
@@ -245,6 +351,7 @@ const SnakeGame = ({ onQuit }) => {
         gameStateRef.current.gameOver = true;
       }
       appleSpawnTimeRef.current = timestamp;
+      setComboCount(0);
     }
     const delta = timestamp - lastTimestampRef.current;
     lastTimestampRef.current = timestamp;
@@ -285,8 +392,9 @@ const SnakeGame = ({ onQuit }) => {
         y: 100,
         color: appleColors[Math.floor(Math.random() * appleColors.length)]
       },
-      canvasWidth: 800,
-      canvasHeight: 600,
+      obstacles: generateObstacles(1, canvasWidth, canvasHeight),
+      canvasWidth,
+      canvasHeight,
       gameOver: false,
     };
     previousStateRef.current = {
@@ -299,6 +407,9 @@ const SnakeGame = ({ onQuit }) => {
     diagonalCounterRef.current = 0;
     pressedKeysRef.current = new Set();
     setPoints(0);
+    setComboCount(0);
+    setLevel(1);
+    setActiveBonus(null);
     animationFrameIdRef.current = requestAnimationFrame(gameLoop);
   };
 
@@ -329,8 +440,8 @@ const SnakeGame = ({ onQuit }) => {
         <canvas
           ref={canvasRef}
           className="game-canvas"
-          width={gameStateRef.current.canvasWidth}
-          height={gameStateRef.current.canvasHeight}
+          width={canvasWidth}
+          height={canvasHeight}
         />
         {isGameOver && (
           <div className="game-over-overlay">
@@ -342,13 +453,13 @@ const SnakeGame = ({ onQuit }) => {
           </div>
         )}
       </div>
-      {/* Mobile controls */}
+      {/* Contrôles mobiles */}
       <div className="mobile-controls">
-        <button className="mobile-btn" onTouchStart={() => handleMobileDirection("up")} onTouchEnd={clearMobileDirection}>↑</button>
+        <button className="mobile-btn" onTouchStart={() => pressedKeysRef.current.add("z")} onTouchEnd={() => pressedKeysRef.current.delete("z")}>↑</button>
         <div className="mobile-row">
-          <button className="mobile-btn" onTouchStart={() => handleMobileDirection("left")} onTouchEnd={clearMobileDirection}>←</button>
-          <button className="mobile-btn" onTouchStart={() => handleMobileDirection("down")} onTouchEnd={clearMobileDirection}>↓</button>
-          <button className="mobile-btn" onTouchStart={() => handleMobileDirection("right")} onTouchEnd={clearMobileDirection}>→</button>
+          <button className="mobile-btn" onTouchStart={() => pressedKeysRef.current.add("q")} onTouchEnd={() => pressedKeysRef.current.delete("q")}>←</button>
+          <button className="mobile-btn" onTouchStart={() => pressedKeysRef.current.add("s")} onTouchEnd={() => pressedKeysRef.current.delete("s")}>↓</button>
+          <button className="mobile-btn" onTouchStart={() => pressedKeysRef.current.add("d")} onTouchEnd={() => pressedKeysRef.current.delete("d")}>→</button>
         </div>
       </div>
     </div>

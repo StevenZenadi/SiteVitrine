@@ -72,8 +72,8 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;  /* largeur égale au canvas */
-  height: 100%; /* hauteur égale au canvas */
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
@@ -113,7 +113,7 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   background: #0051a8;
 }
 
-/* Mobile controls – affichés uniquement sur mobile */
+/* Contrôles mobiles */
 .mobile-controls {
   display: none;
 }

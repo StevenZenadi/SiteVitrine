@@ -78,3 +78,24 @@
 .menu-link.active {
   color: #0070c9;
 }
+
+@media (max-width: 768px) {
+  .header {
+    padding: 10px 15px; /* Moins de padding qu’en desktop */
+  }
+
+  .menu {
+    flex-direction: column; /* Place les onglets en colonne */
+    gap: 10px;
+  }
+
+  .menu-link {
+    font-size: 1rem; /* Réduit la taille de police */
+    padding: 8px 0; /* Moins de hauteur */
+  }
+}
+
+/* Par exemple, si le header fait ~60px de haut sur mobile */
+.main-content {
+  margin-top: 70px; /* Ajustez selon la hauteur réelle du header */
+}

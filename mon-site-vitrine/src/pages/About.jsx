@@ -8,6 +8,8 @@ import img3 from '../images/gris.png';
 import img4 from '../images/bleu.png';
 import img5 from '../images/vert.png';
 import img6 from '../images/violet.png';
+import myPhoto from '../images/Profil.jpg';
+
 
 const images = [img1, img2, img3, img4, img5, img6];
 // Texte associé à chaque boule (par exemple, lettres de "STEVEN")
@@ -135,15 +137,68 @@ function ParallaxBackground() {
   );
 }
 
+
 function About() {
   return (
     <div className="about-page">
+      {/* Animation des boules colorées */}
       <ParallaxBackground />
-      {/* Intégration du mot "I'm" sous les boules */}
+
+      {/* Animation "I'm" sous les boules */}
       <WordIm />
+
+      {/* Contenu principal de la page */}
       <div className="about-content">
         <h1>À Propos de Moi</h1>
-        <p>Votre contenu ici…</p>
+
+        {/* Sous-titre ou phrase d'accroche */}
+        <h2 className="about-subtitle">Développeur Web & IoT Passionné</h2>
+
+        {/* Photo de profil ou avatar (optionnel) */}
+        <img src={myPhoto} alt="Mon profil" className="about-photo" />
+
+        {/* Texte de présentation */}
+        <p>
+          Bienvenue ! Je m'appelle <strong>Steven</strong>, un développeur 
+          enthousiaste spécialisé dans le web et l’IoT. J’aime créer des 
+          solutions innovantes qui combinent software et hardware. 
+        </p>
+
+        {/* Section "Mon Parcours" */}
+        <div className="about-section">
+          <h3>Mon Parcours</h3>
+          <p>
+            Après avoir obtenu un diplôme en Informatique, j’ai travaillé sur 
+            plusieurs projets de développement web, d’objets connectés et 
+            d’automatisation. J’ai découvert une passion pour les systèmes 
+            embarqués et la création d’applications front-end.
+          </p>
+        </div>
+
+        {/* Section "Mes Compétences" */}
+        <div className="about-section">
+          <h3>Mes Compétences</h3>
+          <ul className="about-skills">
+            <li>HTML / CSS / JavaScript</li>
+            <li>React & Node.js</li>
+            <li>Arduino & Raspberry Pi</li>
+            <li>Conception d’API REST</li>
+            <li>Git & GitHub</li>
+          </ul>
+        </div>
+
+        {/* CTA : Télécharger CV / Voir GitHub / LinkedIn (exemples) */}
+        <div className="about-cta-container">
+          <a href="/cv.pdf" className="about-cta" download>
+            Télécharger mon CV
+          </a>
+          <a href="https://github.com/votreProfil" className="about-cta" target="_blank" rel="noopener noreferrer">
+            Mon GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/votreProfil" className="about-cta" target="_blank" rel="noopener noreferrer">
+            Mon LinkedIn
+          </a>
+        </div>
       </div>
     </div>
   );

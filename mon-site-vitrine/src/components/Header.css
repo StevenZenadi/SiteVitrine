@@ -1,8 +1,8 @@
+/* --- Styles généraux du header --- */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* Plus de padding pour éviter l'effet "collé" */
   padding: 15px 40px;
   background: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -20,91 +20,120 @@
 }
 
 .logo {
-  height: 50px; /* Agrandir légèrement le logo pour le mettre en valeur */
+  height: 50px;
   width: auto;
 }
 
-/* Conteneur du menu avec position: relative pour l'indicateur */
+/* --- Bouton burger --- */
+.burger-button {
+  display: none; /* On le masque par défaut sur desktop */
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.burger-button.open .bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.burger-button.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-button.open .bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.bar {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #333;
+  transition: all 0.3s ease;
+}
+
+/* --- Menu en ligne (desktop) --- */
 .nav {
   position: relative;
 }
 
-/* Menu en ligne */
 .menu {
   list-style: none;
   display: flex;
-  /* Espacement plus important entre les onglets */
   gap: 30px;
   margin: 0;
   padding: 0;
 }
 
-/* Lien du menu */
-.menu-link {
-  text-decoration: none;
-  color: #333;
-  position: relative;
-  /* Plus de padding vertical pour agrandir la zone cliquable */
-  padding-bottom: 8px;
-  transition: color 0.3s ease;
-  font-size: 1.1rem; /* Taille de police augmentée pour la lisibilité */
-  font-weight: 600;  /* Texte légèrement plus gras */
-}
-
-/* Couleur au survol */
-.menu-link:hover {
-  color: #0070c9; /* Reprend par exemple la couleur du logo ou une couleur marquante */
-}
-
-/* Barre d'indication : noire et plus épaisse */
+/* Barre d'indication noire */
 .menu-indicator {
   position: absolute;
   bottom: 0;
   height: 4px;
-  background: #000; /* Noir */
+  background: #000; /* Trait noir */
   border-radius: 2px;
   transition: left 0.3s ease, width 0.3s ease;
 }
 
-/* Onglet actif : texte multicolore */
+/* Liens du menu */
+.menu-link {
+  text-decoration: none;
+  color: #333;
+  position: relative;
+  padding-bottom: 8px;
+  transition: color 0.3s ease;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Couleur au survol */
+.menu-link:hover {
+  color: #0099ff;
+}
+
+/* Active : texte en dégradé ou multicolore (exemple) */
 .menu-link.active {
-  /* Rendre le texte transparent, puis appliquer un dégradé en fond */
-  background: linear-gradient(
-    to right,
-    #ff0000, /* Rouge */
-    #ff9900, /* Orange */
-    #009600, /* Vert */
-    #0099ff, /* Bleu */
-    #9900ff  /* Violet, etc. */
+  background: linear-gradient(to right,
+    #ff0000,  /* Rouge */
+    #ff9900,  /* Orange */
+    #009600,  /* Vert */
+    #0099ff,  /* Bleu */
+    #9900ff   /* Violet */
   );
-  -webkit-background-clip: text; /* Pour afficher le dégradé dans le texte */
-  color: transparent;            /* Masque la couleur initiale du texte */
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
-
-/* Espace pour d'autres éléments du header */
-.header-right {
-  display: flex;
-  align-items: center;
-}
-
+/* --- Responsive --- */
 @media (max-width: 768px) {
-  .header {
-    padding: 10px 15px; /* Moins de padding qu’en desktop */
+  /* Le bouton burger devient visible */
+  .burger-button {
+    display: flex;
   }
 
+  /* Le menu horizontal se cache par défaut */
   .menu {
-    flex-direction: column; /* Place les onglets en colonne */
-    gap: 10px;
+    display: none;
+    flex-direction: column; /* On empile les liens */
+    gap: 20px;
+    position: absolute;
+    top: 60px;    /* Sous le header */
+    right: 40px;  /* Aligné à droite */
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    border-radius: 8px;
   }
 
-  .menu-link {
-    font-size: 1rem; /* Réduit la taille de police */
-    padding: 8px 0; /* Moins de hauteur */
+  /* Quand isMenuOpen est true, on l'affiche */
+  .menu.menu-open {
+    display: flex;
   }
-}
 
-/* Par exemple, si le header fait ~60px de haut sur mobile */
-.main-content {
-  margin-top: 70px; /* Ajustez selon la hauteur réelle du header */
+  /* L'indicateur peut être désactivé ou géré différemment sur mobile */
+  .menu-indicator {
+    display: none;
+  }
 }

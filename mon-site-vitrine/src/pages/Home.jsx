@@ -6,7 +6,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import TiltCard from '../components/TiltCard';
 import "./Home.css";
-import home from '../images/fondHome.webp';
 import imageCardSoftware from '../images/cardSoftware.jpg';
 import imageCardLearning from '../images/cardLearn.jpg';
 import imageCardHardware from '../images/cardHardware.jpg';

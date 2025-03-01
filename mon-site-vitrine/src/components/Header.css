@@ -1,5 +1,6 @@
 /* --- Styles généraux du header --- */
 .header {
+  position: relative; /* Pour que les éléments absolus se positionnent par rapport au header */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -56,7 +57,9 @@
 
 /* --- Menu en ligne (desktop) --- */
 .nav {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .menu {
@@ -113,6 +116,16 @@
     display: flex;
   }
 
+  body {
+    padding-top: 80px; /* Pour éviter que le contenu soit recouvert par le header */
+  }
+
+  .nav {
+    position: static; /* ou relative selon votre besoin */
+    transform: none;
+    margin-left: auto; /* Pour que le menu apparaisse à droite */
+  }
+
   /* Le menu horizontal se cache par défaut */
   .menu {
     display: none;
@@ -135,5 +148,9 @@
   /* L'indicateur peut être désactivé ou géré différemment sur mobile */
   .menu-indicator {
     display: none;
+  }
+
+  .main-content {
+    margin-top: 80px; /* Ajustez cette valeur selon la hauteur de votre header */
   }
 }

@@ -1,7 +1,6 @@
 // src/components/RandomCirclesBackground.jsx
 import React, { useState, useEffect } from 'react';
 import './RandomCirclesBackground.css';
-import CirclesConnections from './CirclesConnections';
 
 const fullPalette = ["#1AAD0E", "#894FFF", "#00A1FF", "#FFAD00", "#FF0000", "#828282"];
 
@@ -23,32 +22,41 @@ const getColor = (selectedCategory) => {
 
 const getRandomNumber = (min, max) => Math.random() * (max - min) + min;
 
+const mapRange = (value, inMin, inMax, outMin, outMax) => {
+  return outMin + ((value - inMin) * (outMax - outMin)) / (inMax - inMin);
+};
+
 const RandomCirclesBackground = ({ selectedCategory }) => {
   const [circles, setCircles] = useState([]);
   const [transitioning, setTransitioning] = useState(false);
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
 
-  // Génération des cercles (diminution de la densité : par exemple 10 cercles)
+  // Augmenter la densité : par exemple, générer 20 cercles au lieu de 10.
   const generateCircles = () => {
-    const count = 10;
+    const count = 20;
     const newCircles = [];
     for (let i = 0; i < count; i++) {
-      const size = Math.floor(getRandomNumber(40, 80));
+      const size = Math.floor(getRandomNumber(20, 100));
       const left = getRandomNumber(0, 100);
       const top = getRandomNumber(0, 100);
       const color = getColor(selectedCategory);
-      const parallaxFactor = getRandomNumber(0.2, 1.0);
-      newCircles.push({ id: i, size, left, top, color, parallaxFactor });
+      // Plus la boule est grande, plus elle bouge (parallaxFactor élevé)
+      const parallaxFactor = mapRange(size, 20, 100, 0.2, 1);
+      // Les plus petites sont plus floues
+      const blur = mapRange(size, 20, 100, 5, 1);
+      // Z-index en fonction de la taille : les grandes cercles sont devant
+      const zIndex = Math.floor(size);
+      newCircles.push({ id: i, size, left, top, color, parallaxFactor, blur, zIndex });
     }
     return newCircles;
   };
 
-  // Génération initiale des cercles
+  // Génération initiale
   useEffect(() => {
     setCircles(generateCircles());
   }, []);
 
-  // Lorsque la catégorie change, on déclenche une transition : fade-out puis fade-in
+  // Transition lors du changement de catégorie
   useEffect(() => {
     setTransitioning(true);
     const timer = setTimeout(() => {
@@ -58,7 +66,7 @@ const RandomCirclesBackground = ({ selectedCategory }) => {
     return () => clearTimeout(timer);
   }, [selectedCategory]);
 
-  // Mise à jour du parallax via la souris
+  // Mise à jour du parallax via le mouvement de la souris
   useEffect(() => {
     const handleMouseMove = (e) => {
       const offsetX = (e.clientX - window.innerWidth / 2) / 100;
@@ -81,12 +89,14 @@ const RandomCirclesBackground = ({ selectedCategory }) => {
             backgroundColor: circle.color,
             left: `${circle.left}%`,
             top: `${circle.top}%`,
+            filter: `blur(${circle.blur}px)`,
             boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-            transform: `translate(${mouseOffset.x * circle.parallaxFactor}px, ${mouseOffset.y * circle.parallaxFactor}px)`
+            transform: `translate(${mouseOffset.x * circle.parallaxFactor}px, ${mouseOffset.y * circle.parallaxFactor}px)`,
+            zIndex: circle.zIndex
           }}
         />
       ))}
-      <CirclesConnections circles={circles} ballSize={50} transitioning={transitioning} />
+      {/* Les lignes de connexion ont été retirées */}
     </div>
   );
 };

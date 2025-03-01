@@ -1,3 +1,4 @@
+// src/pages/Projects.jsx
 import React, { useState, useEffect } from "react";
 import VideoCanvas from "../components/VideoCanvas";
 import "./Projects.css";
@@ -10,12 +11,10 @@ import RandomCirclesBackground from "../components/RandomCirclesBackground";
 function Projects() {
   const categories = ["software", "hardware", "apprentissage"];
   const { projectCategory, setProjectCategory } = useProjectCategory();
-
   const [hoverCategory, setHoverCategory] = useState("software");
   const [animationKey, setAnimationKey] = useState(0);
 
   useEffect(() => {
-    // Catégorie par défaut
     setProjectCategory("software");
   }, [setProjectCategory]);
 
@@ -43,54 +42,45 @@ function Projects() {
     setAnimationKey((prev) => prev + 1);
   };
 
-  // Classe de fond dynamique (catégorie)
   const backgroundClass = hoverCategory || "software";
 
   return (
     <div className={`projects-page ${backgroundClass}`}>
-      {/* Arrière-plan décoratif */}
       <RandomCirclesBackground selectedCategory={backgroundClass} />
 
-      {/* Titre principal de la page */}
-      <h1 className="page-main-title">Nos Projets</h1>
+      {/* Barre d'onglets horizontale */}
+      <div className="tabs-bar">
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            className={`tab ${hoverCategory === cat ? "active" : ""} ${cat}`}
+            onClick={() => handleCategoryChange(cat)}
+          >
+            {cat.charAt(0).toUpperCase() + cat.slice(1)}
+          </button>
+        ))}
+      </div>
 
       <div className="projects-content">
-        {/* Colonne des onglets */}
-        <div className="tabs-column">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              className={`tab ${hoverCategory === cat ? "active" : ""} ${cat}`}
-              onMouseEnter={() => handleCategoryChange(cat)}
-            >
-              {cat.charAt(0).toUpperCase() + cat.slice(1)}
-            </button>
-          ))}
-        </div>
-
-        {/* Colonne de la vidéo + légende */}
         <div className="video-column">
           {hoverCategory && (
             <h2 className="video-subtitle" key={`subtitle-${hoverCategory}-${animationKey}`}>
               {subTitles[hoverCategory]}
             </h2>
           )}
-
           <div className="video-wrapper" key={`${hoverCategory}-${animationKey}`}>
             <VideoCanvas
               videoSources={videoMapping[hoverCategory]}
               duration={3000}
-              width={600}   // <-- Largeur réduite
-              height={338}  // Pour conserver un ratio proche de 16:9
+              width={600}
+              height={338}
             />
           </div>
-
           {hoverCategory && (
             <>
               <div className="video-caption" key={`caption-${hoverCategory}-${animationKey}`}>
                 {captions[hoverCategory]}
               </div>
-              {/* CTA : lien ou bouton pour en savoir plus */}
               <div className="video-cta-container">
                 <button className="video-cta">
                   Voir tous les projets {hoverCategory}
@@ -101,7 +91,6 @@ function Projects() {
         </div>
       </div>
 
-      {/* Section de contenu en cours */}
       <section className="project-category">
         <p>Restez connecté, de nouvelles réalisations arrivent bientôt !</p>
       </section>

@@ -6,7 +6,7 @@
   height: 100%;
   z-index: -1;
   background: #f0f0f0;
-  filter: blur(8px);
+  /* Suppression du filtre de flou global */
 }
 
 .circle {
@@ -15,13 +15,13 @@
   transition: transform 0.5s ease, opacity 0.6s ease, transform 0.6s ease;
 }
 
-/* Animation d'apparition */
+/* Apparition */
 .fade-in {
   opacity: 1;
   transform: scale(1);
 }
 
-/* Animation de disparition */
+/* Disparition */
 .fade-out {
   opacity: 0;
   transform: scale(0);

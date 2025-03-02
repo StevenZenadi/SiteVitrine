@@ -22,6 +22,7 @@
   max-width: 400px;
   text-align: center;
   transition: transform 0.2s;
+  cursor: pointer;
 }
 
 .game-card:hover {
@@ -49,12 +50,12 @@
   background-color: #005fa3;
 }
 
-/* Container pour le jeu Snake */
+/* Container pour le jeu affiché */
 .game-container {
   position: relative;
   width: 100%;
-  height: calc(100vh - 70px); /* Hauteur totale du viewport moins l'espace réservé au header */
-  background-color: #000; /* Fond noir ou selon votre design */
+  height: calc(100vh - 70px);
+  background-color: #000;
 }
 
 /* Bouton Retour positionné en haut à gauche */

@@ -1,18 +1,44 @@
+// src/pages/Games.jsx
 import React, { useState } from 'react';
 import './Games.css';
 import SnakeGame from '../components/SnakeGame';
+import CV3D from '../components/CV3D';
 import SeparatorLine from '../components/GameLine';
 
 function Games() {
-  const [showGame, setShowGame] = useState(false);
+  // "selectedGame" peut être "snake", "cv3d" ou null
+  const [selectedGame, setSelectedGame] = useState(null);
+
+  const renderGame = () => {
+    if (selectedGame === "snake") {
+      return (
+        <div className="game-container">
+          <button className="back-btn" onClick={() => setSelectedGame(null)}>
+            Retour
+          </button>
+          <SnakeGame onQuit={() => setSelectedGame(null)} />
+        </div>
+      );
+    } else if (selectedGame === "cv3d") {
+      return (
+        <div className="game-container">
+          <button className="back-btn" onClick={() => setSelectedGame(null)}>
+            Retour
+          </button>
+          <CV3D />
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="games-page">
       <SeparatorLine />
-      {!showGame ? (
+      {selectedGame === null ? (
         <div className="games-list">
           <h1>Mes Jeux Web</h1>
-          <div className="game-card">
+          {/* Carte pour Neon Snake */}
+          <div className="game-card" onClick={() => setSelectedGame("snake")}>
             <img
               src="/images/snake-thumbnail.webp"
               alt="Neon Snake"
@@ -20,16 +46,30 @@ function Games() {
               loading="lazy"
             />
             <h3>Neon Snake</h3>
-            <p>Découvrez une version percutante du classique Snake avec des effets néon et animations modernes.</p>
-            <button onClick={() => setShowGame(true)} className="btn play-btn">
-              Jouer
-            </button>
+            <p>
+              Découvrez une version percutante du classique Snake avec des
+              effets néon et animations modernes.
+            </p>
+            <button className="btn play-btn">Jouer</button>
+          </div>
+          {/* Nouvelle carte pour le CV 3D interactif */}
+          <div className="game-card" onClick={() => setSelectedGame("cv3d")}>
+            <img
+              //src="/images/cv3d-thumbnail.webp"
+              alt="CV 3D Interactif"
+              className="game-thumbnail"
+              loading="lazy"
+            />
+            <h3>CV 3D Interactif</h3>
+            <p>
+              Explorez mon CV sous un angle inédit grâce à une expérience 3D
+              immersive et en réalité augmentée.
+            </p>
+            <button className="btn play-btn">Explorer</button>
           </div>
         </div>
       ) : (
-        <div className="game-container">
-          <SnakeGame onQuit={() => setShowGame(false)} />
-        </div>
+        renderGame()
       )}
     </div>
   );

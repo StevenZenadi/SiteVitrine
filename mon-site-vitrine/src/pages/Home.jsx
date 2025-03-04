@@ -11,8 +11,9 @@ function Home() {
       {/* Section Hero */}
       <section className="hero-container">
         <div className="hero-content">
-          <LogoAnimated />
           <h1 className="hero-title">Bienvenue sur mon portfolio</h1>
+          <LogoAnimated />
+
           <p className="hero-subtitle">Développeur Web & IoT Passionné</p>
         </div>
       </section>

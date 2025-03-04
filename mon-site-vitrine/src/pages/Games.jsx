@@ -39,7 +39,7 @@ function Games() {
       <SeparatorLine />
       {selectedGame === null ? (
         <div className="games-list">
-          <h1>Mes Jeux Web</h1>
+          <h1>Mes démos</h1>
           {/* Carte pour Neon Snake */}
           <div className="game-card" onClick={() => setSelectedGame("snake")}>
             <img

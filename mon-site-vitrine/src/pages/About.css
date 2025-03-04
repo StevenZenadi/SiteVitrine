@@ -1,4 +1,3 @@
-/* Conteneur global de la page À propos */
 .about-page {
   position: relative;
   min-height: 100vh;
@@ -6,124 +5,31 @@
   overflow: hidden;
 }
 
-/* Conteneur pour le parallax */
-.parallax-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-/* Conteneur de la rangée de balles, centré horizontalement */
-.parallax-row {
-  position: absolute;
-  height: 0;
-  pointer-events: none;
-}
-
-/* Style de chaque boule */
-.parallax-ball {
-  position: absolute;
-  background-position: center;
-  border-radius: 50%;
-  pointer-events: none;
-  transition: transform 0.2s ease-out;
-  box-shadow: 0 2px 6px rgb(0, 0, 0);
-}
-
-/* Animation pour le texte (complète) */
-@keyframes eyeMovement {
-  0% { transform: translate(var(--initial-x), var(--initial-y)); }
-  15% { transform: translate(calc(var(--initial-x) - 30px), var(--initial-y)); }
-  30% { transform: translate(calc(var(--initial-x) - 30px), var(--initial-y)); }
-  45% { transform: translate(calc(var(--initial-x) + 30px), var(--initial-y)); }
-  60% { transform: translate(calc(var(--initial-x) + 30px), var(--initial-y)); }
-  80% { transform: translate(calc(var(--initial-x) - 15px), calc(var(--initial-y) + 20px)); }
-  100% { transform: translate(var(--initial-x), var(--initial-y)); }
-}
-
-/* Animation atténuée pour la boule */
-@keyframes ballEyeMovement {
-  0% { transform: translate(var(--initial-x), var(--initial-y)); }
-  15% { transform: translate(calc(var(--initial-x) - 15px), var(--initial-y)); }
-  30% { transform: translate(calc(var(--initial-x) - 15px), var(--initial-y)); }
-  45% { transform: translate(calc(var(--initial-x) + 15px), var(--initial-y)); }
-  60% { transform: translate(calc(var(--initial-x) + 15px), var(--initial-y)); }
-  80% { transform: translate(calc(var(--initial-x) - 7.5px), calc(var(--initial-y) + 10px)); }
-  100% { transform: translate(var(--initial-x), var(--initial-y)); }
-}
-
-/* Appliquer l'animation ballEyeMovement au texte lorsqu'on le souhaite */
-/* Dans notre cas, nous appliquons directement via inline style sur le conteneur de la boule si en animation */
-
-/* Texte centré dans la boule */
-.ball-text {
-  position: absolute;
-  top: 30%;
-  left: 40%;
-  color: white;
-  font-size: 2rem;
-  font-weight: bold;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-  pointer-events: none;
-  transition: transform 0.2s ease-out;
-}
-
-/* Contenu principal de la page */
 .about-content {
   position: relative;
   z-index: 10;
-  padding: 20px;
-  text-align: center;
-  color: #333;
-  background: rgba(255,255,255,0.8);
-  max-width: 800px;
   margin: 0 auto;
-  margin-top: 350px; /* Laisser de l'espace pour les balles */
-}
-
-/* Conteneur global de la page */
-.about-page {
-  position: relative;
-  min-height: 100vh;
-  background: #fff;
-  overflow: hidden;
-}
-
-/* Conteneur principal du contenu (texte, sections, CTA...) */
-.about-content {
-  position: relative;
-  z-index: 10;
-  /* On réduit la marge-top pour rapprocher le contenu des boules */
-  margin-top: 200px; /* Ajustez selon la place occupée par vos boules */
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 600px; /* Largeur max pour un texte plus lisible */
+  max-width: 600px;
   padding: 20px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.8);
-  /* Légère ombre pour faire ressortir le bloc */
+  background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   border-radius: 8px;
+  margin-top: 40px;
 }
 
-/* Titre principal */
 .about-content h1 {
   margin-bottom: 10px;
   font-size: 2rem;
   color: #333;
 }
 
-/* Sous-titre ou phrase d'accroche */
 .about-subtitle {
   font-size: 1.2rem;
   color: #666;
   margin-bottom: 20px;
 }
 
-/* Photo de profil (optionnel) */
 .about-photo {
   width: 150px;
   height: 150px;
@@ -133,30 +39,11 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* Sections thématiques */
-.about-section {
-  margin-top: 30px;
-  text-align: left; /* Si vous préférez aligner le texte à gauche */
+/* Ajustements pour les sections */
+section {
+  margin-bottom: 30px;
 }
 
-.about-section h3 {
-  margin-bottom: 10px;
-  font-size: 1.2rem;
-  color: #333;
-}
-
-/* Liste de compétences */
-.about-skills {
-  list-style-type: disc;
-  margin-left: 20px;
-  color: #333;
-}
-
-.about-skills li {
-  margin-bottom: 5px;
-}
-
-/* Boutons d'action */
 .about-cta-container {
   display: flex;
   flex-wrap: wrap;
@@ -180,21 +67,12 @@
   background-color: #005ea6;
 }
 
-/* ------------------------------ */
-/* Règles existantes pour ParallaxBackground & WordIm
-   Vous conservez vos animations de boules et le code existant.
-   Ci-dessous, on rappelle la structure, sans y toucher.
-*/
-/* .parallax-container, .parallax-row, .parallax-ball, .ball-text, etc. */
-
-/* Responsive : ajustez si nécessaire */
 @media (max-width: 768px) {
   .about-content {
-    margin-top: 150px; /* Adapter pour éviter le chevauchement sur mobile */
+    margin-top: 20px;
     padding: 15px;
     max-width: 90%;
   }
-
   .about-photo {
     width: 120px;
     height: 120px;

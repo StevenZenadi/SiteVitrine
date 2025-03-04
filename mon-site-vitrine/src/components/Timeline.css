@@ -1,0 +1,33 @@
+.timeline {
+    margin: 20px 0;
+    padding: 0 10px;
+  }
+  
+  .timeline-event {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+  }
+  
+  .timeline-dot {
+    width: 12px;
+    height: 12px;
+    background-color: #0070c9;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-right: 10px;
+    margin-top: 5px;
+  }
+  
+  .timeline-content {
+    background: #f7f7f7;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .timeline-year {
+    font-weight: bold;
+    color: #333;
+  }
+  

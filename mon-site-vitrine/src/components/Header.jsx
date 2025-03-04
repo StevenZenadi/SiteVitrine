@@ -2,14 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
 import logo from '../images/Logo.png';
+import DynamicLogo from './DynamicLogo'; // le chemin selon votre arborescence
 
 function Header() {
   const location = useLocation();
   const menuRef = useRef(null);
-  
+
   // État pour le menu burger (ouvert/fermé)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
+
   // État pour l'indicateur (soulignement)  
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
 
@@ -54,13 +55,14 @@ function Header() {
     <header className="header">
       <div className="header-left">
         <Link to="/" className="logo-link">
-          <img src={logo} alt="Logo" className="logo" />
+          {/* Ici, on affiche le logo dynamique */}
+          <DynamicLogo />
         </Link>
       </div>
 
       {/* Bouton burger pour mobile */}
-      <div 
-        className={`burger-button ${isMenuOpen ? 'open' : ''}`} 
+      <div
+        className={`burger-button ${isMenuOpen ? 'open' : ''}`}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
       >
         <span className="bar"></span>
@@ -69,8 +71,8 @@ function Header() {
       </div>
 
       <nav className="nav" ref={menuRef}>
-        <ul 
-          className={`menu ${isMenuOpen ? 'menu-open' : ''}`} 
+        <ul
+          className={`menu ${isMenuOpen ? 'menu-open' : ''}`}
           onMouseLeave={handleMouseLeave}
         >
           <li>
@@ -124,9 +126,9 @@ function Header() {
             </Link>
           </li>
         </ul>
-        <div 
-          className="menu-indicator" 
-          style={{ left: indicatorStyle.left, width: indicatorStyle.width }} 
+        <div
+          className="menu-indicator"
+          style={{ left: indicatorStyle.left, width: indicatorStyle.width }}
         />
       </nav>
     </header>

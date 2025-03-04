@@ -4,6 +4,7 @@
   text-align: center;
   z-index: 50;
   transition: background-color 0.3s ease;
+  background-color: #fff;
   /* Vous pouvez ajouter un dégradé subtil si vous le souhaitez, par exemple : */
   /* background: linear-gradient(to top, var(--footer-border-color), transparent); */
 }

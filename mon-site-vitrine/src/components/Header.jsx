@@ -102,7 +102,7 @@ function Header() {
               onMouseEnter={handleMouseEnter}
               onClick={handleLinkClick}
             >
-              Jeux
+              Démos
             </Link>
           </li>
           <li>

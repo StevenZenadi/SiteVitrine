@@ -5,7 +5,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 40px;
-  background: #fff;
+  background-color: #000000;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -75,7 +75,7 @@
   position: absolute;
   bottom: 0;
   height: 4px;
-  background: #000; /* Trait noir */
+  background: #ffffff; /* Trait noir */
   border-radius: 2px;
   transition: left 0.3s ease, width 0.3s ease;
 }
@@ -93,7 +93,7 @@
 
 /* Couleur au survol */
 .menu-link:hover {
-  color: #0099ff;
+  color: #ffffff;
 }
 
 /* Active : texte en dégradé ou multicolore (exemple) */

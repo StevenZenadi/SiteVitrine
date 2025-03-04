@@ -40,7 +40,7 @@ function App() {
   return (
     <>
       <ProjectCategoryProvider>
-        {loading && <Preloader onFinish={() => setLoading(false)} />}
+        {loading }
         <div className="app-container">
           <Router>
             <Header />

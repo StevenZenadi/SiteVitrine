@@ -45,7 +45,7 @@ header nav a {
   left: 0;
   right: 0;
   z-index: 1000; /* pour le placer devant le contenu */
-  background-color: #fff; /* ou la couleur de votre choix */
+  background-color: #000000; /* ou la couleur de votre choix */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 

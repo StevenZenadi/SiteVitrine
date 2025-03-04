@@ -4,6 +4,7 @@ import './Games.css';
 import SnakeGame from '../components/SnakeGame';
 import Scene3D from '../components/Scene3D.jsx';
 import SeparatorLine from '../components/GameLine';
+import RandomCirclesBackground from "../components/RandomCirclesBackground";
 
 function Games() {
   // "selectedGame" peut être "snake", "cv3d" ou null
@@ -33,6 +34,8 @@ function Games() {
 
   return (
     <div className="games-page">
+      <RandomCirclesBackground/>
+
       <SeparatorLine />
       {selectedGame === null ? (
         <div className="games-list">

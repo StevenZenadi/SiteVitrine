@@ -1,7 +1,8 @@
 // src/pages/Contact.jsx
 import React, { useState } from 'react';
-import "./Contact.css"; // Pour le style
+import "./Contact.css";
 import imageProfil from "../images/Profil.jpg";
+import { FaUser, FaEnvelope, FaLinkedin } from 'react-icons/fa'; // Exemple d'icônes depuis react-icons
 
 function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -17,7 +18,7 @@ function Contact() {
     const body = encodeURIComponent(
       `Nom : ${form.name}\nEmail : ${form.email}\n\n${form.message}`
     );
-    const mailtoLink = `mailto:ton-adresse@example.com?subject=${subject}&body=${body}`;
+    const mailtoLink = `mailto:steven.zenadi@orange.fr?subject=${subject}&body=${body}`;
 
     window.location.href = mailtoLink;
     setForm({ name: "", email: "", message: "" });
@@ -25,24 +26,46 @@ function Contact() {
 
   return (
     <section className="contact-section">
-      {/* Conteneur pour la photo */}
+      {/* Photo de profil */}
       <div className="profile-pic-container">
         <img
-          src={imageProfil} // <- remplace par le chemin de ta photo
+          src={imageProfil}
           alt="Mon portrait"
           className="profile-pic"
         />
       </div>
 
-      <h1>Contactez-moi</h1>
-      <p>
-        N’hésitez pas à me laisser un message si vous souhaitez plus d’informations 
-        ou me contacter pour un projet.
+      {/* Accroche personnelle */}
+      <p className="accroche-personnelle">
+        Passionné par la création de projets innovants, je serais ravi d’échanger
+        avec vous pour donner vie à vos idées.
       </p>
 
+      <h1>Contactez-moi</h1>
+      <p className="intro-paragraph">
+        N’hésitez pas à me laisser un message si vous souhaitez plus d’informations
+        ou me contacter pour un projet. Je réponds généralement sous 48h.
+      </p>
+
+      {/* Lien vers LinkedIn */}
+      <div className="social-links">
+        <a
+          href="https://www.linkedin.com/in/steven-zenadi-885281150"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="linkedin-link"
+        >
+          <FaLinkedin className="icon-linkedin" />
+          Mon LinkedIn
+        </a>
+      </div>
+
+      {/* Formulaire */}
       <form className="contact-form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Nom</label>
+          <label htmlFor="name">
+            <FaUser className="icon-form" /> Nom
+          </label>
           <input
             id="name"
             type="text"
@@ -54,7 +77,9 @@ function Contact() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="email">Adresse Email</label>
+          <label htmlFor="email">
+            <FaEnvelope className="icon-form" /> Adresse Email
+          </label>
           <input
             id="email"
             type="email"

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './Games.css';
 import SnakeGame from '../components/SnakeGame';
-import CV3D from '../components/CV3D';
+import Scene3D from '../components/Scene3D.jsx';
 import SeparatorLine from '../components/GameLine';
 
 function Games() {
@@ -25,7 +25,7 @@ function Games() {
           <button className="back-btn" onClick={() => setSelectedGame(null)}>
             Retour
           </button>
-          <CV3D />
+          <Scene3D />
         </div>
       );
     }

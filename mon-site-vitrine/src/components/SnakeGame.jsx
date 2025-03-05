@@ -39,7 +39,7 @@ function roundRect(ctx, x, y, width, height, radius) {
   ctx.fill();
 }
 
-// Définition des effets et couleurs associés (6 effets)
+// Définition des effets et couleurs associés (7 bonus)
 const appleEffects = [
   { color: "#828282", effect: "extensionTemps", label: "EXT", probability: 0.20 },
   { color: "#FF0000", effect: "boostScore", label: "BOOST", probability: 0.20 },
@@ -49,7 +49,6 @@ const appleEffects = [
   { color: "#FFAD00", effect: "magnet", label: "MAG", probability: 0.10 },
   { color: "#1AAD0E", effect: "slow", label: "SLOW", probability: 0.10 }
 ];
-
 
 function pickAppleEffect() {
   const r = Math.random();
@@ -152,11 +151,10 @@ const effectDurations = {
   slow: 3000
 };
 
-
 function bonusColor(type) {
   switch (type) {
-    case "passThrough": return "multicolor"; // Le serpent sera multicolore
-    case "freeze": return "#00A1FF"; // Bleu
+    case "passThrough": return "multicolor"; // mode multicolore pour le serpent
+    case "freeze": return "#00A1FF"; // Bleu pour freeze
     case "boostScore": return "#FF0000"; // Rouge
     case "extensionTemps": return "#828282"; // Gris
     case "segmentsSupp": return "#894FFF"; // Violet
@@ -166,7 +164,6 @@ function bonusColor(type) {
   }
 }
 
-
 function getSnakeAppearance(activeBonuses) {
   if (activeBonuses.length === 0) return { base: "green", secondary: null };
   const sorted = activeBonuses.slice().sort((a, b) => a.appliedAt - b.appliedAt);
@@ -175,7 +172,48 @@ function getSnakeAppearance(activeBonuses) {
   return { base, secondary };
 }
 
+// Hook pour les contrôles par swipe
+const useSwipeControls = (setDirection) => {
+  const touchStartRef = useRef(null);
+
+  const handleTouchStart = (e) => {
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchMove = (e) => {
+    if (!touchStartRef.current) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - touchStartRef.current.x;
+    const dy = touch.clientY - touchStartRef.current.y;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      if (dx > 20) {
+        setDirection({ x: gridSize, y: 0 });
+        touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      } else if (dx < -20) {
+        setDirection({ x: -gridSize, y: 0 });
+        touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      }
+    } else {
+      if (dy > 20) {
+        setDirection({ x: 0, y: gridSize });
+        touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      } else if (dy < -20) {
+        setDirection({ x: 0, y: -gridSize });
+        touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchStartRef.current = null;
+  };
+
+  return { handleTouchStart, handleTouchMove, handleTouchEnd };
+};
+
 const SnakeGame = ({ onQuit }) => {
+  // Références et états
   const canvasRef = useRef(null);
   const accumulatorRef = useRef(0);
   const lastTimestampRef = useRef(0);
@@ -190,11 +228,10 @@ const SnakeGame = ({ onQuit }) => {
   const pointEffectsRef = useRef([]);
   const applesEatenRef = useRef(0);
 
-  // Active bonus cumulés
   const [activeBonuses, setActiveBonuses] = useState([]);
   const activeBonusesRef = useRef([]);
 
-  // Nouveau state pour le flash de bordure
+  // State pour le flash de bordure
   const [borderFlash, setBorderFlash] = useState(null);
 
   const [chrono, setChrono] = useState(0);
@@ -208,6 +245,11 @@ const SnakeGame = ({ onQuit }) => {
   const canvasWidth = 800;
   const canvasHeight = 600;
   const appleGroupCount = 3;
+
+  const [direction, setDirection] = useState(initialDirection);
+  useEffect(() => {
+    gameStateRef.current.direction = direction;
+  }, [direction]);
 
   const gameStateRef = useRef({
     snake: initialSnake.map(s => ({ ...s })),
@@ -260,16 +302,21 @@ const SnakeGame = ({ onQuit }) => {
       case "magnet":
         bonus = { type: "magnet", expires: timestamp + effectDurations.magnet };
         break;
+      case "slow":
+        bonus = { type: "slow", expires: timestamp + effectDurations.slow };
+        break;
       default:
         break;
     }
     if (bonus) {
       addBonus(bonus);
-      // Déclencher le flash de bordure (1 seconde) à chaque pomme mangée
       const flashColor = (effect === "passThrough") ? "#FFFFFF" : bonusColor(effect);
       setBorderFlash({ color: flashColor, expires: timestamp + 1000 });
     }
   };
+
+  // Contrôles par swipe pour mobile
+  const { handleTouchStart, handleTouchMove, handleTouchEnd } = useSwipeControls(setDirection);
 
   useEffect(() => {
     const handleKeyDown = e => {
@@ -299,13 +346,16 @@ const SnakeGame = ({ onQuit }) => {
       snake: gameStateRef.current.snake.map(s => ({ ...s })),
     };
     if (gameStateRef.current.gameOver) return;
+
     updateBonuses(timestamp);
+
     const keys = pressedKeysRef.current;
     let vertical = 0, horizontal = 0;
     if (keys.has('z')) vertical = -1;
     if (keys.has('s')) vertical = 1;
     if (keys.has('q')) horizontal = -1;
     if (keys.has('d')) horizontal = 1;
+
     const oldDirection = gameStateRef.current.direction;
     let newDirection = oldDirection;
     if (vertical !== 0 && horizontal !== 0) {
@@ -324,12 +374,13 @@ const SnakeGame = ({ onQuit }) => {
       newDirection = oldDirection;
     }
     gameStateRef.current.direction = newDirection;
+
     const head = gameStateRef.current.snake[0];
     let newHead = {
       x: head.x + newDirection.x,
       y: head.y + newDirection.y
     };
-    // Collision avec obstacles
+
     for (let i = 0; i < gameStateRef.current.obstacles.length; i++) {
       const obs = gameStateRef.current.obstacles[i];
       if (
@@ -347,7 +398,7 @@ const SnakeGame = ({ onQuit }) => {
         }
       }
     }
-    // Collision avec les murs
+
     if (
       newHead.x < 0 ||
       newHead.x >= gameStateRef.current.canvasWidth ||
@@ -365,7 +416,7 @@ const SnakeGame = ({ onQuit }) => {
         return;
       }
     }
-    // Collision avec le corps
+
     for (let i = 1; i < gameStateRef.current.snake.length; i++) {
       const seg = gameStateRef.current.snake[i];
       if (newHead.x === seg.x && newHead.y === seg.y) {
@@ -373,7 +424,9 @@ const SnakeGame = ({ onQuit }) => {
         return;
       }
     }
+
     gameStateRef.current.snake.unshift(newHead);
+
     let eatenApple = null;
     for (let apple of gameStateRef.current.apples) {
       if (newHead.x === apple.x && newHead.y === apple.y) {
@@ -381,6 +434,7 @@ const SnakeGame = ({ onQuit }) => {
         break;
       }
     }
+
     if (eatenApple) {
       if (parseFloat(countdown) > (countdownLimit / 1000) * 0.3) {
         setComboCount(prev => prev + 1);
@@ -439,11 +493,13 @@ const SnakeGame = ({ onQuit }) => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     // Dessiner les obstacles arrondis en blanc
     for (let obs of gameStateRef.current.obstacles) {
       ctx.fillStyle = 'white';
       roundRect(ctx, obs.x, obs.y, obs.width, obs.height, 5);
     }
+
     // Apparence du serpent
     const appearance = getSnakeAppearance(activeBonusesRef.current);
     const snakeBaseColor = appearance.base;
@@ -468,7 +524,7 @@ const SnakeGame = ({ onQuit }) => {
       }
       ctx.stroke();
     });
-    // Interpolation du mouvement du serpent
+
     const currentSnake = gameStateRef.current.snake;
     const prevSnake = previousStateRef.current.snake;
     const finalPoints = [];
@@ -484,6 +540,7 @@ const SnakeGame = ({ onQuit }) => {
         y: currentSnake[i].y + gridSize / 2
       });
     }
+
     ctx.beginPath();
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
@@ -502,7 +559,7 @@ const SnakeGame = ({ onQuit }) => {
       }
     }
     ctx.stroke();
-    // Dessiner chaque pomme
+
     gameStateRef.current.apples.forEach(apple => {
       const breathScale = 1 + 0.15 * Math.sin(timestamp / 250);
       ctx.save();
@@ -520,7 +577,7 @@ const SnakeGame = ({ onQuit }) => {
       ctx.fill();
       ctx.restore();
     });
-    // Dessiner les points (score s'envolant)
+
     const effectDuration = 1000;
     pointEffectsRef.current.forEach(effect => {
       const elapsed = timestamp - effect.startTime;
@@ -537,11 +594,13 @@ const SnakeGame = ({ onQuit }) => {
     pointEffectsRef.current = pointEffectsRef.current.filter(
       effect => (timestamp - effect.startTime) < effectDuration
     );
+
     if (gameStateRef.current.gameOver) {
       ctx.fillStyle = 'black';
       ctx.font = '48px sans-serif';
       ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2);
     }
+
     renderedSnakeRef.current.push([...finalPoints]);
     if (renderedSnakeRef.current.length > maxTrailFrames) {
       renderedSnakeRef.current.shift();
@@ -623,7 +682,6 @@ const SnakeGame = ({ onQuit }) => {
     if (typeof onQuit === 'function') onQuit();
   };
 
-  // Panneau de feedback des bonus cumulés
   const bonusFeedback = activeBonuses.length > 0 ? activeBonuses.map(bonus => {
     const remaining = Math.max(0, ((bonus.expires - performance.now()) / 1000).toFixed(1));
     const totalDuration = effectDurations[bonus.type] || 1;
@@ -677,7 +735,7 @@ const SnakeGame = ({ onQuit }) => {
         </div>
       </div>
 
-      {/* Pour une adaptation mobile et une meilleure UX, le feedback est placé en haut à droite dans la zone de jeu */}
+      {/* Feedback placé en haut à droite de la zone de jeu */}
       <div
         className="active-effects-panel"
         style={{
@@ -697,7 +755,7 @@ const SnakeGame = ({ onQuit }) => {
         </div>
       )}
 
-      {/* Conteneur du canvas avec position relative pour aligner la bordure flash */}
+      {/* Conteneur du canvas avec position relative pour le flash de bordure */}
       <div
         className="canvas-wrapper"
         style={{
@@ -705,6 +763,9 @@ const SnakeGame = ({ onQuit }) => {
           width: `${canvasWidth}px`,
           height: `${canvasHeight}px`
         }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         <canvas
           ref={canvasRef}
@@ -774,6 +835,7 @@ const SnakeGame = ({ onQuit }) => {
           </button>
         </div>
       </div>
+
       <style>{`
         @keyframes flash {
           0% { opacity: 1; }

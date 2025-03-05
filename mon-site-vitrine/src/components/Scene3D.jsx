@@ -1,5 +1,5 @@
 // Scene3D.jsx
-import iutDijon from "../ressources/IUTDijon3D-optimized.glb";
+import iutDijon from "../ressources/retravailiut.gltf";
 
 import React from 'react';
 
@@ -10,7 +10,7 @@ const GLTFViewer = ({ src, alt = "Modèle 3D", style, ...props }) => {
       alt={alt}
       auto-rotate
       camera-controls
-      style={style || { width: "100%", height: "500px" }}
+      style={style || { width: "100vw", height: "100vh" }}
       {...props}
     />
   );

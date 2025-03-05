@@ -63,7 +63,7 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
 .game-canvas {
   border: 1px solid #ccc;
   display: block;
-  background: #fff;
+  background: #000000;
   border-radius: 12px;
 }
 

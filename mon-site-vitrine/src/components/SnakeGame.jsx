@@ -10,31 +10,57 @@ function lerp(a, b, t) {
   return a + (b - a) * t;
 }
 
-// Définition des effets et couleurs associés
-// 2 effets communs, 2 puissants et 1 bonus spécial passThrough (pomme multicolore)
+// Convertir un hex en rgba (pour la bordure flash)
+function hexToRgba(hex, alpha) {
+  hex = hex.replace("#", "");
+  if (hex.length === 3) {
+    hex = hex.split("").map(c => c + c).join("");
+  }
+  const bigint = parseInt(hex, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// Fonction utilitaire pour dessiner un rectangle avec des coins arrondis
+function roundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  ctx.fill();
+}
+
+// Définition des effets et couleurs associés (6 effets)
 const appleEffects = [
-  { color: "#828282", effect: "extensionTemps", label: "EXT", probability: 0.30 },  // ajoute du temps
-  { color: "#FF0000", effect: "boostScore", label: "BOOST", probability: 0.30 },      // boost de score
-  { color: "#1AAD0E", effect: "freeze", label: "FREEZE", probability: 0.10 },          // bloque la régénération (pomme verte)
-  { color: "#00A1FF", effect: "segmentsSupp", label: "SEG+", probability: 0.10 },       // +2 segments
-  { color: "#FFFFFF", effect: "passThrough", label: "PASS", probability: 0.20 }        // obstacles explosent et wrap-around
+  { color: "#828282", effect: "extensionTemps", label: "EXT", probability: 0.20 },
+  { color: "#FF0000", effect: "boostScore", label: "BOOST", probability: 0.20 },
+  { color: "#00A1FF", effect: "freeze", label: "FREEZE", probability: 0.10 },
+  { color: "#894FFF", effect: "segmentsSupp", label: "SEG+", probability: 0.10 },
+  { color: "#FFFFFF", effect: "passThrough", label: "PASS", probability: 0.20 },
+  { color: "#FFAD00", effect: "magnet", label: "MAG", probability: 0.10 },
+  { color: "#1AAD0E", effect: "slow", label: "SLOW", probability: 0.10 }
 ];
+
 
 function pickAppleEffect() {
   const r = Math.random();
   let sum = 0;
   for (let effect of appleEffects) {
     sum += effect.probability;
-    if (r < sum) {
-      return effect;
-    }
+    if (r < sum) return effect;
   }
   return appleEffects[0];
 }
 
-/**
- * Place une pomme en évitant obstacles et chevauchements.
- */
 const placeSingleApple = (obstacles, canvasWidth, canvasHeight, existingPositions = []) => {
   const cols = canvasWidth / gridSize;
   const rows = canvasHeight / gridSize;
@@ -43,12 +69,12 @@ const placeSingleApple = (obstacles, canvasWidth, canvasHeight, existingPosition
   while (tries < maxTries) {
     const x = Math.floor(Math.random() * cols) * gridSize;
     const y = Math.floor(Math.random() * rows) * gridSize;
-    let collides = obstacles.some(obs => (
+    let collides = obstacles.some(obs =>
       x < obs.x + obs.width &&
       x + gridSize > obs.x &&
       y < obs.y + obs.height &&
       y + gridSize > obs.y
-    ));
+    );
     collides = collides || existingPositions.some(pos => pos.x === x && pos.y === y);
     if (!collides) {
       const effect = pickAppleEffect();
@@ -60,9 +86,6 @@ const placeSingleApple = (obstacles, canvasWidth, canvasHeight, existingPosition
   return { x: 0, y: 0, color: effect.color, effect: effect.effect, label: effect.label };
 };
 
-/**
- * Génère un groupe de pommes.
- */
 const generateAppleGroup = (groupCount, obstacles, canvasWidth, canvasHeight) => {
   const apples = [];
   for (let i = 0; i < groupCount; i++) {
@@ -72,9 +95,6 @@ const generateAppleGroup = (groupCount, obstacles, canvasWidth, canvasHeight) =>
   return apples;
 };
 
-/**
- * Génère des obstacles aléatoires.
- */
 const generateObstacles = (level, canvasWidth, canvasHeight) => {
   const obstacles = [];
   const count = Math.min(3 + level - 1, 8);
@@ -93,9 +113,6 @@ const generateObstacles = (level, canvasWidth, canvasHeight) => {
   return obstacles;
 };
 
-/**
- * Génère des obstacles en évitant certaines positions.
- */
 const generateObstaclesAvoiding = (level, canvasWidth, canvasHeight, avoidPositions) => {
   const obstacles = [];
   const count = Math.min(3 + level - 1, 8);
@@ -113,9 +130,7 @@ const generateObstaclesAvoiding = (level, canvasWidth, canvasHeight, avoidPositi
       pos.x >= candidate.x && pos.x < candidate.x + candidate.width &&
       pos.y >= candidate.y && pos.y < candidate.y + candidate.height
     );
-    if (!collides) {
-      obstacles.push(candidate);
-    }
+    if (!collides) obstacles.push(candidate);
   }
   return obstacles;
 };
@@ -127,13 +142,38 @@ const initialSnake = [
 ];
 const initialDirection = { x: gridSize, y: 0 };
 
-// Durées (en ms) pour les bonus à durée
 const effectDurations = {
   extensionTemps: 3000,
   boostScore: 3000,
-  passThrough: 5000
-  // freeze et segmentsSupp sont instantanés
+  passThrough: 5000,
+  freeze: 4000,
+  segmentsSupp: 4000,
+  magnet: 3000,
+  slow: 3000
 };
+
+
+function bonusColor(type) {
+  switch (type) {
+    case "passThrough": return "multicolor"; // Le serpent sera multicolore
+    case "freeze": return "#00A1FF"; // Bleu
+    case "boostScore": return "#FF0000"; // Rouge
+    case "extensionTemps": return "#828282"; // Gris
+    case "segmentsSupp": return "#894FFF"; // Violet
+    case "magnet": return "#FFAD00"; // Orange
+    case "slow": return "#1AAD0E"; // Vert
+    default: return "green";
+  }
+}
+
+
+function getSnakeAppearance(activeBonuses) {
+  if (activeBonuses.length === 0) return { base: "green", secondary: null };
+  const sorted = activeBonuses.slice().sort((a, b) => a.appliedAt - b.appliedAt);
+  const base = bonusColor(sorted[0].type);
+  const secondary = sorted.length >= 2 ? bonusColor(sorted[1].type) : null;
+  return { base, secondary };
+}
 
 const SnakeGame = ({ onQuit }) => {
   const canvasRef = useRef(null);
@@ -145,21 +185,18 @@ const SnakeGame = ({ onQuit }) => {
   const pressedKeysRef = useRef(new Set());
   const animationFrameIdRef = useRef(null);
 
-  // Pour la traînée du serpent
   const renderedSnakeRef = useRef([]);
   const maxTrailFrames = 30;
-
-  // Effets de points (score s'envolant)
   const pointEffectsRef = useRef([]);
-
-  // Compteur d'apples mangées (pour repositionner les obstacles)
   const applesEatenRef = useRef(0);
 
-  // activeBonus stocke le bonus pour le feedback ; activeBonusRef est la référence mutable utilisée dans la boucle de jeu
-  const [activeBonus, setActiveBonus] = useState(null);
-  const activeBonusRef = useRef(null);
+  // Active bonus cumulés
+  const [activeBonuses, setActiveBonuses] = useState([]);
+  const activeBonusesRef = useRef([]);
 
-  // États d'interface
+  // Nouveau state pour le flash de bordure
+  const [borderFlash, setBorderFlash] = useState(null);
+
   const [chrono, setChrono] = useState(0);
   const [countdown, setCountdown] = useState((countdownLimit / 1000).toFixed(1));
   const [points, setPoints] = useState(0);
@@ -170,9 +207,8 @@ const SnakeGame = ({ onQuit }) => {
 
   const canvasWidth = 800;
   const canvasHeight = 600;
-  const appleGroupCount = 3; // Nombre de pommes par groupe
+  const appleGroupCount = 3;
 
-  // État interne du jeu
   const gameStateRef = useRef({
     snake: initialSnake.map(s => ({ ...s })),
     direction: initialDirection,
@@ -181,23 +217,24 @@ const SnakeGame = ({ onQuit }) => {
     canvasWidth,
     canvasHeight,
     gameOver: false,
-    groupFrozen: false,  // Bloque la régénération (freeze)
+    groupFrozen: false,
   });
 
-  // Pour l'interpolation du serpent
   const previousStateRef = useRef({
     snake: initialSnake.map(s => ({ ...s })),
   });
 
-  // Mise à jour du bonus : on synchronise la ref et l'état
-  const updateBonus = (bonus) => {
-    setActiveBonus(bonus);
-    activeBonusRef.current = bonus;
+  const addBonus = (bonus) => {
+    bonus.appliedAt = performance.now();
+    activeBonusesRef.current.push(bonus);
+    setActiveBonuses([...activeBonusesRef.current]);
   };
 
-  /**
-   * Applique le bonus associé à la pomme consommée.
-   */
+  const updateBonuses = (timestamp) => {
+    activeBonusesRef.current = activeBonusesRef.current.filter(b => b.expires > timestamp);
+    setActiveBonuses([...activeBonusesRef.current]);
+  };
+
   const applyBonus = (effect, timestamp) => {
     let bonus = null;
     switch (effect) {
@@ -208,6 +245,7 @@ const SnakeGame = ({ onQuit }) => {
         bonus = { type: "boostScore", expires: timestamp + effectDurations.boostScore };
         break;
       case "segmentsSupp":
+        bonus = { type: "segmentsSupp", expires: timestamp + effectDurations.segmentsSupp };
         {
           const tail = gameStateRef.current.snake[gameStateRef.current.snake.length - 1];
           gameStateRef.current.snake.push({ ...tail }, { ...tail });
@@ -217,15 +255,22 @@ const SnakeGame = ({ onQuit }) => {
         bonus = { type: "passThrough", expires: timestamp + effectDurations.passThrough };
         break;
       case "freeze":
-        // Aucun bonus actif pour freeze.
+        bonus = { type: "freeze", expires: timestamp + effectDurations.freeze };
+        break;
+      case "magnet":
+        bonus = { type: "magnet", expires: timestamp + effectDurations.magnet };
         break;
       default:
         break;
     }
-    if (bonus) updateBonus(bonus);
+    if (bonus) {
+      addBonus(bonus);
+      // Déclencher le flash de bordure (1 seconde) à chaque pomme mangée
+      const flashColor = (effect === "passThrough") ? "#FFFFFF" : bonusColor(effect);
+      setBorderFlash({ color: flashColor, expires: timestamp + 1000 });
+    }
   };
 
-  // Gestion des touches (Z, Q, S, D)
   useEffect(() => {
     const handleKeyDown = e => {
       const key = e.key.toLowerCase();
@@ -254,10 +299,7 @@ const SnakeGame = ({ onQuit }) => {
       snake: gameStateRef.current.snake.map(s => ({ ...s })),
     };
     if (gameStateRef.current.gameOver) return;
-    // Vérifier le bonus via la ref (pour toujours avoir la valeur actuelle)
-    if (activeBonusRef.current && timestamp > activeBonusRef.current.expires) {
-      updateBonus(null);
-    }
+    updateBonuses(timestamp);
     const keys = pressedKeysRef.current;
     let vertical = 0, horizontal = 0;
     if (keys.has('z')) vertical = -1;
@@ -296,7 +338,7 @@ const SnakeGame = ({ onQuit }) => {
         newHead.y < obs.y + obs.height &&
         newHead.y + gridSize > obs.y
       ) {
-        if (activeBonusRef.current && activeBonusRef.current.type === "passThrough") {
+        if (activeBonusesRef.current.some(b => b.type === "passThrough")) {
           gameStateRef.current.obstacles.splice(i, 1);
           i--;
         } else {
@@ -312,8 +354,7 @@ const SnakeGame = ({ onQuit }) => {
       newHead.y < 0 ||
       newHead.y >= gameStateRef.current.canvasHeight
     ) {
-      if (activeBonusRef.current && activeBonusRef.current.type === "passThrough") {
-        // Wrap-around uniquement si passThrough est actif
+      if (activeBonusesRef.current.some(b => b.type === "passThrough")) {
         if (newHead.x < 0) newHead.x = gameStateRef.current.canvasWidth - gridSize;
         else if (newHead.x >= gameStateRef.current.canvasWidth) newHead.x = 0;
         if (newHead.y < 0) newHead.y = gameStateRef.current.canvasHeight - gridSize;
@@ -333,7 +374,6 @@ const SnakeGame = ({ onQuit }) => {
       }
     }
     gameStateRef.current.snake.unshift(newHead);
-    // Gestion du groupe de pommes
     let eatenApple = null;
     for (let apple of gameStateRef.current.apples) {
       if (newHead.x === apple.x && newHead.y === apple.y) {
@@ -349,9 +389,7 @@ const SnakeGame = ({ onQuit }) => {
       }
       let bonusMultiplier = 1;
       const thresholds = [5, 10, 15, 20, 25];
-      if (thresholds.includes(comboCount + 1)) {
-        bonusMultiplier = 1.3;
-      }
+      if (thresholds.includes(comboCount + 1)) bonusMultiplier = 1.3;
       const earnedPoints = Math.floor(10 * bonusMultiplier);
       setPoints(prev => prev + earnedPoints);
       pointEffectsRef.current.push({
@@ -371,7 +409,6 @@ const SnakeGame = ({ onQuit }) => {
         gameStateRef.current.groupFrozen = false;
         groupSpawnTimeRef.current = timestamp;
       } else {
-        // Pour freeze, ne retirer que l'apple mangée et bloquer la régénération
         gameStateRef.current.apples = gameStateRef.current.apples.filter(apple => apple !== eatenApple);
         gameStateRef.current.groupFrozen = true;
         if (gameStateRef.current.apples.length === 0) {
@@ -383,7 +420,6 @@ const SnakeGame = ({ onQuit }) => {
     } else {
       const timeSinceGroup = timestamp - groupSpawnTimeRef.current;
       if (!gameStateRef.current.groupFrozen && timeSinceGroup >= countdownLimit) {
-        // Lorsque le timer est dépassé, retirer UN SEGMENT SUPPLÉMENTAIRE
         if (gameStateRef.current.snake.length > 1) {
           gameStateRef.current.snake.pop();
         } else {
@@ -393,7 +429,6 @@ const SnakeGame = ({ onQuit }) => {
         groupSpawnTimeRef.current = timestamp;
         setComboCount(0);
       } else {
-        // Mouvement normal : retirer le dernier segment
         gameStateRef.current.snake.pop();
       }
     }
@@ -404,20 +439,26 @@ const SnakeGame = ({ onQuit }) => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Dessiner les obstacles
+    // Dessiner les obstacles arrondis en blanc
     for (let obs of gameStateRef.current.obstacles) {
-      ctx.fillStyle = '#555';
-      ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+      ctx.fillStyle = 'white';
+      roundRect(ctx, obs.x, obs.y, obs.width, obs.height, 5);
     }
-    // Dessiner la traînée du serpent
+    // Apparence du serpent
+    const appearance = getSnakeAppearance(activeBonusesRef.current);
+    const snakeBaseColor = appearance.base;
     const frames = renderedSnakeRef.current;
-    const trailLen = frames.length;
-    frames.forEach((framePoints, idx) => {
-      const alphaTrail = 0.1 + (0.7 * (idx / (trailLen - 1 || 1)));
+    frames.forEach(framePoints => {
       ctx.beginPath();
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = `rgba(0,128,0,${alphaTrail})`;
+      if (snakeBaseColor === "multicolor") {
+        const cycleColors = ["#828282", "#FF0000", "#FFAD00", "#00A1FF", "#1AAD0E"];
+        const index = Math.floor(timestamp / 100) % cycleColors.length;
+        ctx.strokeStyle = cycleColors[index];
+      } else {
+        ctx.strokeStyle = snakeBaseColor;
+      }
       ctx.lineWidth = gridSize;
       if (framePoints.length > 0) {
         ctx.moveTo(framePoints[0].x, framePoints[0].y);
@@ -427,7 +468,7 @@ const SnakeGame = ({ onQuit }) => {
       }
       ctx.stroke();
     });
-    // Interpolation pour un mouvement fluide
+    // Interpolation du mouvement du serpent
     const currentSnake = gameStateRef.current.snake;
     const prevSnake = previousStateRef.current.snake;
     const finalPoints = [];
@@ -443,11 +484,16 @@ const SnakeGame = ({ onQuit }) => {
         y: currentSnake[i].y + gridSize / 2
       });
     }
-    let snakeColor = activeBonusRef.current && activeBonusRef.current.type === "extensionTemps" ? "#00aa00" : "green";
     ctx.beginPath();
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.strokeStyle = snakeColor;
+    if (snakeBaseColor === "multicolor") {
+      const cycleColors = ["#828282", "#FF0000", "#FFAD00", "#00A1FF", "#1AAD0E"];
+      const index = Math.floor(timestamp / 100) % cycleColors.length;
+      ctx.strokeStyle = cycleColors[index];
+    } else {
+      ctx.strokeStyle = snakeBaseColor;
+    }
     ctx.lineWidth = gridSize;
     if (finalPoints.length > 0) {
       ctx.moveTo(finalPoints[0].x, finalPoints[0].y);
@@ -467,14 +513,14 @@ const SnakeGame = ({ onQuit }) => {
       let fillColor = apple.color;
       if (apple.effect === "passThrough") {
         const cycleColors = ["#828282", "#FF0000", "#FFAD00", "#00A1FF", "#1AAD0E"];
-        let index = Math.floor(timestamp / 100) % cycleColors.length;
+        const index = Math.floor(timestamp / 100) % cycleColors.length;
         fillColor = cycleColors[index];
       }
       ctx.fillStyle = fillColor;
       ctx.fill();
       ctx.restore();
     });
-    // Dessiner les effets de points
+    // Dessiner les points (score s'envolant)
     const effectDuration = 1000;
     pointEffectsRef.current.forEach(effect => {
       const elapsed = timestamp - effect.startTime;
@@ -565,39 +611,59 @@ const SnakeGame = ({ onQuit }) => {
     setPoints(0);
     setComboCount(0);
     setLevel(1);
-    updateBonus(null);
+    activeBonusesRef.current = [];
+    setActiveBonuses([]);
     pointEffectsRef.current = [];
     applesEatenRef.current = 0;
+    setBorderFlash(null);
     animationFrameIdRef.current = requestAnimationFrame(gameLoop);
   };
 
   const quitGame = () => {
-    if (typeof onQuit === 'function') {
-      onQuit();
-    }
+    if (typeof onQuit === 'function') onQuit();
   };
 
-  // Panneau de feedback des effets actifs
-  let bonusFeedback = null;
-  if (activeBonus) {
-    const remaining = Math.max(0, ((activeBonus.expires - performance.now()) / 1000).toFixed(1));
-    const totalDuration = effectDurations[activeBonus.type] || 1;
+  // Panneau de feedback des bonus cumulés
+  const bonusFeedback = activeBonuses.length > 0 ? activeBonuses.map(bonus => {
+    const remaining = Math.max(0, ((bonus.expires - performance.now()) / 1000).toFixed(1));
+    const totalDuration = effectDurations[bonus.type] || 1;
     const progress = Math.max(0, Math.min(100, (remaining * 100) / (totalDuration / 1000)));
     const flashStyle = remaining < 1 ? { animation: 'flash 0.5s infinite' } : {};
-    bonusFeedback = (
-      <div className="effect-item" style={{ marginBottom: '5px', display: 'flex', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)', padding: '5px', borderRadius: '4px' }}>
+    return (
+      <div
+        key={bonus.appliedAt}
+        className="effect-item"
+        style={{
+          marginBottom: '5px',
+          display: 'flex',
+          alignItems: 'center',
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          padding: '5px',
+          borderRadius: '4px'
+        }}
+      >
         <div className="effect-icon" style={{ fontWeight: 'bold', color: 'white', ...flashStyle }}>
-          {activeBonus.type.toUpperCase()}
+          {bonus.type.toUpperCase()}
         </div>
         <div className="effect-time" style={{ marginLeft: '8px', color: 'white' }}>
           {remaining}s
         </div>
-        <div className="effect-progress" style={{ width: '80px', height: '6px', backgroundColor: 'gray', marginLeft: '8px', borderRadius: '3px', overflow: 'hidden' }}>
+        <div
+          className="effect-progress"
+          style={{
+            width: '80px',
+            height: '6px',
+            backgroundColor: 'gray',
+            marginLeft: '8px',
+            borderRadius: '3px',
+            overflow: 'hidden'
+          }}
+        >
           <div style={{ width: `${progress}%`, height: '100%', backgroundColor: 'limegreen' }} />
         </div>
       </div>
     );
-  }
+  }) : <div style={{ color: 'white' }}>Aucun bonus actif</div>;
 
   return (
     <div className="game-container" style={{ position: 'relative' }}>
@@ -610,24 +676,62 @@ const SnakeGame = ({ onQuit }) => {
           <button onClick={quitGame} className="btn">Quitter</button>
         </div>
       </div>
-      {/* Panneau de feedback des effets actifs */}
-      <div className="active-effects-panel" style={{ position: 'absolute', top: '10px', right: '10px' }}>
+
+      {/* Pour une adaptation mobile et une meilleure UX, le feedback est placé en haut à droite dans la zone de jeu */}
+      <div
+        className="active-effects-panel"
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          maxWidth: '200px'
+        }}
+      >
         {bonusFeedback}
       </div>
+
       {showOptions && (
         <div className="options-bar">
           <h3>Options</h3>
           <p>Aucune option disponible pour le moment.</p>
         </div>
       )}
-      <div className="canvas-wrapper">
+
+      {/* Conteneur du canvas avec position relative pour aligner la bordure flash */}
+      <div
+        className="canvas-wrapper"
+        style={{
+          position: 'relative',
+          width: `${canvasWidth}px`,
+          height: `${canvasHeight}px`
+        }}
+      >
         <canvas
           ref={canvasRef}
           className="game-canvas"
           width={canvasWidth}
           height={canvasHeight}
         />
-        {isGameOver && (
+
+        {/* Bordure flash absolue */}
+        {borderFlash && performance.now() < borderFlash.expires && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              pointerEvents: 'none',
+              boxSizing: 'border-box',
+              borderRadius: '10px',
+              border: `10px solid ${hexToRgba(borderFlash.color, (borderFlash.expires - performance.now()) / 1000)}`,
+              transition: 'border 0.1s'
+            }}
+          />
+        )}
+
+        {gameStateRef.current.gameOver && (
           <div className="game-over-overlay">
             <div className="game-over-popup">
               <h2>Game Over</h2>
@@ -637,6 +741,7 @@ const SnakeGame = ({ onQuit }) => {
           </div>
         )}
       </div>
+
       <div className="mobile-controls">
         <button
           className="mobile-btn"

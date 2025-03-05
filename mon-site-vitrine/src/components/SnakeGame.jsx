@@ -94,9 +94,11 @@ const generateAppleGroup = (groupCount, obstacles, canvasWidth, canvasHeight) =>
   return apples;
 };
 
-const generateObstacles = (level, canvasWidth, canvasHeight) => {
+// La densité des obstacles varie selon la taille du serpent
+function generateObstacles(level, canvasWidth, canvasHeight, snakeLength = 3) {
+  // Par exemple, plus le serpent est petit, plus on génère d'obstacles.
+  const count = Math.min(8, Math.max(3, 8 - Math.floor(snakeLength / 5)));
   const obstacles = [];
-  const count = Math.min(3 + level - 1, 8);
   for (let i = 0; i < count; i++) {
     const obstacleWidth = gridSize * (2 + Math.floor(Math.random() * 2));
     const obstacleHeight = gridSize * (2 + Math.floor(Math.random() * 2));
@@ -110,29 +112,12 @@ const generateObstacles = (level, canvasWidth, canvasHeight) => {
     });
   }
   return obstacles;
-};
+}
 
-const generateObstaclesAvoiding = (level, canvasWidth, canvasHeight, avoidPositions) => {
-  const obstacles = [];
-  const count = Math.min(3 + level - 1, 8);
-  let attempts = 0;
-  while (obstacles.length < count && attempts < 50 * count) {
-    attempts++;
-    const obstacleWidth = gridSize * (2 + Math.floor(Math.random() * 2));
-    const obstacleHeight = gridSize * (2 + Math.floor(Math.random() * 2));
-    const maxX = Math.floor((canvasWidth - obstacleWidth) / gridSize);
-    const maxY = Math.floor((canvasHeight - obstacleHeight) / gridSize);
-    const x = Math.floor(Math.random() * maxX) * gridSize;
-    const y = Math.floor(Math.random() * maxY) * gridSize;
-    const candidate = { x, y, width: obstacleWidth, height: obstacleHeight };
-    const collides = avoidPositions.some(pos =>
-      pos.x >= candidate.x && pos.x < candidate.x + candidate.width &&
-      pos.y >= candidate.y && pos.y < candidate.y + candidate.height
-    );
-    if (!collides) obstacles.push(candidate);
-  }
-  return obstacles;
-};
+function generateObstaclesAvoiding(level, canvasWidth, canvasHeight, avoidPositions) {
+  // On utilise ici la même logique pour générer les obstacles
+  return generateObstacles(level, canvasWidth, canvasHeight, 3); // On peut l'adapter si besoin
+}
 
 const initialSnake = [
   { x: 40, y: 40 },
@@ -251,10 +236,11 @@ const SnakeGame = ({ onQuit }) => {
     gameStateRef.current.direction = direction;
   }, [direction]);
 
+  // On génère les obstacles en fonction de la taille du serpent (plus petit = plus d'obstacles)
   const gameStateRef = useRef({
     snake: initialSnake.map(s => ({ ...s })),
     direction: initialDirection,
-    obstacles: generateObstacles(level, canvasWidth, canvasHeight),
+    obstacles: generateObstacles(1, canvasWidth, canvasHeight, initialSnake.length),
     apples: generateAppleGroup(appleGroupCount, [], canvasWidth, canvasHeight),
     canvasWidth,
     canvasHeight,
@@ -459,6 +445,8 @@ const SnakeGame = ({ onQuit }) => {
           const avoidPositions = [...gameStateRef.current.snake, ...gameStateRef.current.apples];
           gameStateRef.current.obstacles = generateObstaclesAvoiding(level, canvasWidth, canvasHeight, avoidPositions);
         }
+        // Réajuster la densité des obstacles en fonction de la taille du serpent
+        gameStateRef.current.obstacles = generateObstacles(level, canvasWidth, canvasHeight, gameStateRef.current.snake.length);
         gameStateRef.current.apples = generateAppleGroup(appleGroupCount, gameStateRef.current.obstacles, canvasWidth, canvasHeight);
         gameStateRef.current.groupFrozen = false;
         groupSpawnTimeRef.current = timestamp;
@@ -474,12 +462,16 @@ const SnakeGame = ({ onQuit }) => {
     } else {
       const timeSinceGroup = timestamp - groupSpawnTimeRef.current;
       if (!gameStateRef.current.groupFrozen && timeSinceGroup >= countdownLimit) {
-        if (gameStateRef.current.snake.length > 1) {
+        // En cas d'expiration du countdown, retirer deux segments pour pénaliser le joueur
+        if (gameStateRef.current.snake.length > 2) {
+          gameStateRef.current.snake.pop();
           gameStateRef.current.snake.pop();
         } else {
           gameStateRef.current.gameOver = true;
         }
         gameStateRef.current.apples = generateAppleGroup(appleGroupCount, gameStateRef.current.obstacles, canvasWidth, canvasHeight);
+        // On réajuste également la densité des obstacles en fonction de la taille du serpent
+        gameStateRef.current.obstacles = generateObstacles(level, canvasWidth, canvasHeight, gameStateRef.current.snake.length);
         groupSpawnTimeRef.current = timestamp;
         setComboCount(0);
       } else {
@@ -650,7 +642,7 @@ const SnakeGame = ({ onQuit }) => {
     gameStateRef.current = {
       snake: initialSnake.map(s => ({ ...s })),
       direction: initialDirection,
-      obstacles: generateObstacles(1, canvasWidth, canvasHeight),
+      obstacles: generateObstacles(1, canvasWidth, canvasHeight, initialSnake.length),
       apples: generateAppleGroup(appleGroupCount, [], canvasWidth, canvasHeight),
       canvasWidth,
       canvasHeight,
@@ -729,10 +721,6 @@ const SnakeGame = ({ onQuit }) => {
         <div>Time: {chrono}s</div>
         <div>Countdown: {countdown}s</div>
         <div>Points: {points}</div>
-        <div className="interface-buttons">
-          <button onClick={() => setShowOptions(!showOptions)} className="btn">Options</button>
-          <button onClick={quitGame} className="btn">Quitter</button>
-        </div>
       </div>
 
       {/* Feedback placé en haut à droite de la zone de jeu */}
@@ -755,7 +743,7 @@ const SnakeGame = ({ onQuit }) => {
         </div>
       )}
 
-      {/* Conteneur du canvas avec position relative pour le flash de bordure */}
+      {/* Conteneur du canvas (position relative pour le flash de bordure) */}
       <div
         className="canvas-wrapper"
         style={{

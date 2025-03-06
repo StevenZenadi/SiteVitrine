@@ -1,7 +1,7 @@
 import React from 'react';
 import './About.css';
 import LogoAnimated from '../components/LogoAnimated';
-import PhotoGallery from '../components/PhotoGallery';
+import PhotoGallery from '../components/PersonalProjects';
 import Timeline from '../components/Timeline';
 import BeyondWork from '../components/BeyondWork';
 import PresentationMedia from '../components/PresentationMedia';
@@ -42,11 +42,11 @@ function About() {
           <BeyondWork />
         </section>
 
-        {/* Présentation Vidéo/Audio */}
+        {/* Présentation Vidéo/Audio 
         <section className="section-presentation">
           <h3>Présentation Vidéo</h3>
           <PresentationMedia />
-        </section>
+        </section>*/}
 
         {/* Anecdotes et Citations */}
         <section className="section-anecdotes">

@@ -1,0 +1,31 @@
+.personal-projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.personal-project-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  padding: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.personal-project-card:hover {
+  transform: translateY(-3px);
+}
+
+.personal-project-card h4 {
+  margin: 0.75rem 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.personal-project-card p {
+  margin-top: 0.5rem;
+  color: #555;
+  font-size: 0.95rem;
+}

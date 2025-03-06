@@ -1,0 +1,28 @@
+.project-gallery {
+  margin: 1rem 0;
+}
+
+.gallery-slide {
+  position: relative;
+}
+
+.gallery-slide img,
+.gallery-slide video {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.slide-caption {
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 0.3rem 0.5rem;
+  text-align: center;
+  border-radius: 0 0 8px 8px;
+}

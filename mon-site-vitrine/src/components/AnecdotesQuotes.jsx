@@ -3,8 +3,7 @@ import './AnecdotesQuotes.css';
 
 function AnecdotesQuotes() {
   const quotes = [
-    { text: "Une etoile qui brille deux fois plus fort, brille deux fois moins longtemps.", author: "Steven" },
-    { text: "La connaissance vient avec la passion, la passion quand à elle est inée.", author: "Steven" },
+    { text: "La connaissance naît de la passion, tout autre éléments ne sont que catalyseurs ou inhibiteurs. La passion est inée.", author: "Steven" },
   ];
 
   return (

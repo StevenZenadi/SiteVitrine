@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import './Home.css';
 import LogoAnimated from '../components/LogoAnimated';
 import TestimonialsCarousel from '../components/TestimonialsCarousel';
+import miniature1 from "../images/miniature1.png";
+import miniature2 from "../images/miniature2.png";
+import miniatureSnake from "../images/miniatureSnake.mp4";
 
 function Home() {
   return (
@@ -23,17 +26,27 @@ function Home() {
         <h2>Projets récents</h2>
         <div className="projects-grid">
           <div className="project-card">
-            <img src="/images/project1.jpg" alt="Projet 1" />
+            <img src={miniature1} alt="Projet 1" />
             <h3>Projet 1</h3>
             <p>Création d’un site vitrine moderne et responsive.</p>
           </div>
           <div className="project-card">
-            <img src="/images/project2.jpg" alt="Projet 2" />
-            <h3>Projet 2</h3>
-            <p>Système IoT pour la domotique et l’automatisation.</p>
+            <img src={'miniature2'} alt="Projet 2" />
+            <h3>Coming Soon</h3>
+            <p>Site commercial pour un auto-entrepreneur informatique.</p>
           </div>
           <div className="project-card">
-            <img src="/images/project3.jpg" alt="Projet 3" />
+            <video
+              className="game-thumbnail"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+            >
+              <source src={miniatureSnake} type="video/mp4" />
+              Votre navigateur ne supporte pas la balise vidéo.
+            </video>
             <h3>Projet 3</h3>
             <p>Prototype interactif d’un jeu Snake amélioré.</p>
           </div>

@@ -11,8 +11,8 @@ import myPhoto from '../images/Profil.jpg';
 function About() {
   return (
     <div className="about-page">
-      {/* Logo animé en haut */}
-      <LogoAnimated />
+      {/* Logo animé en haut 
+      <LogoAnimated />*/}
 
       {/* Contenu principal */}
       <div className="about-content">

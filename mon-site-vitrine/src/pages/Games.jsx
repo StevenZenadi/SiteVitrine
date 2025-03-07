@@ -5,6 +5,8 @@ import SnakeGame from '../components/SnakeGame';
 import Scene3D from '../components/Scene3D.jsx';
 import SeparatorLine from '../components/GameLine';
 import RandomCirclesBackground from "../components/RandomCirclesBackground";
+import miniatureSnake from "../images/miniatureSnake.mp4";
+import miniature2 from "../images/miniature2.png";
 
 function Games() {
   // "selectedGame" peut être "snake", "cv3d" ou null
@@ -34,7 +36,7 @@ function Games() {
 
   return (
     <div className="games-page">
-      <RandomCirclesBackground/>
+      <RandomCirclesBackground />
 
       <SeparatorLine />
       {selectedGame === null ? (
@@ -42,31 +44,36 @@ function Games() {
           <h1>Mes démos</h1>
           {/* Carte pour Neon Snake */}
           <div className="game-card" onClick={() => setSelectedGame("snake")}>
-            <img
-              src="/images/snake-thumbnail.webp"
-              alt="Neon Snake"
+            <video
               className="game-thumbnail"
-              loading="lazy"
-            />
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+            >
+              <source src={miniatureSnake} type="video/mp4" />
+              Votre navigateur ne supporte pas la balise vidéo.
+            </video>
+
             <h3>Neon Snake</h3>
             <p>
               Découvrez une version percutante du classique Snake avec des
-              effets néon et animations modernes.
+              effets et animations modernes.
             </p>
             <button className="btn play-btn">Jouer</button>
           </div>
           {/* Nouvelle carte pour le CV 3D interactif */}
           <div className="game-card" onClick={() => setSelectedGame("cv3d")}>
             <img
-              //src="/images/cv3d-thumbnail.webp"
+              src={miniature2}
               alt="CV 3D Interactif"
               className="game-thumbnail"
               loading="lazy"
             />
-            <h3>CV 3D Interactif</h3>
+            <h3>Iut 3D</h3>
             <p>
-              Explorez mon CV sous un angle inédit grâce à une expérience 3D
-              immersive et en réalité augmentée.
+              Explorez l'IUT ou jai eu mon diplôme dans un environnement 3D.
             </p>
             <button className="btn play-btn">Explorer</button>
           </div>

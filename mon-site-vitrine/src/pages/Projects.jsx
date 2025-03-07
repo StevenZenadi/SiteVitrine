@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Projects.css';
 import miniature1 from "../images/miniature1.png";
+import miniature2 from "../images/miniature2.png";
 
 // Exemple de données pour les projets
 const projectData = [
@@ -29,10 +30,10 @@ const projectData = [
   {
     id: 4,
     category: 'others',
-    title: 'Application de Chatbot',
-    description: 'Expérimentation avec un chatbot intégré à un site web pour démontrer mes compétences en IA.',
-    image: '/images/project-chatbot.jpg',
-    tech: ['Node.js', 'Express', 'Dialogflow'],
+    title: 'IUT Dijon 3D',
+    description: "Prototype de modelisme 3D de l'IUT de Dijon.",
+    image: miniature2,
+    tech: ['Sketchup'],
     link: 'https://github.com/mon-profil/project-chatbot'
   },
   // Ajoutez d'autres projets au besoin...

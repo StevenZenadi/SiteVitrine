@@ -5,7 +5,7 @@ import SnakeGame from '../components/SnakeGame';
 import Scene3D from '../components/Scene3D.jsx';
 import SeparatorLine from '../components/GameLine';
 import RandomCirclesBackground from "../components/RandomCirclesBackground";
-import miniatureSnake from "../images/miniatureSnake.mp4";
+import miniatureSnake from "../videos/miniatureSnake.mp4";
 import miniature2 from "../images/miniature2.png";
 
 function Games() {

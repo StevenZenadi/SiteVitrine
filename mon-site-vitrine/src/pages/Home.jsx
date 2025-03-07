@@ -6,7 +6,7 @@ import LogoAnimated from '../components/LogoAnimated';
 import TestimonialsCarousel from '../components/TestimonialsCarousel';
 import miniature1 from "../images/miniature1.png";
 import miniature2 from "../images/miniature2.png";
-import miniatureSnake from "../images/miniatureSnake.mp4";
+import miniatureSnake from "../videos/miniatureSnake.mp4";
 
 function Home() {
   return (

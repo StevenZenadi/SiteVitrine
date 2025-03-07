@@ -1,5 +1,5 @@
 // src/pages/Projects.jsx
-import miniatureSnake from "../images/miniatureSnake.mp4";
+import miniatureSnake from "../videos/miniatureSnake.mp4";
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Projects.css';

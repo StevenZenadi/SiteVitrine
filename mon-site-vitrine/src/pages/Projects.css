@@ -167,3 +167,9 @@
 .more-projects:hover {
   background-color: #005ea6;
 }
+.project-video {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0;
+}

@@ -1,6 +1,9 @@
 // src/pages/Projects.jsx
-import React, { useState, useEffect } from 'react';
+import miniatureSnake from "../images/miniatureSnake.mp4";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Projects.css';
+import miniature1 from "../images/miniature1.png";
 
 // Exemple de données pour les projets
 const projectData = [
@@ -9,25 +12,17 @@ const projectData = [
     category: 'web',
     title: 'Site Vitrine',
     description: 'Création d’un site vitrine responsive avec React et CSS moderne.',
-    image: '/images/project-web.jpg',
+    image: miniature1,
     tech: ['React', 'CSS', 'GitHub Pages'],
-    link: 'https://github.com/mon-profil/project-web'
-  },
-  {
-    id: 2,
-    category: 'iot',
-    title: 'Projet IoT',
-    description: 'Développement d’un système IoT utilisant Raspberry Pi et MQTT pour la domotique.',
-    image: '/images/project-iot.jpg',
-    tech: ['Python', 'Raspberry Pi', 'MQTT'],
-    link: 'https://github.com/mon-profil/project-iot'
+    link: 'https://github.com/StevenZenadi/SiteVitrine'
   },
   {
     id: 3,
     category: 'games',
     title: 'Jeu Snake Amélioré',
     description: 'Prototype interactif d’un jeu Snake avec animations fluides et effets visuels poussés.',
-    image: '/images/project-snake.jpg',
+    // Pour la vidéo, on définit un objet avec type, src et poster
+    image: { type: 'video', src: miniatureSnake, poster: '/images/project-snake.jpg' },
     tech: ['JavaScript', 'Canvas', 'Animations'],
     link: 'https://github.com/mon-profil/project-snake'
   },
@@ -52,7 +47,6 @@ const categories = [
 ];
 
 function Projects() {
-
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [transitioning, setTransitioning] = useState(false);
 
@@ -74,7 +68,7 @@ function Projects() {
       <h1 className="projects-title">Mes Projets</h1>
       <div className="projects-tabs">
         {categories.map(cat => (
-          <button
+          <button 
             key={cat.key}
             className={`tab ${selectedCategory === cat.key ? 'active' : ''}`}
             onClick={() => handleCategoryChange(cat.key)}
@@ -87,7 +81,21 @@ function Projects() {
         {filteredProjects.map(project => (
           <div key={project.id} className="project-card">
             <div className="project-image">
-              <img src={project.image} alt={project.title} />
+              {typeof project.image === 'object' && project.image.type === 'video' ? (
+                <video 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline 
+                  poster={project.image.poster}
+                  className="project-video"
+                >
+                  <source src={project.image.src} type="video/mp4" />
+                  Votre navigateur ne supporte pas la vidéo.
+                </video>
+              ) : (
+                <img src={project.image} alt={project.title} />
+              )}
             </div>
             <div className="project-info">
               <h3>{project.title}</h3>
@@ -102,16 +110,14 @@ function Projects() {
           </div>
         ))}
       </div>
-      <div className="projects-footer">
-        {selectedCategory !== 'all' && (
-          <button
-            className="more-projects"
-            onClick={() => setSelectedCategory('all')}
-          >
-            Voir tous les projets
-          </button>
-        )}
-      </div>
+      {selectedCategory !== 'all' && (
+        <button 
+          className="more-projects"
+          onClick={() => handleCategoryChange('all')}
+        >
+          Voir tous les projets
+        </button>
+      )}
     </section>
   );
 }

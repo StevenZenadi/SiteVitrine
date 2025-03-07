@@ -10,7 +10,7 @@ function lerp(a, b, t) {
   return a + (b - a) * t;
 }
 
-// Convertir un hex en rgba (pour la bordure flash)
+// Convertir un hex en rgba (pour la bordure flash et autres effets)
 function hexToRgba(hex, alpha) {
   hex = hex.replace("#", "");
   if (hex.length === 3) {
@@ -94,11 +94,11 @@ const generateAppleGroup = (groupCount, obstacles, canvasWidth, canvasHeight) =>
   return apples;
 };
 
-// La densité des obstacles varie selon la taille du serpent
+// La densité des obstacles varie selon la taille du serpent, avec fade-in via spawnTime
 function generateObstacles(level, canvasWidth, canvasHeight, snakeLength = 3) {
-  // Par exemple, plus le serpent est petit, plus on génère d'obstacles.
   const count = Math.min(8, Math.max(3, 8 - Math.floor(snakeLength / 5)));
   const obstacles = [];
+  const now = performance.now();
   for (let i = 0; i < count; i++) {
     const obstacleWidth = gridSize * (2 + Math.floor(Math.random() * 2));
     const obstacleHeight = gridSize * (2 + Math.floor(Math.random() * 2));
@@ -109,20 +109,20 @@ function generateObstacles(level, canvasWidth, canvasHeight, snakeLength = 3) {
       y: Math.floor(Math.random() * maxY) * gridSize,
       width: obstacleWidth,
       height: obstacleHeight,
+      spawnTime: now
     });
   }
   return obstacles;
 }
 
 function generateObstaclesAvoiding(level, canvasWidth, canvasHeight, avoidPositions) {
-  // On utilise ici la même logique pour générer les obstacles
-  return generateObstacles(level, canvasWidth, canvasHeight, 3); // On peut l'adapter si besoin
+  return generateObstacles(level, canvasWidth, canvasHeight, 3);
 }
 
 const initialSnake = [
   { x: 40, y: 40 },
   { x: 20, y: 40 },
-  { x: 0, y: 40 },
+  { x: 0, y: 40 }
 ];
 const initialDirection = { x: gridSize, y: 0 };
 
@@ -138,8 +138,8 @@ const effectDurations = {
 
 function bonusColor(type) {
   switch (type) {
-    case "passThrough": return "multicolor"; // mode multicolore pour le serpent
-    case "freeze": return "#00A1FF"; // Bleu pour freeze
+    case "passThrough": return "multicolor"; // Le serpent sera multicolore
+    case "freeze": return "#00A1FF"; // Bleu
     case "boostScore": return "#FF0000"; // Rouge
     case "extensionTemps": return "#828282"; // Gris
     case "segmentsSupp": return "#894FFF"; // Violet
@@ -157,15 +157,13 @@ function getSnakeAppearance(activeBonuses) {
   return { base, secondary };
 }
 
-// Hook pour les contrôles par swipe
+// Hook pour les contrôles par swipe (sans joystick)
 const useSwipeControls = (setDirection) => {
   const touchStartRef = useRef(null);
-
   const handleTouchStart = (e) => {
     const touch = e.touches[0];
     touchStartRef.current = { x: touch.clientX, y: touch.clientY };
   };
-
   const handleTouchMove = (e) => {
     if (!touchStartRef.current) return;
     const touch = e.touches[0];
@@ -189,15 +187,13 @@ const useSwipeControls = (setDirection) => {
       }
     }
   };
-
   const handleTouchEnd = () => {
     touchStartRef.current = null;
   };
-
   return { handleTouchStart, handleTouchMove, handleTouchEnd };
 };
 
-const SnakeGame = ({ onQuit }) => {
+const SnakeGame = () => {
   // Références et états
   const canvasRef = useRef(null);
   const accumulatorRef = useRef(0);
@@ -219,12 +215,14 @@ const SnakeGame = ({ onQuit }) => {
   // State pour le flash de bordure
   const [borderFlash, setBorderFlash] = useState(null);
 
+  // Tableau de particules pour les explosions
+  const particlesRef = useRef([]);
+
   const [chrono, setChrono] = useState(0);
   const [countdown, setCountdown] = useState((countdownLimit / 1000).toFixed(1));
   const [points, setPoints] = useState(0);
   const [level, setLevel] = useState(1);
   const [comboCount, setComboCount] = useState(0);
-  const [showOptions, setShowOptions] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
 
   const canvasWidth = 800;
@@ -236,7 +234,7 @@ const SnakeGame = ({ onQuit }) => {
     gameStateRef.current.direction = direction;
   }, [direction]);
 
-  // On génère les obstacles en fonction de la taille du serpent (plus petit = plus d'obstacles)
+  // Génération des obstacles en fonction de la taille du serpent
   const gameStateRef = useRef({
     snake: initialSnake.map(s => ({ ...s })),
     direction: initialDirection,
@@ -261,6 +259,21 @@ const SnakeGame = ({ onQuit }) => {
   const updateBonuses = (timestamp) => {
     activeBonusesRef.current = activeBonusesRef.current.filter(b => b.expires > timestamp);
     setActiveBonuses([...activeBonusesRef.current]);
+  };
+
+  const spawnParticleExplosion = (x, y, color, count = 20) => {
+    const now = performance.now();
+    for (let i = 0; i < count; i++) {
+      particlesRef.current.push({
+        x,
+        y,
+        vx: (Math.random() - 0.5) * 4,
+        vy: (Math.random() - 0.5) * 4,
+        life: 1000,
+        startTime: now,
+        color
+      });
+    }
   };
 
   const applyBonus = (effect, timestamp) => {
@@ -329,7 +342,7 @@ const SnakeGame = ({ onQuit }) => {
 
   const updateGameState = (timestamp) => {
     previousStateRef.current = {
-      snake: gameStateRef.current.snake.map(s => ({ ...s })),
+      snake: gameStateRef.current.snake.map(s => ({ ...s }))
     };
     if (gameStateRef.current.gameOver) return;
 
@@ -376,6 +389,7 @@ const SnakeGame = ({ onQuit }) => {
         newHead.y + gridSize > obs.y
       ) {
         if (activeBonusesRef.current.some(b => b.type === "passThrough")) {
+          spawnParticleExplosion(obs.x + obs.width / 2, obs.y + obs.height / 2, "white", 30);
           gameStateRef.current.obstacles.splice(i, 1);
           i--;
         } else {
@@ -436,8 +450,9 @@ const SnakeGame = ({ onQuit }) => {
         x: eatenApple.x + gridSize / 2,
         y: eatenApple.y + gridSize / 2,
         points: earnedPoints,
-        startTime: timestamp,
+        startTime: timestamp
       });
+      spawnParticleExplosion(eatenApple.x + gridSize / 2, eatenApple.y + gridSize / 2, eatenApple.color, 40);
       applyBonus(eatenApple.effect, timestamp);
       if (eatenApple.effect !== "freeze") {
         applesEatenRef.current++;
@@ -445,7 +460,6 @@ const SnakeGame = ({ onQuit }) => {
           const avoidPositions = [...gameStateRef.current.snake, ...gameStateRef.current.apples];
           gameStateRef.current.obstacles = generateObstaclesAvoiding(level, canvasWidth, canvasHeight, avoidPositions);
         }
-        // Réajuster la densité des obstacles en fonction de la taille du serpent
         gameStateRef.current.obstacles = generateObstacles(level, canvasWidth, canvasHeight, gameStateRef.current.snake.length);
         gameStateRef.current.apples = generateAppleGroup(appleGroupCount, gameStateRef.current.obstacles, canvasWidth, canvasHeight);
         gameStateRef.current.groupFrozen = false;
@@ -462,7 +476,7 @@ const SnakeGame = ({ onQuit }) => {
     } else {
       const timeSinceGroup = timestamp - groupSpawnTimeRef.current;
       if (!gameStateRef.current.groupFrozen && timeSinceGroup >= countdownLimit) {
-        // En cas d'expiration du countdown, retirer deux segments pour pénaliser le joueur
+        // À l'expiration du countdown, retirer DEUX segments pour pénaliser le joueur
         if (gameStateRef.current.snake.length > 2) {
           gameStateRef.current.snake.pop();
           gameStateRef.current.snake.pop();
@@ -470,7 +484,6 @@ const SnakeGame = ({ onQuit }) => {
           gameStateRef.current.gameOver = true;
         }
         gameStateRef.current.apples = generateAppleGroup(appleGroupCount, gameStateRef.current.obstacles, canvasWidth, canvasHeight);
-        // On réajuste également la densité des obstacles en fonction de la taille du serpent
         gameStateRef.current.obstacles = generateObstacles(level, canvasWidth, canvasHeight, gameStateRef.current.snake.length);
         groupSpawnTimeRef.current = timestamp;
         setComboCount(0);
@@ -486,36 +499,59 @@ const SnakeGame = ({ onQuit }) => {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Dessiner les obstacles arrondis en blanc
+    // Dessiner les obstacles avec un fade-in
     for (let obs of gameStateRef.current.obstacles) {
+      let fadeFactor = 1;
+      if (obs.spawnTime) {
+        fadeFactor = Math.min(1, (timestamp - obs.spawnTime) / 500);
+      }
+      ctx.globalAlpha = fadeFactor;
       ctx.fillStyle = 'white';
       roundRect(ctx, obs.x, obs.y, obs.width, obs.height, 5);
+      ctx.globalAlpha = 1;
     }
 
-    // Apparence du serpent
+    // Effet de lumière sur le serpent uniquement en mode multicolore
     const appearance = getSnakeAppearance(activeBonusesRef.current);
     const snakeBaseColor = appearance.base;
     const frames = renderedSnakeRef.current;
-    frames.forEach(framePoints => {
-      ctx.beginPath();
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      if (snakeBaseColor === "multicolor") {
+    if (snakeBaseColor === "multicolor") {
+      ctx.save();
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = "#FFFFFF";
+      frames.forEach(framePoints => {
+        ctx.beginPath();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
         const cycleColors = ["#828282", "#FF0000", "#FFAD00", "#00A1FF", "#1AAD0E"];
         const index = Math.floor(timestamp / 100) % cycleColors.length;
         ctx.strokeStyle = cycleColors[index];
-      } else {
-        ctx.strokeStyle = snakeBaseColor;
-      }
-      ctx.lineWidth = gridSize;
-      if (framePoints.length > 0) {
-        ctx.moveTo(framePoints[0].x, framePoints[0].y);
-        for (let i = 1; i < framePoints.length; i++) {
-          ctx.lineTo(framePoints[i].x, framePoints[i].y);
+        ctx.lineWidth = gridSize;
+        if (framePoints.length > 0) {
+          ctx.moveTo(framePoints[0].x, framePoints[0].y);
+          for (let i = 1; i < framePoints.length; i++) {
+            ctx.lineTo(framePoints[i].x, framePoints[i].y);
+          }
         }
-      }
-      ctx.stroke();
-    });
+        ctx.stroke();
+      });
+      ctx.restore();
+    } else {
+      frames.forEach(framePoints => {
+        ctx.beginPath();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = snakeBaseColor;
+        ctx.lineWidth = gridSize;
+        if (framePoints.length > 0) {
+          ctx.moveTo(framePoints[0].x, framePoints[0].y);
+          for (let i = 1; i < framePoints.length; i++) {
+            ctx.lineTo(framePoints[i].x, framePoints[i].y);
+          }
+        }
+        ctx.stroke();
+      });
+    }
 
     const currentSnake = gameStateRef.current.snake;
     const prevSnake = previousStateRef.current.snake;
@@ -587,6 +623,24 @@ const SnakeGame = ({ onQuit }) => {
       effect => (timestamp - effect.startTime) < effectDuration
     );
 
+    // Afficher les particules d'explosion
+    particlesRef.current.forEach((particle, index) => {
+      const elapsed = timestamp - particle.startTime;
+      const t = elapsed / particle.life;
+      if (t < 1) {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        ctx.globalAlpha = 1 - t;
+        ctx.fillStyle = particle.color;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      } else {
+        particlesRef.current.splice(index, 1);
+      }
+    });
+
     if (gameStateRef.current.gameOver) {
       ctx.fillStyle = 'black';
       ctx.font = '48px sans-serif';
@@ -650,7 +704,7 @@ const SnakeGame = ({ onQuit }) => {
       groupFrozen: false,
     };
     previousStateRef.current = {
-      snake: initialSnake.map(s => ({ ...s })),
+      snake: initialSnake.map(s => ({ ...s }))
     };
     renderedSnakeRef.current = [];
     accumulatorRef.current = 0;
@@ -671,7 +725,7 @@ const SnakeGame = ({ onQuit }) => {
   };
 
   const quitGame = () => {
-    if (typeof onQuit === 'function') onQuit();
+    // Les boutons "Options" et "Quitter" ont été retirés
   };
 
   const bonusFeedback = activeBonuses.length > 0 ? activeBonuses.map(bonus => {
@@ -736,14 +790,7 @@ const SnakeGame = ({ onQuit }) => {
         {bonusFeedback}
       </div>
 
-      {showOptions && (
-        <div className="options-bar">
-          <h3>Options</h3>
-          <p>Aucune option disponible pour le moment.</p>
-        </div>
-      )}
-
-      {/* Conteneur du canvas (position relative pour le flash de bordure) */}
+      {/* Conteneur du canvas avec position relative pour le flash de bordure */}
       <div
         className="canvas-wrapper"
         style={{
@@ -762,7 +809,6 @@ const SnakeGame = ({ onQuit }) => {
           height={canvasHeight}
         />
 
-        {/* Bordure flash absolue */}
         {borderFlash && performance.now() < borderFlash.expires && (
           <div
             style={{
@@ -785,7 +831,6 @@ const SnakeGame = ({ onQuit }) => {
             <div className="game-over-popup">
               <h2>Game Over</h2>
               <button onClick={restartGame} className="btn">Rejouer</button>
-              <button onClick={quitGame} className="btn">Quitter</button>
             </div>
           </div>
         )}

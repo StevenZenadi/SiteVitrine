@@ -14,12 +14,12 @@ function Home() {
       {/* Section Hero */}
       <section className="hero-container">
         <div className="hero-content">
-          <h1 className="hero-title">Bienvenue sur mon portfolio</h1>
+          <h1 className="hero-title">Bienvenue sur mon portfolio (En cours d'aménagement)</h1>
           <LogoAnimated />
 
           <p className="hero-subtitle">Développeur Web & IoT Passionné</p>
           <p className="hero-subtitle">
-            Cette application React a pour but de vous présenter mon savoir-faire et de vous permettre de mieux me connaître. Il évoluera avec le temps, en intégrant de nouveaux projets de démonstration et en corrigeant les éventuels bugs existants.
+            Cette application React a pour but de vous présenter mon savoir-faire et de vous permettre de mieux me connaître. 
           </p>
         </div>
       </section>

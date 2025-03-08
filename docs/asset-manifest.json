@@ -1,11 +1,11 @@
 {
   "files": {
     "main.css": "/SiteVitrine/static/css/main.3df151b9.css",
-    "main.js": "/SiteVitrine/static/js/main.4cd19658.js",
+    "main.js": "/SiteVitrine/static/js/main.b67dcf6c.js",
     "static/media/voiture8.mp4": "/SiteVitrine/static/media/voiture8.c60f646747b3d6990cf0.mp4",
     "static/media/miniatureSnake.mp4": "/SiteVitrine/static/media/miniatureSnake.b5598602a038e0033989.mp4",
-    "static/media/retravailiut.gltf": "/SiteVitrine/static/media/retravailiut.b284b600fdd3397a5564.gltf",
     "static/media/van2.webp": "/SiteVitrine/static/media/van2.4d12d521fb68c7d4ead0.webp",
+    "static/media/iutdijon.gltf": "/SiteVitrine/static/media/iutdijon.4bc800350c7609004294.gltf",
     "static/media/voiture4.webp": "/SiteVitrine/static/media/voiture4.6229e67d8abc84188bba.webp",
     "static/media/van6.webp": "/SiteVitrine/static/media/van6.5f409f59d3aca8c5a618.webp",
     "static/media/van4.webp": "/SiteVitrine/static/media/van4.95771e04318896091dbb.webp",
@@ -51,6 +51,6 @@
   },
   "entrypoints": [
     "static/css/main.3df151b9.css",
-    "static/js/main.4cd19658.js"
+    "static/js/main.b67dcf6c.js"
   ]
 }

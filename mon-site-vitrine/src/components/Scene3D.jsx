@@ -1,5 +1,5 @@
 // Scene3D.jsx
-import iutDijon from "../ressources/retravailiut.gltf";
+import iutDijon from "../ressources/iutdijon.gltf";
 
 import React from 'react';
 

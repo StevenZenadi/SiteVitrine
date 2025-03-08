@@ -46,7 +46,7 @@ function PersonalProjects() {
     },
     {
       title: "Atelier DIY",
-      description: "Creation d'un modèle personnalisé sur base de classe A 200. Pensée et réalisée par moi.",
+      description: "Creation d'un modèle personnalisé sur base de classe A 200. Pensée et réalisée par votre serviteur.",
       images: [
         { src: voiture1, caption: "Avant" },
         { src: voiture2, caption: "Avant" },

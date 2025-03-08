@@ -25,6 +25,12 @@ function About() {
           alliant développement web et objets connectés. Découvrez ici un aperçu de mon parcours, de mes passions et de ce qui me motive au quotidien.
         </p>
 
+        {/* Galerie Photo Interactive */}
+        <section className="section-gallery">
+          <h3>Projets persos</h3>
+          <PhotoGallery />
+        </section>
+
         {/* Timeline Personnelle */}
         <section className="section-timeline">
           <h3>Ma Timeline</h3>

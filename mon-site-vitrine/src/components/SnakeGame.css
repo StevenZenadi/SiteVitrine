@@ -120,8 +120,10 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
 
 @media (max-width: 600px) {
   .game-container {
-    width: 100%;
-    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    touch-action: none;
   }
   .interface-bar, .options-bar {
     padding: 8px 12px;

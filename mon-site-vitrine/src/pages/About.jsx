@@ -7,6 +7,7 @@ import BeyondWork from '../components/BeyondWork';
 import PresentationMedia from '../components/PresentationMedia';
 import AnecdotesQuotes from '../components/AnecdotesQuotes';
 import myPhoto from '../images/Profil.jpg';
+import cv from "../ressources/cv.pdf";
 
 function About() {
   return (
@@ -23,12 +24,6 @@ function About() {
           Bienvenue ! Je m'appelle Steven Zenadi et je suis passionné par la création de solutions innovantes 
           alliant développement web et objets connectés. Découvrez ici un aperçu de mon parcours, de mes passions et de ce qui me motive au quotidien.
         </p>
-
-        {/* Galerie Photo Interactive */}
-        <section className="section-gallery">
-          <h3>Galerie Photo Interactive</h3>
-          <PhotoGallery />
-        </section>
 
         {/* Timeline Personnelle */}
         <section className="section-timeline">
@@ -56,7 +51,7 @@ function About() {
 
         {/* Appels à l'action */}
         <div className="about-cta-container">
-          <a href="/cv.pdf" className="about-cta" download>
+          <a href={cv} className="about-cta" download>
             Télécharger mon CV
           </a>
         </div>

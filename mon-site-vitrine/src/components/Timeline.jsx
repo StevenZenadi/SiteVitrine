@@ -4,7 +4,7 @@ import './Timeline.css';
 function Timeline() {
   // Exemple de points de timeline
   const events = [
-    { year: "2016", title: "Adulte en devenir.", description: "Commencement de mon parcours en DUT informatique." },
+    { year: "2016", title: "Adulte en devenir.", description: "Commencement de mon parcours en informatique." },
     { year: "2018", title: "Junior.", description: "Rejoins le CIAD en tant qu'ingenieur de recherche. Rejoins l'equipe enseignante de la fac de Dijon." },
     { year: "2019", title: "On parle de vous.", description: "Rejoins l'equipe enseignante de Polytech Dijon." },
     { year: "2021", title: "Au revoir. Bonjour !", description: "Quitte le CIAD et la metropole Dijonnaise pour Paris et Finovox." },

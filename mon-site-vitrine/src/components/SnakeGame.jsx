@@ -828,12 +828,16 @@ const SnakeGame = () => {
 
   return (
     <div className="game-container">
+      {/* Barre d'infos / Bouton Retour éventuel */}
       <div className="interface-bar">
+        {/* Si vous avez un bouton Retour, placez-le ici */}
+        {/* <button className="btn back-button">Retour</button> */}
         <div>Time: {chrono}s</div>
         <div>Countdown: {countdown}s</div>
         <div>Points: {points}</div>
       </div>
 
+      {/* Panel des bonus actifs */}
       <div className="active-effects-panel">
         {activeBonuses.length > 0
           ? activeBonuses.map(bonus => {
@@ -861,10 +865,12 @@ const SnakeGame = () => {
           : <div className="no-bonus">Aucun bonus actif</div>}
       </div>
 
-      <div className="canvas-wrapper"
-           onTouchStart={handleTouchStart}
-           onTouchMove={handleTouchMove}
-           onTouchEnd={handleTouchEnd}>
+      <div
+        className="canvas-wrapper"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <canvas
           ref={canvasRef}
           className="game-canvas"

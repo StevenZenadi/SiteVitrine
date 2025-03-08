@@ -1,49 +1,24 @@
 /* Utiliser la police système Apple */
 body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 /* Conteneur principal du jeu */
 .game-container {
   position: relative;
   width: 800px;
-  margin: 60px auto 0 auto; /* Ajout d'un margin-top pour éviter que le contenu passe sous le header */
+  margin: 60px auto 0 auto; /* marge pour éviter le header, ajustez si besoin */
   background: #fff;
 }
 
-/* Barre d'interface – style épuré et blanc */
+/* Barre d'interface */
 .interface-bar {
-  width: 100%;
-  padding: 12px 20px;
-  background: #fff;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
   display: flex;
+  flex-wrap: wrap;             /* Permet de passer à la ligne si pas assez de place */
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-/* Boutons dans la barre d'interface */
-.interface-buttons .btn {
-  background: #007aff;
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  margin-left: 8px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.interface-buttons .btn:hover {
-  background: #0051a8;
-}
-
-/* Options – style similaire */
-.options-bar {
   width: 100%;
   padding: 12px 20px;
   background: #fff;
@@ -51,6 +26,12 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   border-radius: 10px;
   margin-bottom: 10px;
   color: #333;
+  box-sizing: border-box;
+}
+
+/* Exemple si vous avez un bouton Retour */
+.back-button {
+  margin-right: auto;
 }
 
 /* Wrapper pour le canvas */
@@ -68,7 +49,7 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   border-radius: 12px;
 }
 
-/* Overlay de Game Over – recouvre exactement le canvas */
+/* Overlay de Game Over */
 .game-over-overlay {
   position: absolute;
   top: 0;
@@ -83,7 +64,7 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   border-radius: 12px;
 }
 
-/* Pop-up Game Over – style élégant */
+/* Pop-up Game Over */
 .game-over-popup {
   background: #fff;
   padding: 20px 40px;
@@ -117,7 +98,7 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
 /* Panneau des bonus actifs */
 .active-effects-panel {
   position: absolute;
-  top: 10px;
+  top: 10px;      /* Sur desktop, 10px en dessous du parent (.game-container) */
   right: 10px;
   max-width: 200px;
   background: rgba(0,0,0,0.5);
@@ -180,7 +161,6 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   border-radius: 12px;
 }
 
-/* Bouton dans l'overlay */
 .help-overlay .btn {
   margin-top: 20px;
   background: #007aff;
@@ -196,19 +176,23 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   background: #0051a8;
 }
 
-/* Contrôles mobiles supprimés */
-  
+/* Animation de flash (pour le texte des bonus) */
+@keyframes flash {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Responsivité sur mobile */
 @media (max-width: 600px) {
   .game-container {
     width: 100vw;
-    height: 100vh;
-    position: relative;
+    height: auto; /* on peut laisser auto pour la hauteur, sinon 100vh si vous préférez */
+    margin-top: 0;  /* on peut ajuster si besoin */
     touch-action: none;
-    margin-top: 60px;
   }
-  .interface-bar, .options-bar {
-    padding: 8px 12px;
-    font-size: 14px;
+  .interface-bar {
+    margin-top: 10px;   /* laisse un peu de place en haut sur mobile */
   }
   .game-canvas {
     width: 100%;
@@ -217,6 +201,13 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   .canvas-wrapper {
     width: 100%;
   }
+
+  /* Décaler un peu plus le panneau des bonus pour ne pas chevaucher la barre d'info */
+  .active-effects-panel {
+    top: 80px; /* lève-le plus bas sur mobile */
+    right: 10px;
+  }
+  
   .game-over-overlay {
     width: 100%;
     height: 100%;

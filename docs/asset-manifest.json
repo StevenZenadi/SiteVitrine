@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/SiteVitrine/static/css/main.8df1b9c1.css",
+    "main.css": "/SiteVitrine/static/css/main.202900d8.css",
     "main.js": "/SiteVitrine/static/js/main.f9ac79fe.js",
     "static/media/voiture8.mp4": "/SiteVitrine/static/media/voiture8.c60f646747b3d6990cf0.mp4",
     "static/media/miniatureSnake.mp4": "/SiteVitrine/static/media/miniatureSnake.b5598602a038e0033989.mp4",
@@ -50,7 +50,7 @@
     "index.html": "/SiteVitrine/index.html"
   },
   "entrypoints": [
-    "static/css/main.8df1b9c1.css",
+    "static/css/main.202900d8.css",
     "static/js/main.f9ac79fe.js"
   ]
 }

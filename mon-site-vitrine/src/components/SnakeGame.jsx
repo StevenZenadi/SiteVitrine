@@ -800,21 +800,7 @@ const SnakeGame = () => {
 
   // Overlay de démarrage repositionné dans le canvas-wrapper pour être à la bonne taille
   const helpOverlay = (
-    <div className="help-overlay" style={{
-      position: 'absolute',
-      top: 0, left: 0,
-      width: `${canvasWidth}px`,
-      height: `${canvasHeight}px`,
-      backgroundColor: 'rgba(0,0,0,0.8)',
-      color: 'white',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      textAlign: 'center',
-      padding: '20px',
-      zIndex: 10
-    }}>
+    <div className="help-overlay">
       <h1>Bienvenue dans Neon Snake !</h1>
       <p>
         Contrôlez le serpent en glissant sur l'écran.<br />
@@ -822,7 +808,7 @@ const SnakeGame = () => {
         Les obstacles apparaissent progressivement et évitent de se placer sur le serpent ou juste devant lui.<br />
         Faites attention : à l'expiration du timer, le serpent perd deux segments !
       </p>
-      <button className="btn" onClick={() => setShowHelp(false)} style={{ marginTop: '20px' }}>
+      <button className="btn" onClick={() => setShowHelp(false)}>
         Play
       </button>
     </div>
@@ -841,22 +827,14 @@ const SnakeGame = () => {
   );
 
   return (
-    <div className="game-container" style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', touchAction: 'none' }}>
+    <div className="game-container">
       <div className="interface-bar">
         <div>Time: {chrono}s</div>
         <div>Countdown: {countdown}s</div>
         <div>Points: {points}</div>
       </div>
 
-      <div
-        className="active-effects-panel"
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          maxWidth: '200px'
-        }}
-      >
+      <div className="active-effects-panel">
         {activeBonuses.length > 0
           ? activeBonuses.map(bonus => {
               const remaining = Math.max(0, ((bonus.expires - performance.now()) / 1000).toFixed(1));
@@ -867,48 +845,24 @@ const SnakeGame = () => {
                 <div
                   key={bonus.appliedAt}
                   className="effect-item"
-                  style={{
-                    marginBottom: '5px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    backgroundColor: 'rgba(0,0,0,0.5)',
-                    padding: '5px',
-                    borderRadius: '4px'
-                  }}
                 >
-                  <div className="effect-icon" style={{ fontWeight: 'bold', color: 'white', ...flashStyle }}>
+                  <div className="effect-icon" style={flashStyle}>
                     {bonus.type.toUpperCase()}
                   </div>
-                  <div className="effect-time" style={{ marginLeft: '8px', color: 'white' }}>
+                  <div className="effect-time">
                     {remaining}s
                   </div>
-                  <div
-                    className="effect-progress"
-                    style={{
-                      width: '80px',
-                      height: '6px',
-                      backgroundColor: 'gray',
-                      marginLeft: '8px',
-                      borderRadius: '3px',
-                      overflow: 'hidden'
-                    }}
-                  >
-                    <div style={{ width: `${progress}%`, height: '100%', backgroundColor: 'limegreen' }} />
+                  <div className="effect-progress">
+                    <div style={{ width: `${progress}%` }} />
                   </div>
                 </div>
               );
             })
-          : <div style={{ color: 'white' }}>Aucun bonus actif</div>}
+          : <div className="no-bonus">Aucun bonus actif</div>}
       </div>
 
       <div
         className="canvas-wrapper"
-        style={{
-          position: 'relative',
-          width: `${canvasWidth}px`,
-          height: `${canvasHeight}px`,
-          margin: '0 auto'
-        }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -969,7 +923,7 @@ const SnakeGame = () => {
             onTouchStart={() => pressedKeysRef.current.add("d")}
             onTouchEnd={() => pressedKeysRef.current.delete("d")}
           >
-            →
+            → 
           </button>
         </div>
       </div>

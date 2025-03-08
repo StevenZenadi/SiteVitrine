@@ -861,12 +861,10 @@ const SnakeGame = () => {
           : <div className="no-bonus">Aucun bonus actif</div>}
       </div>
 
-      <div
-        className="canvas-wrapper"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
+      <div className="canvas-wrapper"
+           onTouchStart={handleTouchStart}
+           onTouchMove={handleTouchMove}
+           onTouchEnd={handleTouchEnd}>
         <canvas
           ref={canvasRef}
           className="game-canvas"
@@ -894,47 +892,6 @@ const SnakeGame = () => {
         {gameStateRef.current.gameOver && gameOverOverlay}
         {showHelp && helpOverlay}
       </div>
-
-      <div className="mobile-controls">
-        <button
-          className="mobile-btn"
-          onTouchStart={() => pressedKeysRef.current.add("z")}
-          onTouchEnd={() => pressedKeysRef.current.delete("z")}
-        >
-          ↑
-        </button>
-        <div className="mobile-row">
-          <button
-            className="mobile-btn"
-            onTouchStart={() => pressedKeysRef.current.add("q")}
-            onTouchEnd={() => pressedKeysRef.current.delete("q")}
-          >
-            ←
-          </button>
-          <button
-            className="mobile-btn"
-            onTouchStart={() => pressedKeysRef.current.add("s")}
-            onTouchEnd={() => pressedKeysRef.current.delete("s")}
-          >
-            ↓
-          </button>
-          <button
-            className="mobile-btn"
-            onTouchStart={() => pressedKeysRef.current.add("d")}
-            onTouchEnd={() => pressedKeysRef.current.delete("d")}
-          >
-            → 
-          </button>
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes flash {
-          0% { opacity: 1; }
-          50% { opacity: 0.5; }
-          100% { opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 };

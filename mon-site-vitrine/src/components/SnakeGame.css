@@ -7,20 +7,19 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
 .game-container {
   position: relative;
   width: 800px;
-  margin: 0 auto;
+  margin: 60px auto 0 auto; /* Ajout d'un margin-top pour éviter que le contenu passe sous le header */
   background: #fff;
 }
 
 /* Barre d'interface – style épuré et blanc */
 .interface-bar {
-  width: 50%;
+  width: 100%;
   padding: 12px 20px;
-  padding-left:15%;
   background: #fff;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
   color: #333;
@@ -197,17 +196,15 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   background: #0051a8;
 }
 
-/* Contrôles mobiles */
-.mobile-controls {
-  display: none;
-}
-
+/* Contrôles mobiles supprimés */
+  
 @media (max-width: 600px) {
   .game-container {
     width: 100vw;
     height: 100vh;
     position: relative;
     touch-action: none;
+    margin-top: 60px;
   }
   .interface-bar, .options-bar {
     padding: 8px 12px;
@@ -223,30 +220,5 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   .game-over-overlay {
     width: 100%;
     height: 100%;
-  }
-  .mobile-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
-  }
-  .mobile-controls .mobile-row {
-    display: flex;
-    justify-content: center;
-    margin-top: 5px;
-  }
-  .mobile-btn {
-    background: #007aff;
-    color: #fff;
-    border: none;
-    padding: 12px 18px;
-    margin: 5px;
-    border-radius: 50%;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  .mobile-btn:hover {
-    background: #0051a8;
   }
 }

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import "./Contact.css";
 import imageProfil from "../images/Profil.jpg";
-import { FaUser, FaEnvelope, FaLinkedin } from 'react-icons/fa'; // Exemple d'icônes depuis react-icons
+import { FaUser, FaEnvelope, FaLinkedin } from 'react-icons/fa';
 
 function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -14,13 +14,17 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Préparer le sujet et le corps du message
     const subject = encodeURIComponent("IMPORTANT");
     const body = encodeURIComponent(
       `Nom : ${form.name}\nEmail : ${form.email}\n\n${form.message}`
     );
+    // Construire le lien mailto
     const mailtoLink = `mailto:steven.zenadi@orange.fr?subject=${subject}&body=${body}`;
 
+    // Ouvrir le client mail par défaut
     window.location.href = mailtoLink;
+    // Réinitialiser le formulaire
     setForm({ name: "", email: "", message: "" });
   };
 
@@ -86,7 +90,7 @@ function Contact() {
             name="email"
             value={form.email}
             onChange={handleChange}
-            placeholder="votre.email@exemple.com"
+            placeholder="steven.zenadi@orange.fr"
             required
           />
         </div>

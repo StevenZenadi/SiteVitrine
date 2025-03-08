@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/SiteVitrine/static/css/main.d7a9e46e.css",
-    "main.js": "/SiteVitrine/static/js/main.28cb419b.js",
+    "main.css": "/SiteVitrine/static/css/main.ebbe4992.css",
+    "main.js": "/SiteVitrine/static/js/main.8e0e0db5.js",
     "static/js/206.dc6c2f87.chunk.js": "/SiteVitrine/static/js/206.dc6c2f87.chunk.js",
     "static/media/voiture8.mp4": "/SiteVitrine/static/media/voiture8.c60f646747b3d6990cf0.mp4",
     "static/media/miniatureSnake.mp4": "/SiteVitrine/static/media/miniatureSnake.b5598602a038e0033989.mp4",
@@ -36,6 +36,7 @@
     "static/media/voiture2.webp": "/SiteVitrine/static/media/voiture2.bd1005d73981092f1b38.webp",
     "static/media/voiture3.webp": "/SiteVitrine/static/media/voiture3.21309f5a51621314339d.webp",
     "static/media/miniature2.png": "/SiteVitrine/static/media/miniature2.4303ea538e2750028700.png",
+    "static/media/cv.pdf": "/SiteVitrine/static/media/cv.9ae2fbc7d0caf164540e.pdf",
     "static/media/Logo.png": "/SiteVitrine/static/media/Logo.2a45313f26a0634ea6e3.png",
     "static/media/violet.png": "/SiteVitrine/static/media/violet.1d285a80661768c3b7ef.png",
     "static/media/vert.png": "/SiteVitrine/static/media/vert.455e0e39efd169fe7ced.png",
@@ -50,7 +51,7 @@
     "index.html": "/SiteVitrine/index.html"
   },
   "entrypoints": [
-    "static/css/main.d7a9e46e.css",
-    "static/js/main.28cb419b.js"
+    "static/css/main.ebbe4992.css",
+    "static/js/main.8e0e0db5.js"
   ]
 }

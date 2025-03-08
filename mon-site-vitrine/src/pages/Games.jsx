@@ -73,7 +73,7 @@ function Games() {
             />
             <h3>Iut 3D</h3>
             <p>
-              Explorez l'IUT ou jai eu mon diplôme dans un environnement 3D.
+              Explorez l'IUT de Dijon dans un prototype 3D réalisé par mes oins sur Sketchup.
             </p>
             <button className="btn play-btn">Explorer</button>
           </div>

@@ -18,6 +18,9 @@ function Home() {
           <LogoAnimated />
 
           <p className="hero-subtitle">Développeur Web & IoT Passionné</p>
+          <p className="hero-subtitle">
+            Ce site a pour but de vous présenter mon savoir-faire et de vous permettre de mieux me connaître. Il évoluera avec le temps, en intégrant de nouveaux projets de démonstration et en corrigeant les éventuels bugs existants.
+          </p>
         </div>
       </section>
 

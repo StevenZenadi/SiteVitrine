@@ -10,7 +10,7 @@ function lerp(a, b, t) {
   return a + (b - a) * t;
 }
 
-// Convertir un hex en rgba (pour divers effets)
+// Convertir un hex en rgba
 function hexToRgba(hex, alpha) {
   hex = hex.replace("#", "");
   if (hex.length === 3) {
@@ -39,7 +39,7 @@ function roundRect(ctx, x, y, width, height, radius) {
   ctx.fill();
 }
 
-// Fonction pour générer une explosion de particules
+// Explosion de particules
 function spawnParticleExplosion(x, y, color, count = 20) {
   const now = performance.now();
   const particles = [];
@@ -57,7 +57,7 @@ function spawnParticleExplosion(x, y, color, count = 20) {
   return particles;
 }
 
-// Probabilités mises à jour pour les bonus
+// Définition des boosts disponibles
 const appleEffects = [
   { color: "#828282", effect: "extensionTemps", label: "EXT", probability: 0.15 },
   { color: "#FF0000", effect: "boostScore", label: "BOOST", probability: 0.15 },
@@ -112,13 +112,11 @@ const generateAppleGroup = (groupCount, obstacles, canvasWidth, canvasHeight) =>
   return apples;
 };
 
-// Génération des obstacles avec fade-in via spawnTime, en évitant certaines positions
 function generateObstacles(level, canvasWidth, canvasHeight, snakeLength = 3, avoidPositions = []) {
   const count = Math.min(8, Math.max(3, 8 - Math.floor(snakeLength / 5)));
   const obstacles = [];
   const now = performance.now();
   const maxTries = 100;
-  // Marge d'évitement (ici égale à la taille d'une cellule)
   const avoidMargin = gridSize;
   for (let i = 0; i < count; i++) {
     let tries = 0;
@@ -162,8 +160,6 @@ const initialSnake = [
 ];
 const initialDirection = { x: gridSize, y: 0 };
 
-// Pour éviter un game over immédiat, on ajoute non seulement le serpent initial,
-// mais aussi toutes ses cases voisines et deux cases dans la direction initiale.
 const initialAvoidPositions = [];
 initialSnake.forEach(cell => {
   initialAvoidPositions.push({ ...cell });
@@ -185,7 +181,6 @@ const effectDurations = {
   slow: 3000
 };
 
-// Définition de la hiérarchie de puissance des bonus (valeurs plus élevées = plus puissants)
 const bonusRank = {
   freeze: 1,
   extensionTemps: 1,
@@ -209,7 +204,21 @@ function bonusColor(type) {
   }
 }
 
-// La couleur du serpent est définie par le bonus le plus puissant actif
+// Calcule la couleur de la jauge en fonction du temps restant
+function getGaugeColor(remaining, total) {
+  let ratio = remaining / total;
+  let hue;
+  if (ratio >= 0.5) {
+    let ratioPrime = (ratio - 0.5) / 0.5; // de 0 à 1
+    hue = 30 + ratioPrime * 90; // de 30 (orange) à 120 (vert)
+  } else {
+    let ratioPrime = ratio / 0.5; // de 0 à 1
+    hue = ratioPrime * 30; // de 0 (rouge) à 30 (orange)
+  }
+  return `hsl(${hue}, 100%, 50%)`;
+}
+
+// Pour déterminer l'apparence du serpent en fonction des boosts actifs
 function getSnakeAppearance(activeBonuses) {
   if (activeBonuses.length === 0) return { base: "green", secondary: null };
   const bestBonus = activeBonuses.reduce((prev, curr) =>
@@ -218,7 +227,7 @@ function getSnakeAppearance(activeBonuses) {
   return { base: bonusColor(bestBonus.type), secondary: null };
 }
 
-// Hook pour les contrôles par swipe (sans joystick)
+// Contrôles par swipe
 const useSwipeControls = (setDirection) => {
   const touchStartRef = useRef(null);
   const handleTouchStart = (e) => {
@@ -226,7 +235,7 @@ const useSwipeControls = (setDirection) => {
     touchStartRef.current = { x: touch.clientX, y: touch.clientY };
   };
   const handleTouchMove = (e) => {
-    e.preventDefault(); // Empêche le défilement
+    e.preventDefault();
     if (!touchStartRef.current) return;
     const touch = e.touches[0];
     const dx = touch.clientX - touchStartRef.current.x;
@@ -256,12 +265,8 @@ const useSwipeControls = (setDirection) => {
 };
 
 const SnakeGame = () => {
-
-  // Mode Aide / Tutoriel initial
   const [showHelp, setShowHelp] = useState(true);
   const bonusTextEffectsRef = useRef([]);
-
-  // Références et états du jeu
   const canvasRef = useRef(null);
   const accumulatorRef = useRef(0);
   const lastTimestampRef = useRef(0);
@@ -294,7 +299,6 @@ const SnakeGame = () => {
     gameStateRef.current.direction = direction;
   }, [direction]);
 
-  // Génération initiale du jeu avec avoidance (incluant la marge de sécurité)
   const gameStateRef = useRef({
     snake: initialSnake.map(s => ({ ...s })),
     direction: initialDirection,
@@ -358,7 +362,6 @@ const SnakeGame = () => {
     }
   };
 
-  // Contrôles par swipe pour mobile
   const { handleTouchStart, handleTouchMove, handleTouchEnd } = useSwipeControls(setDirection);
 
   useEffect(() => {
@@ -419,7 +422,6 @@ const SnakeGame = () => {
       x: head.x + newDirection.x,
       y: head.y + newDirection.y
     };
-    // Gestion des collisions avec les obstacles
     for (let i = 0; i < gameStateRef.current.obstacles.length; i++) {
       const obs = gameStateRef.current.obstacles[i];
       if (
@@ -431,7 +433,6 @@ const SnakeGame = () => {
         if (activeBonusesRef.current.some(b => b.type === "passThrough")) {
           spawnParticleExplosion(obs.x + obs.width / 2, obs.y + obs.height / 2, "white", 30)
             .forEach(p => particlesRef.current.push(p));
-          // Ajouter 50 points pour la destruction d'un obstacle et afficher "+50"
           setPoints(prev => prev + 50);
           bonusTextEffectsRef.current.push({
             x: obs.x + obs.width / 2,
@@ -448,7 +449,6 @@ const SnakeGame = () => {
         }
       }
     }
-    // En mode passThrough, on désactive la collision sur le serpent lui-même
     if (!activeBonusesRef.current.some(b => b.type === "passThrough")) {
       for (let i = 1; i < gameStateRef.current.snake.length; i++) {
         const seg = gameStateRef.current.snake[i];
@@ -458,7 +458,6 @@ const SnakeGame = () => {
         }
       }
     }
-    // Vérification des bords (wrapping désactivé)
     if (
       newHead.x < 0 ||
       newHead.x >= gameStateRef.current.canvasWidth ||
@@ -539,13 +538,32 @@ const SnakeGame = () => {
     }
   };
 
+  // Regrouper les boosts par type pour afficher un seul élément par boost avec un badge si plusieurs instances sont actives
+  const groupedBoosts = Object.values(
+    activeBonuses.reduce((acc, bonus) => {
+      const currentRemaining = (bonus.expires - performance.now()) / 1000;
+      if (acc[bonus.type]) {
+        acc[bonus.type].count += 1;
+        acc[bonus.type].remaining = Math.max(acc[bonus.type].remaining, currentRemaining);
+      } else {
+        acc[bonus.type] = {
+          type: bonus.type,
+          count: 1,
+          remaining: currentRemaining,
+          total: effectDurations[bonus.type] / 1000
+        };
+      }
+      return acc;
+    }, {})
+  );
+
   const renderGame = (alpha, timestamp) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Dessiner les obstacles avec fade-in
+    // Dessiner les obstacles
     for (let obs of gameStateRef.current.obstacles) {
       let fadeFactor = 1;
       if (obs.spawnTime) {
@@ -755,7 +773,6 @@ const SnakeGame = () => {
       cancelAnimationFrame(animationFrameIdRef.current);
     }
     const now = performance.now();
-    // Re-calculer la zone d'évitement lors du redémarrage (idem qu'à l'initialisation)
     const restartAvoidPositions = [];
     initialSnake.forEach(cell => {
       restartAvoidPositions.push({ ...cell });
@@ -798,7 +815,6 @@ const SnakeGame = () => {
     animationFrameIdRef.current = requestAnimationFrame(gameLoop);
   };
 
-  // Overlay de démarrage repositionné dans le canvas-wrapper pour être à la bonne taille
   const helpOverlay = (
     <div className="help-overlay">
       <h1>Bienvenue dans Neon Snake !</h1>
@@ -828,49 +844,38 @@ const SnakeGame = () => {
 
   return (
     <div className="game-container">
-      {/* Barre d'infos / Bouton Retour éventuel */}
       <div className="interface-bar">
-        {/* Si vous avez un bouton Retour, placez-le ici */}
-        {/* <button className="btn back-button">Retour</button> */}
-        <div>Time: {chrono}s</div>
-        <div>Countdown: {countdown}s</div>
-        <div>Points: {points}</div>
-      </div>
-
-      {/* Panel des bonus actifs */}
-      <div className="active-effects-panel">
-        {activeBonuses.length > 0
-          ? activeBonuses.map(bonus => {
-              const remaining = Math.max(0, ((bonus.expires - performance.now()) / 1000).toFixed(1));
-              const totalDuration = effectDurations[bonus.type] || 1;
-              const progress = Math.max(0, Math.min(100, (remaining * 100) / (totalDuration / 1000)));
-              const flashStyle = remaining < 1 ? { animation: 'flash 0.5s infinite' } : {};
+        <div className="game-stats">
+          <div>Time: {chrono}s</div>
+          <div>Countdown: {countdown}s</div>
+          <div>Points: {points}</div>
+        </div>
+        <div className="boosts-container">
+          {groupedBoosts.length > 0 &&
+            groupedBoosts.map(boost => {
+              const percentage = Math.min(100, (boost.remaining / boost.total) * 100);
+              const gaugeColor = getGaugeColor(boost.remaining, boost.total);
               return (
-                <div
-                  key={bonus.appliedAt}
-                  className="effect-item"
-                >
-                  <div className="effect-icon" style={flashStyle}>
-                    {bonus.type.toUpperCase()}
+                <div key={boost.type} className="boost-item">
+                  <div className="boost-name">
+                    {boost.type.toUpperCase()}
+                    {boost.count > 1 && <span className="boost-count">*{boost.count}</span>}
                   </div>
-                  <div className="effect-time">
-                    {remaining}s
-                  </div>
-                  <div className="effect-progress">
-                    <div style={{ width: `${progress}%` }} />
+                  <div className="boost-time">{boost.remaining.toFixed(1)}s</div>
+                  <div className="boost-gauge">
+                    <div className="boost-gauge-fill" style={{ width: `${percentage}%`, backgroundColor: gaugeColor }}></div>
                   </div>
                 </div>
               );
             })
-          : <div className="no-bonus">Aucun bonus actif</div>}
+          }
+        </div>
       </div>
 
-      <div
-        className="canvas-wrapper"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
+      <div className="canvas-wrapper"
+           onTouchStart={handleTouchStart}
+           onTouchMove={handleTouchMove}
+           onTouchEnd={handleTouchEnd}>
         <canvas
           ref={canvasRef}
           className="game-canvas"

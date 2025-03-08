@@ -1,5 +1,5 @@
-/* Utiliser la police système Apple */
-body, .game-container, .interface-bar, .options-bar, .game-over-popup {
+/* Police système Apple */
+body, .game-container, .interface-bar, .game-over-popup {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -9,29 +9,80 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
 .game-container {
   position: relative;
   width: 800px;
-  margin: 60px auto 0 auto; /* marge pour éviter le header, ajustez si besoin */
+  margin: 60px auto 0 auto;
   background: #fff;
 }
 
-/* Barre d'interface */
+/* Barre d'interface en colonne */
 .interface-bar {
   display: flex;
-  flex-wrap: wrap;             /* Permet de passer à la ligne si pas assez de place */
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 10px;
   width: 100%;
   padding: 12px 20px;
   background: #fff;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
   border-radius: 10px;
   margin-bottom: 10px;
   color: #333;
   box-sizing: border-box;
 }
 
-/* Exemple si vous avez un bouton Retour */
-.back-button {
-  margin-right: auto;
+/* Statistiques de jeu (en ligne) */
+.game-stats {
+  display: flex;
+  gap: 20px;
+}
+
+/* Boosts en ligne */
+.boosts-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* Chaque boost compact */
+.boost-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+}
+
+/* Nom du boost avec badge si count > 1 */
+.boost-name {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.boost-count {
+  background: #ddd;
+  color: #333;
+  border-radius: 50%;
+  padding: 2px 5px;
+  font-size: 10px;
+}
+
+/* Temps restant */
+.boost-time {
+  margin-top: 2px;
+}
+
+/* Jauge de boost plus petite */
+.boost-gauge {
+  width: 100%;
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+.boost-gauge-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 /* Wrapper pour le canvas */
@@ -64,7 +115,6 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   border-radius: 12px;
 }
 
-/* Pop-up Game Over */
 .game-over-popup {
   background: #fff;
   padding: 20px 40px;
@@ -93,53 +143,6 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
 
 .game-over-popup .btn:hover {
   background: #0051a8;
-}
-
-/* Panneau des bonus actifs */
-.active-effects-panel {
-  position: absolute;
-  top: 10px;      /* Sur desktop, 10px en dessous du parent (.game-container) */
-  right: 10px;
-  max-width: 200px;
-  background: rgba(0,0,0,0.5);
-  padding: 5px;
-  border-radius: 4px;
-  color: white;
-}
-
-.effect-item {
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-  padding: 5px;
-  border-radius: 4px;
-}
-
-.effect-icon {
-  font-weight: bold;
-  color: white;
-}
-
-.effect-time {
-  margin-left: 8px;
-}
-
-.effect-progress {
-  width: 80px;
-  height: 6px;
-  background-color: gray;
-  margin-left: 8px;
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.effect-progress > div {
-  height: 100%;
-  background-color: limegreen;
-}
-
-.no-bonus {
-  color: white;
 }
 
 /* Aide / Tutoriel */
@@ -176,7 +179,7 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   background: #0051a8;
 }
 
-/* Animation de flash (pour le texte des bonus) */
+/* Animation flash */
 @keyframes flash {
   0% { opacity: 1; }
   50% { opacity: 0.5; }
@@ -187,12 +190,16 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
 @media (max-width: 600px) {
   .game-container {
     width: 100vw;
-    height: auto; /* on peut laisser auto pour la hauteur, sinon 100vh si vous préférez */
-    margin-top: 0;  /* on peut ajuster si besoin */
+    height: auto;
+    margin-top: 0;
     touch-action: none;
   }
   .interface-bar {
-    margin-top: 10px;   /* laisse un peu de place en haut sur mobile */
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .game-stats {
+    gap: 10px;
   }
   .game-canvas {
     width: 100%;
@@ -200,16 +207,5 @@ body, .game-container, .interface-bar, .options-bar, .game-over-popup {
   }
   .canvas-wrapper {
     width: 100%;
-  }
-
-  /* Décaler un peu plus le panneau des bonus pour ne pas chevaucher la barre d'info */
-  .active-effects-panel {
-    top: 80px; /* lève-le plus bas sur mobile */
-    right: 10px;
-  }
-  
-  .game-over-overlay {
-    width: 100%;
-    height: 100%;
   }
 }

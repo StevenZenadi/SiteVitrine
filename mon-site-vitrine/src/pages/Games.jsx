@@ -1,6 +1,7 @@
 // src/pages/Games.jsx
+
 import React, { useState } from 'react';
-import './Games.css';
+import './Games.css';     // <= pas de conflit avec SnakeGame.css
 import SnakeGame from '../components/SnakeGame';
 import Scene3D from '../components/Scene3D.jsx';
 import SeparatorLine from '../components/GameLine';
@@ -9,13 +10,12 @@ import miniatureSnake from "../videos/miniatureSnake.mp4";
 import miniature2 from "../images/miniature2.png";
 
 function Games() {
-  // "selectedGame" peut être "snake", "cv3d" ou null
   const [selectedGame, setSelectedGame] = useState(null);
 
   const renderGame = () => {
     if (selectedGame === "snake") {
       return (
-        <div className="game-container">
+        <div className="games-wrapper">
           <button className="back-btn" onClick={() => setSelectedGame(null)}>
             Retour
           </button>
@@ -24,7 +24,7 @@ function Games() {
       );
     } else if (selectedGame === "cv3d") {
       return (
-        <div className="game-container">
+        <div className="games-wrapper">
           <button className="back-btn" onClick={() => setSelectedGame(null)}>
             Retour
           </button>
@@ -37,12 +37,12 @@ function Games() {
   return (
     <div className="games-page">
       <RandomCirclesBackground />
-
       <SeparatorLine />
+
       {selectedGame === null ? (
         <div className="games-list">
           <h1>Mes démos</h1>
-          {/* Carte pour Neon Snake */}
+
           <div className="game-card" onClick={() => setSelectedGame("snake")}>
             <video
               className="game-thumbnail"
@@ -63,7 +63,7 @@ function Games() {
             </p>
             <button className="btn play-btn">Jouer</button>
           </div>
-          {/* Nouvelle carte pour le CV 3D interactif */}
+
           <div className="game-card" onClick={() => setSelectedGame("cv3d")}>
             <img
               src={miniature2}
@@ -73,7 +73,7 @@ function Games() {
             />
             <h3>Iut 3D</h3>
             <p>
-              Explorez l'IUT de Dijon dans un prototype 3D réalisé par mes oins sur Sketchup.
+              Explorez l'IUT de Dijon dans un prototype 3D réalisé par mes soins sur Sketchup.
             </p>
             <button className="btn play-btn">Explorer</button>
           </div>

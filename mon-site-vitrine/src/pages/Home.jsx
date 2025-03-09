@@ -14,7 +14,7 @@ function Home() {
       {/* Section Hero */}
       <section className="hero-container">
         <div className="hero-content">
-          <h1 className="hero-title">Bienvenue sur mon portfolio (En cours d'aménagement)</h1>
+          <h1 className="hero-title">Bienvenue sur mon portfolio </h1>
           <LogoAnimated />
 
           <p className="hero-subtitle">Développeur Web & IoT Passionné</p>
@@ -30,11 +30,10 @@ function Home() {
         <div className="projects-grid">
           <div className="project-card">
             <img src={miniature1} alt="Projet 1" />
-            <h3>Projet 1</h3>
-            <p>Création d’un site vitrine moderne et responsive.</p>
+            <h3>Portfolio</h3>
+            <p>Création d’un portfolio moderne et responsive.</p>
           </div>
           <div className="project-card">
-            <img src={'miniature2'} alt="Projet 2" />
             <h3>Coming Soon</h3>
             <p>Site commercial pour un auto-entrepreneur informatique.</p>
           </div>
@@ -50,7 +49,7 @@ function Home() {
               <source src={miniatureSnake} type="video/mp4" />
               Votre navigateur ne supporte pas la balise vidéo.
             </video>
-            <h3>Projet 3</h3>
+            <h3>Jeux Snake</h3>
             <p>Prototype interactif d’un jeu Snake amélioré.</p>
           </div>
         </div>

@@ -6,23 +6,47 @@
   position: relative;
 }
 
+/* Standardisation des images/vidéos : hauteur fixe et object-fit cover */
 .gallery-slide img,
 .gallery-slide video {
   width: 100%;
-  height: auto;
-  border-radius: 8px;
+  height: 300px; /* Hauteur fixe pour toutes les images/vidéos */
   object-fit: cover;
+  border-radius: 8px;
 }
 
+/* Style de la légende en overlay sur l'image */
 .slide-caption {
   position: absolute;
   bottom: 5px;
   left: 0;
   width: 100%;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   color: #fff;
   font-size: 0.9rem;
   padding: 0.3rem 0.5rem;
   text-align: center;
   border-radius: 0 0 8px 8px;
+}
+
+/* Flèches de navigation personnalisées sans fond */
+.slick-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent; /* pas de fond */
+  color: #52616d00;        /* couleur du texte (ou icône) */
+  padding: 0.5rem;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  font-size: 1.5rem;
+}
+
+.slick-prev {
+  left: 10px;
+}
+
+.slick-next {
+  right: 10px;
 }

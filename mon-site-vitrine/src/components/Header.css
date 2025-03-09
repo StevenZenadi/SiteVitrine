@@ -1,14 +1,15 @@
 /* --- Styles généraux du header --- */
 .header {
-  position: relative; /* Pour que les éléments absolus se positionnent par rapport au header */
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Logo à gauche, burger à droite */
   align-items: center;
   padding: 15px 40px;
   background-color: #000000;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* Logo à gauche */
 .header-left {
   display: flex;
   align-items: center;
@@ -25,14 +26,16 @@
   width: auto;
 }
 
-/* --- Bouton burger --- */
+/* --- Bouton burger (mobile) --- */
 .burger-button {
-  display: none; /* On le masque par défaut sur desktop */
+  display: none; /* Masqué par défaut sur desktop */
   flex-direction: column;
   justify-content: space-between;
   width: 24px;
   height: 18px;
   cursor: pointer;
+  background: none;
+  border: none;
 }
 
 .burger-button.open .bar:nth-child(1) {
@@ -51,15 +54,15 @@
   display: block;
   height: 3px;
   width: 100%;
-  background: #333;
+  background: #ffffff; /* Couleur des barres du burger */
   transition: all 0.3s ease;
 }
 
 /* --- Menu en ligne (desktop) --- */
 .nav {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  display: flex;      /* Menu horizontal sur desktop */
+  gap: 30px;
+  margin: 0 auto;     /* Centré automatiquement */
 }
 
 .menu {
@@ -70,12 +73,12 @@
   padding: 0;
 }
 
-/* Barre d'indication noire */
+/* Barre d'indication noire (si vous l'utilisez) */
 .menu-indicator {
   position: absolute;
   bottom: 0;
   height: 4px;
-  background: #ffffff; /* Trait noir */
+  background: #ffffff;
   border-radius: 2px;
   transition: left 0.3s ease, width 0.3s ease;
 }
@@ -83,7 +86,7 @@
 /* Liens du menu */
 .menu-link {
   text-decoration: none;
-  color: #333;
+  color: #ffffff; /* Sur fond noir */
   position: relative;
   padding-bottom: 8px;
   transition: color 0.3s ease;
@@ -93,17 +96,17 @@
 
 /* Couleur au survol */
 .menu-link:hover {
-  color: #ffffff;
+  color: #cccccc;
 }
 
-/* Active : texte en dégradé ou multicolore (exemple) */
+/* Active : exemple de style multicolore */
 .menu-link.active {
   background: linear-gradient(to right,
-    #ff0000,  /* Rouge */
-    #ff9900,  /* Orange */
-    #009600,  /* Vert */
-    #0099ff,  /* Bleu */
-    #9900ff   /* Violet */
+    #ff0000,
+    #ff9900,
+    #009600,
+    #0099ff,
+    #9900ff
   );
   -webkit-background-clip: text;
   color: transparent;
@@ -116,42 +119,43 @@
     display: flex;
   }
 
+  /* On laisse de la place si besoin sous le header */
   body {
-    padding-top: 80px; /* Pour éviter que le contenu soit recouvert par le header */
+    padding-top: 80px;
   }
 
+  /* Le menu horizontal se cache par défaut sur mobile */
   .nav {
-    position: static; /* ou relative selon votre besoin */
-    transform: none;
-    margin-left: auto; /* Pour que le menu apparaisse à droite */
-  }
-
-  /* Le menu horizontal se cache par défaut */
-  .menu {
-    display: none;
-    flex-direction: column; /* On empile les liens */
-    gap: 20px;
+    display: none;            /* Caché par défaut */
     position: absolute;
-    top: 60px;    /* Sous le header */
-    right: 40px;  /* Aligné à droite */
+    top: 60px;                /* Sous le header */
+    right: 40px;              /* Aligné à droite */
     background: #fff;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     border-radius: 8px;
+    flex-direction: column;   /* On empile les liens */
+    gap: 20px;
   }
 
-  /* Quand isMenuOpen est true, on l'affiche */
-  .menu.menu-open {
+  /* Si le menu est ouvert (via un état JS), on affiche */
+  .nav.nav-open {
     display: flex;
   }
 
-  /* L'indicateur peut être désactivé ou géré différemment sur mobile */
-  .menu-indicator {
-    display: none;
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
 
-  .main-content {
-    margin-top: 80px; /* Ajustez cette valeur selon la hauteur de votre header */
+  .menu-link {
+    color: #333; /* Sur fond blanc */
+  }
+
+  /* L'indicateur peut être désactivé sur mobile */
+  .menu-indicator {
+    display: none;
   }
 }
 

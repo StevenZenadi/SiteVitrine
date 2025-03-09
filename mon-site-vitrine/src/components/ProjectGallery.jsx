@@ -5,6 +5,24 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './ProjectGallery.css';
 
+function NextArrow(props) {
+  const { onClick } = props;
+  return (
+    <div className="slick-arrow slick-next" onClick={onClick}>
+      &rarr;
+    </div>
+  );
+}
+
+function PrevArrow(props) {
+  const { onClick } = props;
+  return (
+    <div className="slick-arrow slick-prev" onClick={onClick}>
+      &larr;
+    </div>
+  );
+}
+
 function ProjectGallery({ media = [] }) {
   const settings = {
     dots: true,
@@ -13,7 +31,9 @@ function ProjectGallery({ media = [] }) {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
-    adaptiveHeight: true
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    adaptiveHeight: true,
   };
 
   return (

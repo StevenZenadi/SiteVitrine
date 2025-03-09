@@ -107,8 +107,6 @@ const projectData = [
     image: interface1,
     images: [
       { src: interface0, caption: "Prototype d'interface." },
-      { src: interface6, caption: "Prototype d'interface." },
-      { src: interface5, caption: "Prototype d'interface." },
       { src: interface1, caption: "Version retravaillée selon les principes UX." },      
     ],
     tech: ['React', 'Framer Motion'],

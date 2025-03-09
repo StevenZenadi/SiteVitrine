@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/SiteVitrine/static/css/main.6546c3f6.css",
-    "main.js": "/SiteVitrine/static/js/main.0d00ba76.js",
+    "main.js": "/SiteVitrine/static/js/main.217eb320.js",
     "static/media/voiture8.mp4": "/SiteVitrine/static/media/voiture8.c60f646747b3d6990cf0.mp4",
     "static/media/miniatureSnake.mp4": "/SiteVitrine/static/media/miniatureSnake.b5598602a038e0033989.mp4",
     "static/media/van2.webp": "/SiteVitrine/static/media/van2.4d12d521fb68c7d4ead0.webp",
@@ -74,6 +74,6 @@
   },
   "entrypoints": [
     "static/css/main.6546c3f6.css",
-    "static/js/main.0d00ba76.js"
+    "static/js/main.217eb320.js"
   ]
 }

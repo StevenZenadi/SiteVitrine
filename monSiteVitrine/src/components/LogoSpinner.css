@@ -1,0 +1,40 @@
+.car-race-spinner-container {
+  position: relative;
+  margin: 0 auto;
+}
+
+/* Les variables --ball-size et --radius proviennent du style inline du composant */
+.car-race-ball {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--ball-size);
+  height: var(--ball-size);
+  border-radius: 50%;
+  background-color: var(--color);
+  transform: translate(-50%, -50%);
+  animation: carRace 2s infinite linear;
+  animation-delay: var(--delay);
+}
+
+@keyframes carRace {
+  0% {
+    transform: translate(-50%, -50%) 
+               rotate(0deg) 
+               translate(var(--radius)) 
+               rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) 
+               rotate(360deg) 
+               translate(var(--radius)) 
+               rotate(-360deg);
+  }
+}
+
+/* Si l'utilisateur préfère réduire les animations, on désactive l'animation */
+@media (prefers-reduced-motion: reduce) {
+  .car-race-ball {
+    animation: none;
+  }
+}

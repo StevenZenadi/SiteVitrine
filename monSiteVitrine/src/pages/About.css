@@ -1,0 +1,110 @@
+/* Container principal */
+.about-page {
+  position: relative;
+  min-height: 100vh;
+  /* Optionnel : ajoute une image de fond avec effet parallax
+  background: url('../images/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  */
+  background: #fff;
+  overflow: hidden;
+}
+
+/* Contenu central */
+.about-content {
+  position: relative;
+  z-index: 10;
+  margin: 40px auto 0;
+  max-width: 600px;
+  padding: 20px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  /* Suppression du scaling sur hover */
+}
+
+/* Titres */
+.about-content h1 {
+  margin-bottom: 10px;
+  font-size: 2rem;
+  color: #333;
+}
+
+.about-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Photo de profil avec animation au survol */
+.about-photo {
+  width: 180px;
+  height: 180px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 3px solid #292929;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.666);
+  position: relative;
+  top: -10px;
+  transition: transform 0.3s ease;
+}
+
+.about-photo:hover {
+  transform: scale(1.05);
+}
+
+/* Sections */
+section {
+  margin-bottom: 30px;
+}
+
+/* Bouton d'appel à l'action avec transition sur hover */
+.about-cta-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.about-cta {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #0070c9;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.about-cta:hover {
+  background-color: #005ea6;
+  transform: scale(1.05);
+}
+
+/* Animation fade-in pour le scroll */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-content {
+    margin-top: 20px;
+    padding: 15px;
+    max-width: 90%;
+  }
+  .about-photo {
+    width: 120px;
+    height: 120px;
+  }
+}

@@ -1,0 +1,27 @@
+# Ignorer l'environnement virtuel Python
+venv/
+ENV/
+env/
+
+# Ignorer les fichiers Python compilés
+*.pyc
+__pycache__/
+
+# Ignorer les fichiers de configuration locaux
+.env
+.env.local
+.env.*.local
+
+# Ignorer les fichiers de log
+*.log
+
+# Ignorer les fichiers de build du frontend
+build/
+dist/
+
+# Ignorer les dépendances Node
+node_modules/
+
+# Ignorer les fichiers de caches et système
+.DS_Store
+Thumbs.db

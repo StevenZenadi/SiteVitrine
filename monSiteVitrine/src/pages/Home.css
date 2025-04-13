@@ -1,0 +1,179 @@
+.home-page {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: #333;
+  background: #fff;
+  min-height: 100vh;
+}
+
+/* Section Hero */
+.hero-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem;
+  background: #f9f9f9;
+  min-height: 400px; /* Laisser assez de place pour le logo animé */
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  margin: 1.5rem 0 0.5rem;
+  color: #333;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #0070c9;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.hero-cta:hover {
+  background-color: #005fa3;
+}
+
+.hero-cta:active {
+  transform: scale(0.95);
+}
+
+/* Section Aperçu des Projets */
+.projects-preview {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.projects-preview h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.project-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+}
+
+.project-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.project-card h3 {
+  margin: 0.75rem;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.project-card p {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0 0.75rem 1rem;
+}
+
+.more-projects {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #0070c9;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.more-projects:hover {
+  background-color: #005fa3;
+}
+
+/* Section Témoignages */
+.testimonials-section {
+  padding: 3rem 2rem;
+  background-color: #f7f7f7;
+  text-align: center;
+}
+
+.testimonials-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  .projects-preview h2,
+  .testimonials-section h2 {
+    font-size: 1.75rem;
+  }
+}
+
+.contact-cta {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.contact-cta h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.contact-cta p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+.btn-contact {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #0070c9;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+.btn-contact:hover {
+  background-color: #005fa3;
+}
+
+@keyframes pulseAnimation {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.api-toggle.pulse {
+  animation: pulseAnimation 1s ease-in-out;
+}

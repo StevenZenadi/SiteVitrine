@@ -1,0 +1,181 @@
+/* --- Styles généraux du header --- */
+.header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background-color: #000000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Logo à gauche */
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* Bouton burger (mobile) */
+.burger-button {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.burger-button.open .bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.burger-button.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-button.open .bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.bar {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #ffffff;
+  transition: all 0.3s ease;
+}
+
+/* Menu desktop */
+.nav {
+  display: flex;
+  gap: 30px;
+  margin: 0 auto;
+}
+
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-indicator {
+  position: absolute;
+  bottom: 0;
+  height: 4px;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: left 0.3s ease, width 0.3s ease;
+}
+
+.menu-link {
+  text-decoration: none;
+  color: #ffffff;
+  position: relative;
+  padding-bottom: 8px;
+  transition: color 0.3s ease;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.menu-link:hover {
+  color: #cccccc;
+}
+
+.menu-link.active {
+  background: linear-gradient(to right,
+    #ff0000,
+    #ff9900,
+    #009600,
+    #0099ff,
+    #9900ff
+  );
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Status container */
+.api-status-container {
+  margin-left: 1rem;
+}
+
+/* Statut simplifié */
+.api-status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+/* Petit rond coloré */
+.status-circle {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Couleur verte */
+.green {
+  background-color: #4cd964; /* iOS green */
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .burger-button {
+    display: flex;
+    order: 1;
+  }
+
+  .header-left {
+    order: 2;
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .api-status-container {
+    order: 3;
+    margin-left: auto;
+  }
+
+  .nav {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 40px;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgb(0, 0, 0);
+    border-radius: 8px;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .nav.nav-open {
+    display: flex;
+  }
+
+  .menu {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .menu-link {
+    color: #333;
+  }
+
+  .menu-indicator {
+    display: none;
+  }
+}

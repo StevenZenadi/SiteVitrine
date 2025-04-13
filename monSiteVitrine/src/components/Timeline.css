@@ -1,0 +1,275 @@
+/* =========================
+   Spinner (car-race)
+   ========================= */
+   .car-race-spinner-container {
+    position: relative;
+    margin: 0 auto;
+  }
+  
+  /* Les variables --ball-size et --radius proviennent du style inline du composant */
+  .car-race-ball {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--ball-size);
+    height: var(--ball-size);
+    border-radius: 50%;
+    background-color: var(--color);
+    transform: translate(-50%, -50%);
+    animation: carRace 2s infinite linear;
+    animation-delay: var(--delay);
+  }
+  
+  @keyframes carRace {
+    0% {
+      transform: translate(-50%, -50%) 
+                 rotate(0deg) 
+                 translate(var(--radius)) 
+                 rotate(0deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) 
+                 rotate(360deg) 
+                 translate(var(--radius)) 
+                 rotate(-360deg);
+    }
+  }
+  
+  /* Si l'utilisateur préfère réduire les animations, on désactive l'animation */
+  @media (prefers-reduced-motion: reduce) {
+    .car-race-ball {
+      animation: none;
+    }
+  }
+  
+  /* =========================
+     Timeline - Encadrement Neon sans fond (juste l'encadré)
+     ========================= */
+  
+  /* Container principal de la timeline */
+  .timeline {
+    position: relative;
+    margin: 40px 0;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Ligne verticale centrale (épaissie et en noir) */
+  .timeline::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 6px; /* épaissi */
+    height: 100%;
+    background: #000; /* noir */
+    border-radius: 10px;
+  }
+  
+  /* Chaque événement occupe 50% de largeur et s'aligne en alternance */
+  .timeline-event {
+    position: relative;
+    width: 50%;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: transparent; /* pas de fond */
+    transition: transform 0.3s ease;
+  }
+  
+  .timeline-event:hover {
+    transform: scale(1.02); /* légère montée au survol */
+  }
+  
+  /* Positionnement et alignement alterné */
+  .timeline-event.left {
+    align-self: flex-start;
+    text-align: right;
+  }
+  
+  .timeline-event.right {
+    align-self: flex-end;
+    text-align: left;
+  }
+  
+  .timeline-event.left .timeline-content {
+    margin-right: 20px;
+  }
+  
+  .timeline-event.right .timeline-content {
+    margin-left: 20px;
+  }
+  
+  /* Encadrement néon pour tous les événements via pseudo-élément ::before */
+  /* Par défaut, une bordure de 3px utilisant la variable --neon-color */
+  .timeline-event::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 3px solid var(--neon-color);
+    border-radius: 10px;
+    z-index: 1;
+    opacity: 0.7;
+    filter: drop-shadow(0 0 8px var(--neon-color));
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Pour le 7ème événement, on utilise un border-image pour le dégradé */
+  .timeline-event:nth-child(7)::before {
+    border: 3px solid transparent;
+    border-image: linear-gradient(90deg, #828282, #1AAD0E, #00A1FF, #894FFF, #FFAD00, #FF0000) 1;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+  }
+  
+  /* Effet de brillance qui parcourt le cadre (pseudo-élément ::after) */
+  .timeline-event::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.7), transparent);
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .timeline-event:hover::after {
+    opacity: 1;
+    animation: neon-shine 1s forwards;
+  }
+  
+  @keyframes neon-shine {
+    0% {
+      left: -100%;
+    }
+    50% {
+      left: 100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+  
+  /* Contenu de l'événement sans fond ni ombre pour rester minimaliste */
+  .timeline-content {
+    position: relative;
+    z-index: 3;
+    padding: 10px 15px;
+    background: transparent;
+  }
+  
+  /* Style pour l'année, le titre et la description */
+  .timeline-year {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .timeline-content h4 {
+    margin: 5px 0;
+    font-size: 1.1rem;
+  }
+  
+  .timeline-content p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  
+  /* Style pour les liens hypertextes en italique avec effet interactif */
+  .timeline-content a {
+    color: #2c3e50;
+    text-decoration: none;
+    font-style: italic;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+    padding: 2px 4px;
+  }
+  
+  .timeline-content a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #e74c3c, #f1c40f);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  
+  .timeline-content a:hover {
+    color: #e74c3c;
+    transform: translateY(-2px);
+    background-color: rgba(231, 76, 60, 0.1);
+  }
+  
+  .timeline-content a:hover::after {
+    transform: scaleX(1);
+  }
+  
+  /* Attribution des couleurs pour l'encadrement néon :  
+     1. Gris, 2. Vert, 3. Bleu, 4. Violet, 5. Orange, 6. Rouge, 7. Multicolor (via border-image)
+  */
+  .timeline-event:nth-child(1) {
+    --neon-color: #828282; /* Gris */
+  }
+  
+  .timeline-event:nth-child(2) {
+    --neon-color: #1AAD0E; /* Vert */
+  }
+  
+  .timeline-event:nth-child(3) {
+    --neon-color: #00A1FF; /* Bleu */
+  }
+  
+  .timeline-event:nth-child(4) {
+    --neon-color: #894FFF; /* Violet */
+  }
+  
+  .timeline-event:nth-child(5) {
+    --neon-color: #FFAD00; /* Orange */
+  }
+  
+  .timeline-event:nth-child(6) {
+    --neon-color: #FF0000; /* Rouge */
+  }
+  
+  .timeline-event:nth-child(7) {
+    /* Pour le 7ème, la couleur multicolor sera appliquée via border-image dans ::before */
+    --neon-color: #828282; /* Valeur de fallback */
+  }
+  
+  /* Responsive : sur petits écrans, les événements occupent toute la largeur */
+  @media screen and (max-width: 768px) {
+    .timeline-event {
+      width: 100%;
+      align-self: center !important;
+      text-align: left;
+      margin-bottom: 40px;
+    }
+    .timeline::after {
+      left: 20px;
+    }
+    .timeline-dot {
+      left: 14px !important;
+      right: auto;
+    }
+    .timeline-event.left .timeline-content,
+    .timeline-event.right .timeline-content {
+      margin: 0 0 0 40px;
+    }
+  }
+  

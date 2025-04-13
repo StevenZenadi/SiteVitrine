@@ -1,0 +1,12 @@
+/* src/components/LogoTilt.css */
+.logo-tilt {
+    display: inline-block;
+    transition: transform 0.2s ease;
+    will-change: transform;
+  }
+  
+  .logo-tilt img {
+    display: block;
+    max-width: 100%;
+  }
+  

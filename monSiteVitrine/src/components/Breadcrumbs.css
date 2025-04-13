@@ -1,0 +1,13 @@
+/* src/components/Breadcrumbs.css */
+.breadcrumbs {
+    position: fixed;
+    top: 70px;  /* Ajustez en fonction de la hauteur de votre header */
+    left: 20px;
+    font-size: 0.9rem;
+    color: #555;
+    background: rgba(255,255,255,0.8);
+    padding: 5px 10px;
+    border-radius: 4px;
+    z-index: 1000;
+  }
+  
